@@ -1,0 +1,24 @@
+Package: lassosum
+Type: Package
+Title: What the Package Does (Title Case)
+Version: 0.1
+Date: 2015-11-09
+Authors@R: c(
+		person("Timothy", "Mak", email = "tshmak@hku.hk", role = c("aut", "cre")),
+		person("Robert", "Porsch", email = "robert.porsch@hku.hk", role = c("aut"))
+	    )
+Description: Tim you have to add here some valuable description.
+License: GPL-3
+LazyData: TRUE
+LinkingTo: Rcpp, RcppArmadillo
+Imports:
+    Rcpp (>= 0.11.0),
+    Matrix
+Suggests:
+    testthat,
+    fdrtool,
+    data.table,
+    knitr,
+    rmarkdown
+RoxygenNote: 5.0.1
+VignetteBuilder: knitr

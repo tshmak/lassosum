@@ -1,0 +1,9 @@
+.Rproj.user
+.Rhistory
+.RData
+src/*.o
+src/*.so
+src/*.dll
+.ycm_extra_conf.py
+.ycm_extra_conf.pyc
+inst/doc
