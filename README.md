@@ -16,8 +16,6 @@ package.install("devtools")
 devtools::install_github("tshmak/lassosum")
 ```
 
-What about compiled binaries??? 
-
 ### Tutorial
 
 We advise the use of the packages `data.table` to import summary statistics text files and `fdrtool` to compute the shrunken estimations of the correlations.
@@ -29,10 +27,10 @@ You can download the repository via
 git clone https://github.com/tshmak/lassosum
 ```
 
-or just download the [ZIP file][https://github.com/tshmak/lassosum/archive/master.zip].
+or just download the [ZIP file](https://github.com/tshmak/lassosum/archive/master.zip).
 
 The data for this tutorial is stored in `tutorial/data`. 
-However, we will assume you have set your `R` working directory at `tutorial/` with 
+We will assume you have set your `R` working directory at `tutorial/` with 
 
 ```r
 setwd("path/to/repository/tutorial")
