@@ -3,7 +3,9 @@ lassosum
 
 ### Description
 
-`lassosum` is a method for computing LASSO estimates of a linear regression problem given summary statistics which are correlation of the variables (SNPs) with the outcome (phenotype), via a reference panel. The reference panel is assumed to be in PLINK format (https://www.cog-genomics.org/plink2/), although `lassosum` also provides function that works with reference panels in the form of an R data.frame or matrix. Summary statistics are expected to be loaded into memory as a data.frame. The SNPs in the reference panel and the summary statistics need not exactly match. 
+`lassosum` is a method for computing LASSO estimates of a linear regression problem given summary statistics which are correlation of the variables (SNPs) with the outcome (phenotype), via a reference panel.
+The reference panel is assumed to be in PLINK [format](https://www.cog-genomics.org/plink2/), although `lassosum` also provides function that works with reference panels in the form of an R data.frame or matrix.
+Summary statistics are expected to be loaded into memory as a data.frame. The SNPs in the reference panel and the summary statistics need not exactly match. 
 
 We also provide the function `pseudovalidation` to choose the optimal value of lambda in the absence of a validation dataset, and the function `pgs` for deriving polygenic scores from the estimated betas. 
 
@@ -16,8 +18,6 @@ package.install("devtools")
 devtools::install_github("tshmak/lassosum")
 ```
 
-What about compiled binaries??? 
-
 ### Tutorial
 
 We advise the use of the packages `data.table` to import summary statistics text files and `fdrtool` to compute the shrunken estimations of the correlations.
@@ -29,10 +29,10 @@ You can download the repository via
 git clone https://github.com/tshmak/lassosum
 ```
 
-or just download the [ZIP file][https://github.com/tshmak/lassosum/archive/master.zip].
+or just download the [ZIP file](https://github.com/tshmak/lassosum/archive/master.zip).
 
 The data for this tutorial is stored in `tutorial/data`. 
-However, we will assume you have set your `R` working directory at `tutorial/` with 
+We will assume you have set your `R` working directory at `tutorial/` with 
 
 ```r
 setwd("path/to/repository/tutorial")
