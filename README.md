@@ -144,13 +144,13 @@ load "./data/chr22a" as a matrix
 chr22a <- readbfile("./data/chr22a", fillmissing=T)
 ```
 
-Get beta estimates from lassosum
+Get beta estimates from `lassosumR`
 ```r
 lsR <- lassosumR(cor=correlation, refpanel=chr22a[,comp$bim.extract], 
                  lambda=lambda, shrink=0.9) 
 ```
 
-pseudovalidation using chr22b as target data
+pseudovalidation using chr22b as target data (using `pseudovalidationR`)
 ```r
 chr22b <- readbfile("./data/chr22b", fillmissing=T)
 pvR <- pseudovalidationR(chr22b[, comp2$bim.extract], 
