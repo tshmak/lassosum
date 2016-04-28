@@ -57,3 +57,25 @@ cat("Best lambda = ", lambda[best.lambda.pos], "\n")
 ### Obtain PGS for best lambda ###
 PGS <- pgs(bfile = "./data/chr22b", weights = beta[comp2$ss.order] * comp2$rev, 
 	   extract=comp2$bim.extract)
+
+######### lassosum using a reference panel given as a matrix ###########
+### load "./data/chr22a" as a matrix ###
+chr22a <- readbfile("./data/chr22a", fillmissing=T)
+
+### Get beta estimates from lassosum ###
+lsR <- lassosumR(cor=correlation, refpanel=chr22a[,comp$bim.extract], 
+                 lambda=lambda, shrink=0.9) 
+
+### pseudovalidation using chr22b as target data ###
+chr22b <- readbfile("./data/chr22b", fillmissing=T)
+pvR <- pseudovalidationR(chr22b[, comp2$bim.extract], 
+                        beta=beta[comp2$ss.order, ] * outer(comp2$rev, rep(1,ncol(beta))), 
+                        cor=correlation2.shrunk[comp2$ss.order])
+
+######### De-standardizing correlation coefficients to get regression coefficients ###########
+### Obtain SNP-wise standard deviation of target dataset ###
+sd <- sd.bfile(bfile = "./data/chr22b", extract=comp2$bim.extract)
+
+### regression coefficients = correlation coefficients / sd(X) * sd(y) ###
+reg.coef <- Matrix::Diagonal(x=1/sd) %*% beta[comp2$ss.order, ]
+
