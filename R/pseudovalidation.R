@@ -3,7 +3,6 @@
 #' @param bfile A plink bfile stem
 #' @param beta The matrix of estimated \eqn{\beta}s
 #' @param cor The vector of correlations (\eqn{r})
-#' @param n The number of samples 
 #' @param sd The standard deviation of the SNPs
 #' @param extract samples to extract
 #' @param exclude samples to exclude
@@ -12,8 +11,8 @@
 #' @param chr a vector of chromosomes
 #' @details A function to calculate  
 #' \deqn{f(\lambda)=\beta'r/\sqrt{\beta'X'X\beta}} 
-#' where \eqn{X} is the centred (not standardized) genotype matrix, and \eqn{r} is a 
-#' vector of (shrunken) correlations. 
+#' where \eqn{X} is the standardized genotype matrix divided by \eqn{\sqrt{n}}, 
+#' and \eqn{r} is a vector of (shrunken) correlations. 
 #' @note \itemize{
 #' \item Missing genotypes are interpreted as having the homozygous A2 alleles in the 
 #' PLINK files (same as the \code{--fill-missing-a2} option in PLINK). 
@@ -22,7 +21,7 @@
 #' }
 
 #' @export
-pseudovalidation <- function(bfile, beta, cor, n=NULL, sd=NULL, 
+pseudovalidation <- function(bfile, beta, cor, sd=NULL, 
                              keep=NULL, extract=NULL, exclude=NULL, remove=NULL, 
                              chr=NULL) {
 
@@ -43,6 +42,7 @@ pseudovalidation <- function(bfile, beta, cor, n=NULL, sd=NULL,
   
   if(is.null(sd)) sd <- lassosum(cor = cor, bfile = bfile, lambda=numeric(0), shrink=1, 
                                  keep=parsed$keep, extract=parsed$extract)$sd
+  stopifnot(length(sd) == length(cor))
 
     weight <- 1/sd
     weight[!is.finite(weight)] <- 0
