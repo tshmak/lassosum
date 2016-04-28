@@ -18,6 +18,7 @@
 parseselect <- function(bfile, extract=NULL, exclude=NULL, 
                         keep=NULL, remove=NULL, chr=NULL) {
   
+  stopifnot(is.character(bfile) && length(bfile) == 1)
   stopifnot(file.exists(paste0(bfile, ".bed")))
   stopifnot(file.exists(paste0(bfile, ".bim")))
   stopifnot(file.exists(paste0(bfile, ".fam")))
