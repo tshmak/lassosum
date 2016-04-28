@@ -92,7 +92,7 @@ lassosum <- function(cor, bfile,
     lambda[order] <- lambda
   })
   results$shrink <- shrink
-  results$nparams <- colSums(results$beta != 0)
+  if(length(lambda) > 0) results$nparams <- colSums(results$beta != 0)
   #' @return A list with the following
   #' \item{lambda}{same as the lambda input}
   #' \item{beta}{A matrix of estimated coefficients}
