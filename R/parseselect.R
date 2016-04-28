@@ -90,6 +90,9 @@ parseselect <- function(bfile, extract=NULL, exclude=NULL,
 
     if(is.null(extract)) extract <- extract.chr else 
       extract <- extract & extract.chr
+    
+    p <- sum(extract)
+    
   }
   
   #### keep ####
