@@ -301,7 +301,8 @@ int elnet(double lambda1, double lambda2, arma::vec& diag, arma::mat& X, arma::v
 // [[Rcpp::export]]
 arma::mat genotypeMatrix(const std::string fileName, int N, int P,
                          arma::Col<int> col_skip_pos, arma::Col<int> col_skip, 
-                         arma::Col<int> keepbytes, arma::Col<int> keepoffset) {
+                         arma::Col<int> keepbytes, arma::Col<int> keepoffset, 
+						 const int fillmissing) {
 
   std::ifstream bedFile;
   bool snpMajor = openPlinkBinaryFile(fileName, bedFile);
@@ -365,8 +366,9 @@ arma::mat genotypeMatrix(const std::string fileName, int N, int P,
           int first = b[c++];
           int second = b[c++];
           if (first == 0) {
-            genotypes(j, iii) += (2 - second);
+            genotypes(j, iii) = (2 - second);
           }
+          if(fillmissing == 0 && first == 1 && second == 0) genotypes(j, iii) =arma::datum::nan;
           j++;
         }
       }
@@ -378,8 +380,9 @@ arma::mat genotypeMatrix(const std::string fileName, int N, int P,
         int first = b[c++];
         int second = b[c];
         if (first == 0) {
-          genotypes(j, iii) += (2 - second);
+          genotypes(j, iii) = (2 - second);
         }
+        if(fillmissing == 0 && first == 1 && second == 0) genotypes(j, iii) =arma::datum::nan;
         j++;
       }
     }
@@ -444,7 +447,7 @@ List runElnet(arma::vec& lambda, double shrink, const std::string fileName,
 
   int i,j;
   arma::mat genotypes = genotypeMatrix(fileName, N, P, col_skip_pos, col_skip, keepbytes,
-                             keepoffset);
+                             keepoffset, 1);
 
   if (genotypes.n_cols != r.n_elem) {
     throw std::runtime_error("Number of positions in reference file is not "

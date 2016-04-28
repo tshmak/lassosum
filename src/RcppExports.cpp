@@ -45,8 +45,8 @@ BEGIN_RCPP
 END_RCPP
 }
 // genotypeMatrix
-arma::mat genotypeMatrix(const std::string fileName, int N, int P, arma::Col<int> col_skip_pos, arma::Col<int> col_skip, arma::Col<int> keepbytes, arma::Col<int> keepoffset);
-RcppExport SEXP lassosum_genotypeMatrix(SEXP fileNameSEXP, SEXP NSEXP, SEXP PSEXP, SEXP col_skip_posSEXP, SEXP col_skipSEXP, SEXP keepbytesSEXP, SEXP keepoffsetSEXP) {
+arma::mat genotypeMatrix(const std::string fileName, int N, int P, arma::Col<int> col_skip_pos, arma::Col<int> col_skip, arma::Col<int> keepbytes, arma::Col<int> keepoffset, const int fillmissing);
+RcppExport SEXP lassosum_genotypeMatrix(SEXP fileNameSEXP, SEXP NSEXP, SEXP PSEXP, SEXP col_skip_posSEXP, SEXP col_skipSEXP, SEXP keepbytesSEXP, SEXP keepoffsetSEXP, SEXP fillmissingSEXP) {
 BEGIN_RCPP
     Rcpp::RObject __result;
     Rcpp::RNGScope __rngScope;
@@ -57,7 +57,8 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< arma::Col<int> >::type col_skip(col_skipSEXP);
     Rcpp::traits::input_parameter< arma::Col<int> >::type keepbytes(keepbytesSEXP);
     Rcpp::traits::input_parameter< arma::Col<int> >::type keepoffset(keepoffsetSEXP);
-    __result = Rcpp::wrap(genotypeMatrix(fileName, N, P, col_skip_pos, col_skip, keepbytes, keepoffset));
+    Rcpp::traits::input_parameter< const int >::type fillmissing(fillmissingSEXP);
+    __result = Rcpp::wrap(genotypeMatrix(fileName, N, P, col_skip_pos, col_skip, keepbytes, keepoffset, fillmissing));
     return __result;
 END_RCPP
 }

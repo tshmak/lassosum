@@ -48,8 +48,8 @@ elnet <- function(lambda1, lambda2, diag, X, r, thr, x, yhat, trace, maxiter) {
 #' @return an armadillo genotype matrix 
 #' @keywords internal
 #' 
-genotypeMatrix <- function(fileName, N, P, col_skip_pos, col_skip, keepbytes, keepoffset) {
-    .Call('lassosum_genotypeMatrix', PACKAGE = 'lassosum', fileName, N, P, col_skip_pos, col_skip, keepbytes, keepoffset)
+genotypeMatrix <- function(fileName, N, P, col_skip_pos, col_skip, keepbytes, keepoffset, fillmissing) {
+    .Call('lassosum_genotypeMatrix', PACKAGE = 'lassosum', fileName, N, P, col_skip_pos, col_skip, keepbytes, keepoffset, fillmissing)
 }
 
 #' normalize genotype matrix
