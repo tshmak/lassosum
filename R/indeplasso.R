@@ -11,16 +11,13 @@
 #' @export
 indeplasso <- function(coef, lambda=exp(seq(log(0.001), log(0.1), length.out=20))) {
   results <- outer(coef, rep(NA, length(lambda)))
-  conv <- rep(0, length(lambda))
   for(i in 1:length(lambda)) {
     results[,i] <- sign(coef) * pmax((abs(coef) - lambda[i]),0)
-    conv[i] <- 1
   }
   
   #' @return A list with the following
   #' \item{lambda}{Same as \code{lambda} in input}
   #' \item{beta}{A matrix of estimates of \eqn{\beta}}
-  #' \item{conv}{A vector of convergence indicators. 1=converged. 0=not converged.}
-  
-  return(list(lambda=lambda, beta=results, conv=conv))
+
+  return(list(lambda=lambda, beta=results))
 }

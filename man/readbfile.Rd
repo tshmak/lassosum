@@ -2,13 +2,14 @@
 % Please edit documentation in R/readbfile.R
 \name{readbfile}
 \alias{readbfile}
-\title{read a PLINK bfile file into a matrix
-#' @param bfile PLINK bfile (as character, without the .bed extension)}
+\title{read a PLINK bfile file into a matrix}
 \usage{
 readbfile(bfile, keep = NULL, extract = NULL, exclude = NULL,
   remove = NULL, chr = NULL, fillmissing = F)
 }
 \arguments{
+\item{bfile}{PLINK bfile (as character, without the .bed extension)}
+
 \item{keep}{SNPs to keep}
 
 \item{extract}{samples to extract}
@@ -19,7 +20,7 @@ readbfile(bfile, keep = NULL, extract = NULL, exclude = NULL,
 
 \item{chr}{a vector of chromosomes}
 
-\item{fillmissing}{Whether to fill missing values as 0}
+\item{fillmissing}{Whether to fill missing values with 0}
 }
 \value{
 A genotype matrix of 0,1, and 2 (possibly with NaNs)

@@ -1,7 +1,7 @@
 #' @title Function to convert p-values to correlation via the t-statistic
 #' @param n Sample size
 #' @param p Vector of p-values
-#' @param sign A vector giving the sign of the correlation (e.g. the log odds ratios)
+#' @param sign A vector giving the sign of the correlations (e.g. the log odds ratios)
 #' @return A vector of correlations
 #' @export
 p2cor <- function(p, n, sign=rep(1, length(p))) {

@@ -27,12 +27,12 @@ pseudovalidation(bfile, beta, cor, sd = NULL, keep = NULL, extract = NULL,
 \item{chr}{a vector of chromosomes}
 }
 \value{
-the results of the pseudovalidation
+the results of the pseudovalidation, i.e. \eqn{f(\lambda)}
 }
 \details{
 A function to calculate  
 \deqn{f(\lambda)=\beta'r/\sqrt{\beta'X'X\beta}} 
-where \eqn{X} is the standardized genotype matrix divided by \eqn{\sqrt{n}}, 
+where \eqn{X} is the standardized genotype matrix divided by \eqn{\sqrt n}, 
 and \eqn{r} is a vector of (shrunken) correlations.
 }
 \note{

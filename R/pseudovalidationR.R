@@ -6,7 +6,7 @@
 #' @param cor The vector of correlations (\eqn{r})
 #' @details A function to calculate  
 #' \deqn{f(\lambda)=\beta'r/\sqrt{\beta'X'X\beta}} 
-#' where \eqn{X} is the standardized genotype matrix divided by \eqn{\sqrt{n}}, 
+#' where \eqn{X} is the standardized genotype matrix divided by \eqn{\sqrt n}, 
 #' and \eqn{r} is a vector of (shrunken) correlations. 
 #' @note \itemize{
 #' \item The number of rows in \code{beta} and the length of \code{cor} should be the 
@@ -37,6 +37,6 @@ pseudovalidationR <- function(genotype.mat, beta, cor) {
   attr(result, "bXy") <- bXy
   
   return(result)
-  #' @return the results of the pseudovalidation
+  #' @return the results of the pseudovalidation, i.e. \eqn{f(\lambda)}
     
 }

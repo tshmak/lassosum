@@ -2,7 +2,7 @@
 % Please edit documentation in R/read.table2.R
 \name{read.table2}
 \alias{read.table2}
-\title{Function to read a table depending on whether data.table is installed}
+\title{Function to read a text file depending on whether data.table is installed}
 \usage{
 read.table2(file, header = F)
 }

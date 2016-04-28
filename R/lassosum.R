@@ -1,5 +1,6 @@
 #' @title Function to obtain LASSO estimates of a regression problem given summary statistics
-#' and a reference panel. 
+#' and a reference panel
+#' 
 #' @details A function to find the minimum of \eqn{\beta} in  
 #' \deqn{f(\beta)=\beta'R\beta - 2\beta'r + 2\lambda||\beta||_1}
 #' where 
@@ -13,14 +14,16 @@
 #' Likewise \code{extract}, \code{exclude} can also take one of the three formats,
 #' except with the role of the FID/IID data.frame replaced with a character vector of 
 #' SNP ids (matching those in the .bim file). 
+#' 
 #' @note Missing genotypes are interpreted as having the homozygous A2 alleles in the 
 #' PLINK files (same as the \code{--fill-missing-a2} option in PLINK). 
+#' 
 #' @param cor A vector of correlations (\eqn{r})
 #' @param bfile PLINK bfile (as character, without the .bed extension)
 #' @param lambda A vector of \eqn{\lambda}s (the tuning parameter)
 #' @param shrink The shrinkage parameter \eqn{s} for the correlation matrix \eqn{R} 
 #' @param thr convergence threshold for \eqn{\beta}
-#' @param init Initial values for \eqn{\beta}
+#' @param init Initial values for \eqn{\beta} as a vector of the same length as \code{cor}
 #' @param trace An integer controlling the amount of output generated. 
 #' @param maxiter Maximum number of iterations
 #' @param extract samples to extract
@@ -92,18 +95,19 @@ lassosum <- function(cor, bfile,
     lambda[order] <- lambda
   })
   results$shrink <- shrink
+  
   if(length(lambda) > 0) results$nparams <- colSums(results$beta != 0)
+  return(results)
   #' @return A list with the following
   #' \item{lambda}{same as the lambda input}
   #' \item{beta}{A matrix of estimated coefficients}
   #' \item{conv}{A vector of convergence indicators. 1 means converged. 0 not converged.}
-  #' \item{pred}{\eqn{=(1-s)X\beta}}
+  #' \item{pred}{\eqn{=\sqrt(1-s)X\beta}}
   #' \item{loss}{\eqn{=(1-s)\beta'X'X\beta/n - 2\beta'r}}
   #' \item{fbeta}{\eqn{=\beta'R\beta - 2\beta'r + 2\lambda||\beta||_1}}
   #' \item{sd}{The standard deviation of the reference panel SNPs}
   #' \item{shrink}{same as input}
   #' \item{nparams}{Number of non-zero coefficients}
   
-  return(results)
-
+  
 }

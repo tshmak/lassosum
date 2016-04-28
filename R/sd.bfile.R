@@ -1,4 +1,4 @@
-#' @title Obtain the SNP-wise standard deviation from the PLINK bfile
+#' @title Obtain the SNP-wise standard deviations from the PLINK bfile
 #' @details \code{keep}, \code{remove} could take one of three 
 #' formats: (1) A logical vector indicating which indivduals to keep/remove, 
 #' (2) A \code{data.frame} with two columns giving the FID and IID of the indivdiuals

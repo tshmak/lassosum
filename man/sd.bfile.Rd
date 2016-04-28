@@ -2,7 +2,7 @@
 % Please edit documentation in R/sd.bfile.R
 \name{sd.bfile}
 \alias{sd.bfile}
-\title{Obtain the SNP-wise standard deviation from the PLINK bfile}
+\title{Obtain the SNP-wise standard deviations from the PLINK bfile}
 \usage{
 sd.bfile(bfile, extract = NULL, exclude = NULL, keep = NULL,
   remove = NULL, chr = NULL)

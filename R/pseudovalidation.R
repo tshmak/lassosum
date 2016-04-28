@@ -11,7 +11,7 @@
 #' @param chr a vector of chromosomes
 #' @details A function to calculate  
 #' \deqn{f(\lambda)=\beta'r/\sqrt{\beta'X'X\beta}} 
-#' where \eqn{X} is the standardized genotype matrix divided by \eqn{\sqrt{n}}, 
+#' where \eqn{X} is the standardized genotype matrix divided by \eqn{\sqrt n}, 
 #' and \eqn{r} is a vector of (shrunken) correlations. 
 #' @note \itemize{
 #' \item Missing genotypes are interpreted as having the homozygous A2 alleles in the 
@@ -57,6 +57,6 @@ pseudovalidation <- function(bfile, beta, cor, sd=NULL,
     attr(result, "bXy") <- bXy
     
     return(result)
-    #' @return the results of the pseudovalidation
+    #' @return the results of the pseudovalidation, i.e. \eqn{f(\lambda)}
     
 }

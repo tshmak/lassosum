@@ -5,7 +5,7 @@
 \alias{lassosum}
 \alias{lassosum-package}
 \title{Function to obtain LASSO estimates of a regression problem given summary statistics
-and a reference panel.}
+and a reference panel}
 \usage{
 lassosum(cor, bfile, lambda = exp(seq(log(0.001), log(0.1), length.out = 20)),
   shrink = 0.9, thr = 1e-04, init = NULL, trace = 0, maxiter = 10000,

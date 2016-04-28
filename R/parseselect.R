@@ -2,7 +2,8 @@
 #' @details \code{keep}, \code{remove} could take one of three 
 #' formats: (1) A logical vector indicating which indivduals to keep/remove, 
 #' (2) A \code{data.frame} with two columns giving the FID and IID of the indivdiuals
-#' to keep/remove (matching those in the .fam file), or (3) a character scalar giving the text file with the FID/IID. 
+#' to keep/remove (matching those in the .fam file), or (3) a character scalar giving 
+#' the text file with the FID/IID. Note that these files should have no headers. 
 #' Likewise \code{extract}, \code{exclude} can also take one of the three formats,
 #' except with the role of the FID/IID data.frame replaced with a character vector of 
 #' SNP ids (matching those in the .bim file). 
@@ -140,6 +141,9 @@ parseselect <- function(bfile, extract=NULL, exclude=NULL,
     n <- sum(keep)
   }
 
+  if(n==0) stop("No individuals left after keep/remove! Make sure the FID/IID are correct.")
+  if(p==0) stop("No SNPs left after extract/exclude/chr! Make sure the SNP ids are correct.")
+  
     return(list(keep=keep, extract=extract, 
               N=N, P=P, n=n, p=p))
   #' @return a list with

@@ -1,11 +1,11 @@
 #' @title read a PLINK bfile file into a matrix
-#' #' @param bfile PLINK bfile (as character, without the .bed extension)
+#' @param bfile PLINK bfile (as character, without the .bed extension)
 #' @param extract samples to extract
 #' @param exclude samples to exclude
 #' @param keep SNPs to keep
 #' @param remove SNPs to remove
 #' @param chr a vector of chromosomes
-#' @param fillmissing Whether to fill missing values as 0
+#' @param fillmissing Whether to fill missing values with 0
 #' @export
 
 readbfile <- function(bfile, keep=NULL, extract=NULL, exclude=NULL, remove=NULL, 

@@ -1,7 +1,7 @@
 #' @title Computes polygenic scores as a genotype matrix multiplied by a matrix of weights
 #'
 #' @param bfile A plink bfile stem
-#' @param weights The weights for the SNPs
+#' @param weights The weights for the SNPs (\eqn{\beta})
 #' @param extract samples to extract
 #' @param exclude samples to exclude
 #' @param keep SNPs to keep
@@ -13,7 +13,7 @@
 #' \item The number of rows in \code{weights} should be the same as the number of
 #' SNPs in the bfile after extract/exclude/chr.
 #' }
-#' @details A function to calculate \eqn{=X\beta} where \eqn{X} is the genotype matrix
+#' @details A function to calculate \eqn{X\beta} where \eqn{X} is the genotype matrix
 #' in the plink bfile. 
 #' 
 

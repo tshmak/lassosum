@@ -10,7 +10,7 @@ pgs(bfile, weights, keep = NULL, extract = NULL, exclude = NULL,
 \arguments{
 \item{bfile}{A plink bfile stem}
 
-\item{weights}{The weights for the SNPs}
+\item{weights}{The weights for the SNPs (\eqn{\beta})}
 
 \item{keep}{SNPs to keep}
 
@@ -26,7 +26,7 @@ pgs(bfile, weights, keep = NULL, extract = NULL, exclude = NULL,
 A matrix of Polygenic Scores
 }
 \details{
-A function to calculate \eqn{=X\beta} where \eqn{X} is the genotype matrix
+A function to calculate \eqn{X\beta} where \eqn{X} is the genotype matrix
 in the plink bfile.
 }
 \note{

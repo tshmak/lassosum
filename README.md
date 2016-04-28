@@ -17,6 +17,9 @@ Instalation is easy with `devtools`.
 package.install("devtools")
 devtools::install_github("tshmak/lassosum")
 ```
+### Warning!
+
+Most functions in `lassosum` impute missing genotypes in PLINK bfiles with a homozygous A2 genotype, which is same as using the `--fill-missing-a2` option in PLINK. It is the user's responsibility to filter out individuals and SNPs with too many missing genotypes before hand. 
 
 ### Tutorial
 

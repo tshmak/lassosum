@@ -15,7 +15,6 @@ indeplasso(coef, lambda = exp(seq(log(0.001), log(0.1), length.out = 20)))
 A list with the following
 \item{lambda}{Same as \code{lambda} in input}
 \item{beta}{A matrix of estimates of \eqn{\beta}}
-\item{conv}{A vector of convergence indicators. 1=converged. 0=not converged.}
 }
 \details{
 A function to find the minimum of \eqn{\beta} in  

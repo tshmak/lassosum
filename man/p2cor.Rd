@@ -11,7 +11,7 @@ p2cor(p, n, sign = rep(1, length(p)))
 
 \item{n}{Sample size}
 
-\item{sign}{A vector giving the sign of the correlation (e.g. the log odds ratios)}
+\item{sign}{A vector giving the sign of the correlations (e.g. the log odds ratios)}
 }
 \value{
 A vector of correlations
