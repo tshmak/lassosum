@@ -6,8 +6,8 @@
 #' @param cor The vector of correlations (\eqn{r})
 #' @details A function to calculate  
 #' \deqn{f(\lambda)=\beta'r/\sqrt{\beta'X'X\beta}} 
-#' where \eqn{X} is the centred (not standardized) genotype matrix, and \eqn{r} is a 
-#' vector of (shrunken) correlations. 
+#' where \eqn{X} is the standardized genotype matrix divided by \eqn{\sqrt{n}}, 
+#' and \eqn{r} is a vector of (shrunken) correlations. 
 #' @note \itemize{
 #' \item The number of rows in \code{beta} and the length of \code{cor} should be the 
 #' same as the number of columns in \code{genotype.mat}.
@@ -27,12 +27,7 @@ pseudovalidationR <- function(genotype.mat, beta, cor) {
   if(length(cor) != nrow(beta)) stop("Length of cor does not match number of rows in beta")
   if(ncol(genotype.mat) != nrow(beta)) stop("Number of columns in genotype.mat does not match number of rows in beta")
   
-  parsed <- parseselect(bfile, extract=extract, exclude = exclude, 
-                        keep=keep, remove=remove, 
-                        chr=chr)
-  if(length(cor) != parsed$p) stop("Length of cor does not match number of selected columns in bfile")
-  
-  X <- scale(genotype.mat, scale=F)
+  X <- scale(genotype.mat) / sqrt(nrow(genotype.mat)-1)
   bXy <- as.vector(crossprod(beta, cor))
   Xb <- X %*% beta
   bXXb <- as.vector(colSums(Xb^2))
