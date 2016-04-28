@@ -12,7 +12,7 @@ bim <- fread("./data/chr22a.bim", data.table=F)
 ss.chr22 <- subset(ss, CHR==22) 	# Note that we recommend analyses chromosome by chromosome
 
 ### Compare ss and bim 
-comp <- comp.ss.bim(ss.chr22[, c("SNP", "A1", "A2")], bim[, c("V2", "V5", "V6")]) 
+comp <- comp.ss.bim(ss.chr22[, c("SNP", "A2", "A1")], bim[, c("V2", "V6", "V5")]) 
 ### get vector of correlations from p-values ###
 correlation <- with(ss.chr22, 
 		    p2cor(p=P[comp$ss.order], 
@@ -43,7 +43,7 @@ correlation2.shrunk <- correlation2 * (1 - fdr$lfdr)
 val.bim <- fread("./data/chr22b.bim", data.table=F) 
 
 ### Compare ss and val.bim 
-comp2 <- comp.ss.bim(ss.chr22[, c("SNP", "A1", "A2")], val.bim[, c("V2", "V5", "V6")]) 
+comp2 <- comp.ss.bim(ss.chr22[, c("SNP", "A2", "A1")], val.bim[, c("V2", "V6", "V5")]) 
 
 ### pseudovalidation ###
 pv <- pseudovalidation("./data/chr22b", 
