@@ -3,8 +3,8 @@ lassosum
 
 ### Description
 
-`lassosum` is a method for computing LASSO estimates of a linear regression problem given summary statistics which are correlation of the variables (SNPs) with the outcome (phenotype), via a reference panel.
-The reference panel is assumed to be in PLINK [format](https://www.cog-genomics.org/plink2/), although `lassosum` also provides function that works with reference panels in the form of an R data.frame or matrix.
+`lassosum` is a method for computing LASSO estimates of a linear regression problem given summary statistics from GWAS and Genome-wide meta-analyses, accounting for Linkage Disequilibrium (LD), via a reference panel.
+The reference panel is assumed to be in PLINK [format](https://www.cog-genomics.org/plink2/), although `lassosum` also provides functions that work with reference panels in the form of an R data.frame or matrix.
 Summary statistics are expected to be loaded into memory as a data.frame. The SNPs in the reference panel and the summary statistics need not exactly match. 
 
 We also provide the function `pseudovalidation` to choose the optimal value of lambda in the absence of a validation dataset, and the function `pgs` for deriving polygenic scores from the estimated betas. 
