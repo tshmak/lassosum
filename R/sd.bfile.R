@@ -13,7 +13,6 @@
 #' @param keep SNPs to keep
 #' @param remove SNPs to remove
 #' @param chr a vector of chromosomes
-#' @keywords 
 #' @note Missing genotypes are interpreted as having the homozygous A2 alleles in the 
 #' PLINK files (same as the \code{--fill-missing-a2} option in PLINK). 
 #' @export

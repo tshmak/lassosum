@@ -4,8 +4,8 @@
 \alias{pseudovalidation}
 \title{Performs `pseudovalidation' to select the best \eqn{\lambda} value in lassosum}
 \usage{
-pseudovalidation(bfile, beta, cor, n = NULL, sd = NULL, keep = NULL,
-  extract = NULL, exclude = NULL, remove = NULL, chr = NULL)
+pseudovalidation(bfile, beta, cor, sd = NULL, keep = NULL, extract = NULL,
+  exclude = NULL, remove = NULL, chr = NULL)
 }
 \arguments{
 \item{bfile}{A plink bfile stem}
@@ -13,8 +13,6 @@ pseudovalidation(bfile, beta, cor, n = NULL, sd = NULL, keep = NULL,
 \item{beta}{The matrix of estimated \eqn{\beta}s}
 
 \item{cor}{The vector of correlations (\eqn{r})}
-
-\item{n}{The number of samples}
 
 \item{sd}{The standard deviation of the SNPs}
 
@@ -34,8 +32,8 @@ the results of the pseudovalidation
 \details{
 A function to calculate  
 \deqn{f(\lambda)=\beta'r/\sqrt{\beta'X'X\beta}} 
-where \eqn{X} is the centred (not standardized) genotype matrix, and \eqn{r} is a 
-vector of (shrunken) correlations.
+where \eqn{X} is the standardized genotype matrix divided by \eqn{\sqrt{n}}, 
+and \eqn{r} is a vector of (shrunken) correlations.
 }
 \note{
 \itemize{
