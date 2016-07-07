@@ -11,7 +11,7 @@ We also provide the function `pseudovalidation` to choose the optimal value of l
 
 ### Installation
 
-Instalation is easy with `devtools`.
+Installation is easy with `devtools`.
 
 ```r
 package.install("devtools")
@@ -19,7 +19,7 @@ devtools::install_github("tshmak/lassosum")
 ```
 ### Warning!
 
-Most functions in `lassosum` impute missing genotypes in PLINK bfiles with a homozygous A2 genotype, which is same as using the `--fill-missing-a2` option in PLINK. It is the user's responsibility to filter out individuals and SNPs with too many missing genotypes before hand. 
+Most functions in `lassosum` impute missing genotypes in PLINK bfiles with a homozygous A2 genotype, which is the same as using the `--fill-missing-a2` option in PLINK. It is the user's responsibility to filter out individuals and SNPs with too many missing genotypes beforehand. 
 
 ### Tutorial
 
