@@ -122,7 +122,7 @@ comp2 <- comp.ss.bim(ss.chr22[, c("SNP", "A1", "A2")], val.bim[, c("V2", "V5", "
 Following one can perform the pseudovalidation with
 ```r
 pv <- pseudovalidation("./data/chr22b", 
-  beta=beta[comp2$ss.order, ] * outer(comp2$rev, ncol(beta)), 
+  beta=beta[comp2$ss.order, ] * outer(comp2$rev, rep(1,ncol(beta))), 
 	cor=correlation2.shrunk[comp2$ss.order], 
 	extract=comp2$bim.extract)
 plot(lambda, pv, log="x")
