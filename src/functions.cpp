@@ -142,7 +142,7 @@ arma::mat multiBed3(const std::string fileName, int N, int P, const arma::mat in
   int ii = 0;
   int iii = 0;
   const bool colskip = (col_skip_pos.n_elem > 0);
-  int Nbytes = ceil(N / 4.0);
+  unsigned long long int Nbytes = ceil(N / 4.0);
   const bool selectrow = (keepbytes.n_elem > 0);
   int n;
   if (selectrow)
