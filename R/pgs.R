@@ -2,10 +2,10 @@
 #'
 #' @param bfile A plink bfile stem
 #' @param weights The weights for the SNPs (\eqn{\beta})
-#' @param extract samples to extract
-#' @param exclude samples to exclude
-#' @param keep SNPs to keep
-#' @param remove SNPs to remove
+#' @param extract SNPs to extract
+#' @param exclude SNPs to exclude
+#' @param keep samples to keep
+#' @param samples to remove
 #' @param chr a vector of chromosomes
 #' @note \itemize{
 #' \item Missing genotypes are interpreted as having the homozygous A2 alleles in the 

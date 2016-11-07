@@ -16,15 +16,15 @@ pseudovalidation(bfile, beta, cor, sd = NULL, keep = NULL, extract = NULL,
 
 \item{sd}{The standard deviation of the SNPs}
 
-\item{keep}{SNPs to keep}
+\item{keep}{samples to keep}
 
-\item{extract}{samples to extract}
+\item{extract}{SNPs to extract}
 
-\item{exclude}{samples to exclude}
-
-\item{remove}{SNPs to remove}
+\item{exclude}{SNPs to exclude}
 
 \item{chr}{a vector of chromosomes}
+
+\item{samples}{to remove}
 }
 \value{
 the results of the pseudovalidation, i.e. \eqn{f(\lambda)}

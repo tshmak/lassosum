@@ -1,9 +1,9 @@
 #' @title read a PLINK bfile file into a matrix
 #' @param bfile PLINK bfile (as character, without the .bed extension)
-#' @param extract samples to extract
-#' @param exclude samples to exclude
-#' @param keep SNPs to keep
-#' @param remove SNPs to remove
+#' @param extract SNPs to extract
+#' @param exclude SNPs to exclude
+#' @param keep samples to keep
+#' @param samples to remove
 #' @param chr a vector of chromosomes
 #' @param fillmissing Whether to fill missing values with 0
 #' @export

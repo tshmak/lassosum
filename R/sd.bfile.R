@@ -8,10 +8,10 @@
 #' SNP ids (matching those in the .bim file). 
 
 #' @param bfile plink file stem
-#' @param extract samples to extract
-#' @param exclude samples to exclude
-#' @param keep SNPs to keep
-#' @param remove SNPs to remove
+#' @param extract SNPs to extract
+#' @param exclude SNPs to exclude
+#' @param keep samples to keep
+#' @param samples to remove
 #' @param chr a vector of chromosomes
 #' @note Missing genotypes are interpreted as having the homozygous A2 alleles in the 
 #' PLINK files (same as the \code{--fill-missing-a2} option in PLINK). 

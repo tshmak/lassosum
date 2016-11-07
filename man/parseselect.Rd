@@ -10,15 +10,15 @@ parseselect(bfile, extract = NULL, exclude = NULL, keep = NULL,
 \arguments{
 \item{bfile}{plink file stem}
 
-\item{extract}{samples to extract}
+\item{extract}{SNPs to extract}
 
-\item{exclude}{samples to exclude}
+\item{exclude}{SNPs to exclude}
 
-\item{keep}{SNPs to keep}
-
-\item{remove}{SNPs to remove}
+\item{keep}{samples to keep}
 
 \item{chr}{a vector of chromosomes}
+
+\item{samples}{to remove}
 }
 \value{
 a list with
