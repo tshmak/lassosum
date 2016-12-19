@@ -4,10 +4,8 @@ lassosum
 ### Description
 
 `lassosum` is a method for computing LASSO estimates of a linear regression problem given summary statistics from GWAS and Genome-wide meta-analyses, accounting for Linkage Disequilibrium (LD), via a reference panel.
-The reference panel is assumed to be in PLINK [format](https://www.cog-genomics.org/plink2/), although `lassosum` also provides functions that work with reference panels in the form of an R data.frame or matrix.
-Summary statistics are expected to be loaded into memory as a data.frame. The SNPs in the reference panel and the summary statistics need not exactly match. 
-
-We also provide the function `pseudovalidation` to choose the optimal value of lambda in the absence of a validation dataset, and the function `pgs` for deriving polygenic scores from the estimated betas. 
+The reference panel is assumed to be in PLINK [format](https://www.cog-genomics.org/plink2/).
+Summary statistics are expected to be loaded into memory as a data.frame/data.table. 
 
 ### Installation
 
@@ -23,7 +21,7 @@ Most functions in `lassosum` impute missing genotypes in PLINK bfiles with a hom
 
 ### Tutorial
 
-We advise the use of the packages `data.table` to import summary statistics text files and `fdrtool` to compute the shrunken estimations of the correlations.
+We advise the use of the packages `data.table` to import summary statistics text files.
 
 In the following tutorial we make use of two dummy datasets, which can be downloaded from this repository.
 You can download the repository via
@@ -43,131 +41,44 @@ setwd("path/to/repository/tutorial")
 
 First we read the summary statistics and genotyoe information of the refrence panel into R. (`read.table` is ok, but `fread` from the `data.table` package is much faster for large files.)
 
+
+
 ```r
+library(data.table)
+
 ### Read summary statistics file ###
-ss <- fread("./data/summarystats.txt", data.table=F)
+ss <- fread("./data/summarystats.txt")
+head(ss)
 
-### Read .bim file of the reference panel ###
-bim <- fread("./data/chr22a.bim", data.table=F)
+### Specify the PLINK file stub of the reference panel ###
+ref.bfile <- "./data/refpanel"
+
+### Specify the PLINK file stub of the test data ###
+test.bfile <- "./data/testsample"
+
+### Read ld region file ###
+ld <- fread("./data/Berisa.2015.EUR.bed")
 ```
 
-We advise doing the analysis chromosome by chromosome.
+To run `lassosum`, we need to input SNP-wise correlations. This can be converted from p-values via the `p2cor` function. 
 ```r
-### Select chromosome 22 only ###
-ss.chr22 <- subset(ss, CHR==22) 	
+cor <- p2cor(p = ss$P_val, n = 60000, sign=log(ss$OR_A1))
 ```
 
-`lassosum` comes with a function `comp.ss.bim` to compare the SNPs in the summary statistics and reference panel. It identifies the common SNPs and whether the reference alleles have been reversed. To use this function, both the summary statistics and the reference panel data.frame must have at minimum 3 columns, representing the 
-
-* the SNP id
-* the reference allele
-* the alternative allele
-
+Running lassosum using standard pipeline: 
 ```r
-### Compare ss and bim 
-comp <- comp.ss.bim(ss.chr22[, c("SNP", "A1", "A2")], bim[, c("V2", "V5", "V6")]) 
+out <- lassosum.pipeline(cor=cor, chr=ss$Chr, pos=ss$Position, 
+                         A1=ss$A1, A2=ss$A2,
+                         ref.bfile=ref.bfile, test.bfile=test.bfile, 
+                         LDblocks = ld)
+
+### Validation with phenotype ### 
+v <- validate.lassosum.pipeline(out) # Use the 6th column in .fam file in test dataset for test phenotype
+
+### pseudovalidation ###
+# install.packages("fdrtool")
+v <- pseudovalidate.lassosum.pipeline(out)
+
 ```
-
-We also provide a function `p2cor` to convert p-values into correlations. 
-```r
-correlation <- with(ss.chr22, 
-		    p2cor(p=P[comp$ss.order], 
-			  n = NMISS[comp$ss.order], 
-			  sign=log(OR[comp$ss.order]) * comp$rev))
-```
-
-Define a range of lambda:
-```r
-lambda <- exp(seq(log(0.001), log(0.1), length.out=20))
-```
-
-Obtain the beta estimates from lassosum
-```r
-ls <- lassosum(cor=correlation, bfile="./data/chr22a", lambda=lambda, shrink=0.9, 
-	       extract=comp$bim.extract)
-```
-
-(See below for obtaining estimates when the reference panel is given as an R data.frame.)
-
-We can also get the independent LASSO (i.e. soft-thresholded) estimates for SNPs not in the reference panel. 
-
-```r
-correlation2 <- with(ss.chr22, p2cor(P, NMISS))
-il <- indeplasso(correlation2, lambda = lambda)
-```
-
-We then combine the two sets of estimates
-
-```r
-beta <- il$beta
-beta[comp$ss.order, ] <- ls$beta
-```
-
-### Pseudovalidation
-
-We obtain the shrunken estimates for the correlations
-
-```r
-fdr <- fdrtool::fdrtool(correlation2, statistic="correlation")
-correlation2.shrunk <- correlation2 * (1 - fdr$lfdr)
-```
-
-We read in the `.bim` file from the target/validation dataset and compare the included SNPs.
-
-```r
-val.bim <- fread("./data/chr22b.bim", data.table=F) 
-comp2 <- comp.ss.bim(ss.chr22[, c("SNP", "A1", "A2")], val.bim[, c("V2", "V5", "V6")]) 
-```
-
-Following one can perform the pseudovalidation with
-```r
-pv <- pseudovalidation("./data/chr22b", 
-  beta=beta[comp2$ss.order, ] * outer(comp2$rev, rep(1,ncol(beta))), 
-	cor=correlation2.shrunk[comp2$ss.order], 
-	extract=comp2$bim.extract)
-plot(lambda, pv, log="x")
-```
-
-The best lambda is obtained by
-```r
-best.lambda.pos <- which(pv == max(pv))
-```
-
-and the corresponding PGS scores for the best lambda
-
-```r
-PGS <- pgs(bfile = "./data/chr22b", weights = beta[comp2$ss.order] * comp2$rev, 
-	   extract=comp2$bim.extract)
-```
-
-### lassosum using a reference panel given as a data.frame
-
-load "./data/chr22a" as a matrix 
-```r
-chr22a <- readbfile("./data/chr22a", fillmissing=T)
-```
-
-Get beta estimates from `lassosumR`
-```r
-lsR <- lassosumR(cor=correlation, refpanel=chr22a[,comp$bim.extract], 
-                 lambda=lambda, shrink=0.9) 
-```
-
-pseudovalidation using chr22b as target data (using `pseudovalidationR`)
-```r
-chr22b <- readbfile("./data/chr22b", fillmissing=T)
-pvR <- pseudovalidationR(chr22b[, comp2$bim.extract], 
-                        beta=beta[comp2$ss.order, ] * outer(comp2$rev, rep(1,ncol(beta))), 
-                        cor=correlation2.shrunk[comp2$ss.order])
-```
-
-### De-standardizing correlation coefficients to get regression coefficients 
-Obtain SNP-wise standard deviation of target dataset 
-```r
-sd <- sd.bfile(bfile = "./data/chr22b", extract=comp2$bim.extract)
-```
-regression coefficients = correlation coefficients / sd(X) * sd(y) 
-```r
-reg.coef <- Matrix::Diagonal(x=1/sd) %*% beta[comp2$ss.order, ]
-```
-
+### Support
+If there are any questions, please email Timothy Mak at tshmak@hku.hk

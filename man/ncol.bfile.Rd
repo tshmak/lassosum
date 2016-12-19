@@ -4,13 +4,13 @@
 \alias{ncol.bfile}
 \title{Obtains the number of column (SNPs) in a PLINK bfile}
 \usage{
-ncol.bfile(bfile)
+\method{ncol}{bfile}(bfile)
 }
 \arguments{
 \item{bfile}{Plink file stem}
 }
 \value{
 an integer with the number of columns
+#@keywords internal
 }
-\keyword{internal}
 

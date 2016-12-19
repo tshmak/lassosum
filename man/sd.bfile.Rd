@@ -4,19 +4,19 @@
 \alias{sd.bfile}
 \title{Obtain the SNP-wise standard deviations from the PLINK bfile}
 \usage{
-sd.bfile(bfile, extract = NULL, exclude = NULL, keep = NULL,
-  remove = NULL, chr = NULL)
+sd.bfile(bfile, keep = NULL, remove = NULL, extract = NULL,
+  exclude = NULL, chr = NULL, ...)
 }
 \arguments{
 \item{bfile}{plink file stem}
 
-\item{extract}{samples to extract}
+\item{keep}{samples to keep}
 
-\item{exclude}{samples to exclude}
+\item{remove}{samples to remove}
 
-\item{keep}{SNPs to keep}
+\item{extract}{SNPs to extract}
 
-\item{remove}{SNPs to remove}
+\item{exclude}{SNPs to exclude}
 
 \item{chr}{a vector of chromosomes}
 }

@@ -113,7 +113,7 @@ bool openPlinkBinaryFile(const std::string s, std::ifstream &BIT) {
   return bfile_SNP_major;
 }
 
-//' imports genotypeMatrix and multiplies it by a constant
+//' Multiply genotypeMatrix by a constant
 //' 
 //' @param fileName location of bam file
 //' @param N number of subjects 
@@ -142,7 +142,7 @@ arma::mat multiBed3(const std::string fileName, int N, int P, const arma::mat in
   int ii = 0;
   int iii = 0;
   const bool colskip = (col_skip_pos.n_elem > 0);
-  int Nbytes = ceil(N / 4.0);
+  unsigned long long int Nbytes = ceil(N / 4.0);
   const bool selectrow = (keepbytes.n_elem > 0);
   int n;
   if (selectrow)
@@ -232,8 +232,8 @@ arma::mat multiBed3(const std::string fileName, int N, int P, const arma::mat in
 //' @keywords internal
 //' 
 // [[Rcpp::export]]
-int elnet(double lambda1, double lambda2, arma::vec& diag, arma::mat& X, arma::vec& r,
-              double thr, arma::vec& x, arma::vec& yhat, int trace, int maxiter)
+int elnet(double lambda1, double lambda2, const arma::vec& diag, const arma::mat& X, 
+          const arma::vec& r, double thr, arma::vec& x, arma::vec& yhat, int trace, int maxiter)
 {
 
 // diag is basically diag(X'X)
@@ -285,6 +285,31 @@ int elnet(double lambda1, double lambda2, arma::vec& diag, arma::mat& X, arma::v
   return conv;
 }
 
+// [[Rcpp::export]]
+int repelnet(double lambda1, double lambda2, arma::vec& diag, arma::mat& X, arma::vec& r,
+          double thr, arma::vec& x, arma::vec& yhat, int trace, int maxiter, 
+          arma::Col<int>& startvec, arma::Col<int>& endvec)
+{
+  
+  // Repeatedly call elnet by blocks...
+  int nreps=startvec.n_elem;
+  int out=1;
+  for(int i=0;i < startvec.n_elem; i++) {
+    arma::vec xtouse=x.subvec(startvec(i), endvec(i));
+    arma::vec yhattouse=X.cols(startvec(i), endvec(i)) * xtouse;
+    int out2=elnet(lambda1, lambda2, 
+                   diag.subvec(startvec(i), endvec(i)), 
+                   X.cols(startvec(i), endvec(i)), 
+                   r.subvec(startvec(i), endvec(i)),
+                   thr, xtouse, 
+                   yhattouse, trace - 1, maxiter);
+    x.subvec(startvec(i), endvec(i))=xtouse;
+    yhat += yhattouse;
+    if(trace > 0) Rcout << "Block: " << i << "\n";
+    out=std::min(out, out2);
+  }
+  return out; 
+}
 
 //' imports genotypeMatrix
 //' 
@@ -325,8 +350,8 @@ arma::mat genotypeMatrix(const std::string fileName, int N, int P,
 
   if (colskip) {
     nskip = arma::accu(col_skip);
-	p = P - nskip;
-}  else
+    p = P - nskip;
+  }  else
     p = P;
 	
   int j, jj, iii;
@@ -337,7 +362,7 @@ arma::mat genotypeMatrix(const std::string fileName, int N, int P,
 
   iii=0;
   while (i < P) {
-
+  // Rcout << i << std::endl;
     Rcpp::checkUserInterrupt();
     if (colskip) {
       if (ii < col_skip.n_elem) {
@@ -439,15 +464,19 @@ List runElnet(arma::vec& lambda, double shrink, const std::string fileName,
               arma::vec& r, int N, int P, 
 			  arma::Col<int>& col_skip_pos, arma::Col<int>& col_skip, 
 			  arma::Col<int>& keepbytes, arma::Col<int>& keepoffset, 
-			  double thr, arma::vec& x, int trace, int maxiter) {
+			  double thr, arma::vec& x, int trace, int maxiter, 
+			  arma::Col<int>& startvec, arma::Col<int>& endvec) {
   // a) read bed file
   // b) standardize genotype matrix
   // c) multiply by constatant factor
   // d) perfrom elnet
 
+  // Rcout << "ABC" << std::endl;
+
   int i,j;
   arma::mat genotypes = genotypeMatrix(fileName, N, P, col_skip_pos, col_skip, keepbytes,
                              keepoffset, 1);
+  // Rcout << "DEF" << std::endl;
 
   if (genotypes.n_cols != r.n_elem) {
     throw std::runtime_error("Number of positions in reference file is not "
@@ -466,12 +495,16 @@ List runElnet(arma::vec& lambda, double shrink, const std::string fileName,
   arma::vec out(lambda.n_elem);
   arma::vec loss(lambda.n_elem);
   arma::vec diag(r.n_elem); diag.fill(1.0 - shrink); 
+  // Rcout << "HIJ" << std::endl;
+
 	for(j=0; j < diag.n_elem; j++) {
 		if(sd(j) == 0.0) diag(j) = 0.0;
 	}
+  // Rcout << "LMN" << std::endl;
+
   arma::vec fbeta(lambda.n_elem);
-  arma::vec yhat(x.n_elem);
-  yhat = genotypes * x;
+  arma::vec yhat(genotypes.n_rows);
+  // yhat = genotypes * x;
 
   
   // Rcout << "Starting loop" << std::endl;
@@ -479,11 +512,12 @@ List runElnet(arma::vec& lambda, double shrink, const std::string fileName,
     if (trace > 0)
       Rcout << "lambda: " << lambda(i) << "\n" << std::endl;
     out(i) =
-        elnet(lambda(i), shrink, diag,genotypes, r, thr, x, yhat, trace-1, maxiter);
+        repelnet(lambda(i), shrink, diag,genotypes, r, thr, x, yhat, trace-1, maxiter, 
+                 startvec, endvec);
     beta.col(i) = x;
-	for(j=0; j < beta.n_rows; j++) {
-		if(sd(j) == 0.0) beta(j,i)=beta(j,i) * shrink;
-	}
+    for(j=0; j < beta.n_rows; j++) {
+      if(sd(j) == 0.0) beta(j,i)=beta(j,i) * shrink;
+    }
     if (out(i) != 1) {
       throw std::runtime_error("Not converging.....");
     }
@@ -502,3 +536,4 @@ List runElnet(arma::vec& lambda, double shrink, const std::string fileName,
 					  Named("fbeta") = fbeta, 
 					  Named("sd")= sd);
 }
+

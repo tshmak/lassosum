@@ -12,8 +12,7 @@
 #' \item The number of rows in \code{beta} and the length of \code{cor} should be the 
 #' same as the number of columns in \code{genotype.mat}.
 #' }
-
-#' @export
+#' @keywords internal
 pseudovalidationR <- function(genotype.mat, beta, cor) {
 
   stopifnot(!any(is.na(genotype.mat)))

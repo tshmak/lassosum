@@ -4,13 +4,13 @@
 \alias{nrow.bfile}
 \title{Obtains the number of individuals in a PLINK bfile}
 \usage{
-nrow.bfile(bfile)
+\method{nrow}{bfile}(bfile)
 }
 \arguments{
 \item{bfile}{Plink file stem}
 }
 \value{
 an integer with the number of rows
+#@keywords internal
 }
-\keyword{internal}
 

@@ -29,4 +29,5 @@ and \eqn{r} is a vector of (shrunken) correlations.
 same as the number of columns in \code{genotype.mat}.
 }
 }
+\keyword{internal}
 

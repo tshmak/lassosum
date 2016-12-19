@@ -2,7 +2,7 @@
 % Please edit documentation in R/RcppExports.R
 \name{multiBed3}
 \alias{multiBed3}
-\title{imports genotypeMatrix and multiplies it by a constant}
+\title{Multiply genotypeMatrix by a constant}
 \usage{
 multiBed3(fileName, N, P, input, col_skip_pos, col_skip, keepbytes, keepoffset)
 }
@@ -27,7 +27,7 @@ multiBed3(fileName, N, P, input, col_skip_pos, col_skip, keepbytes, keepoffset)
 an armadillo genotype matrix
 }
 \description{
-imports genotypeMatrix and multiplies it by a constant
+Multiply genotypeMatrix by a constant
 }
 \keyword{internal}
 

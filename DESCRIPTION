@@ -1,7 +1,7 @@
 Package: lassosum
 Type: Package
 Title: LASSO with summary statistics and a reference panel
-Version: 0.1
+Version: 0.2
 Date: 2015-11-09
 Authors@R: c(
 		person("Timothy", "Mak", email = "tshmak@hku.hk", role = c("aut", "cre")),
@@ -13,11 +13,11 @@ LazyData: TRUE
 LinkingTo: Rcpp, RcppArmadillo
 Imports:
     Rcpp (>= 0.11.0),
-    Matrix
+    Matrix, 
+    data.table
 Suggests:
     testthat,
     fdrtool,
-    data.table,
     knitr,
     rmarkdown
 RoxygenNote: 5.0.1

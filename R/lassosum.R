@@ -26,11 +26,16 @@
 #' @param init Initial values for \eqn{\beta} as a vector of the same length as \code{cor}
 #' @param trace An integer controlling the amount of output generated. 
 #' @param maxiter Maximum number of iterations
-#' @param extract samples to extract
-#' @param exclude samples to exclude
-#' @param keep SNPs to keep
-#' @param remove SNPs to remove
+#' @param blocks A vector to split the genome by blocks (coded as c(1,1,..., 2, 2, ..., etc.))
+#' @param extract SNPs to extract
+#' @param exclude SNPs to exclude
+#' @param keep samples to keep
+#' @param remove samples to remove
 #' @param chr a vector of chromosomes
+#' @param mem.limit Memory limit for genotype matrix loaded. Note that other overheads are not included. 
+#' @param chunks Splitting the genome into chunks for computation. Either an integer 
+#' indicating the number of chunks or a vector (length equal to \code{cor}) giving the exact split. 
+#' @param cluster A \code{cluster} object from the \code{parallel} package for parallel computing
 #' 
 #' @export
 
@@ -38,20 +43,59 @@ lassosum <- function(cor, bfile,
                      lambda=exp(seq(log(0.001), log(0.1), length.out=20)), 
                      shrink=0.9, 
                      thr=1e-4, init=NULL, trace=0, maxiter=10000, 
-                     keep=NULL, extract=NULL, exclude=NULL, remove=NULL, 
-                     chr=NULL) {
+                     blocks=NULL,
+                     keep=NULL, remove=NULL, extract=NULL, exclude=NULL, 
+                     chr=NULL, 
+                     mem.limit=4*10^9, chunks=NULL, cluster=NULL) {
   
   stopifnot(is.numeric(cor))
   stopifnot(!any(is.na(cor)))
   if(any(abs(cor) > 1)) warning("Some abs(cor) > 1")
   if(any(abs(cor) == 1)) warning("Some abs(cor) == 1")
+  if(length(shrink) > 1) stop("Only 1 shrink parameter at a time.")
   
   parsed <- parseselect(bfile, extract=extract, exclude = exclude, 
                         keep=keep, remove=remove, 
                         chr=chr)
+  if(is.null(blocks)) {
+    Blocks <- list(startvec=0, endvec=parsed$p - 1)
+  } else {
+    Blocks <- parseblocks(blocks)
+    stopifnot(max(Blocks$endvec)==parsed$p - 1)
+  }
 
   if(length(cor) != parsed$p) stop("Length of cor does not match number of selected columns in bfile")
   # stopifnot(length(cor) == parsed$p)
+  
+  #### Group blocks into chunks ####
+  chunks <- group.blocks(Blocks, parsed, mem.limit, chunks, cluster)
+  if(trace > 0) {
+    if(trace - floor(trace) > 0) {
+      cat("Doing lassosum on chunk", unique(chunks$chunks), "\n")
+    } else {
+      cat("Calculations carried out in ", max(chunks$chunks.blocks), " chunks\n")
+    }
+  }
+  if(length(unique(chunks$chunks.blocks)) > 1) {
+    if(is.null(cluster)) {
+      results.list <- lapply(unique(chunks$chunks.blocks), function(i) {
+        lassosum(cor=cor[chunks$chunks==i], bfile=bfile, lambda=lambda, shrink=shrink, 
+                 thr=thr, init=init[chunks$chunks==i], trace=trace-0.5, maxiter=maxiter, 
+                 blocks[chunks$chunks==i], keep=parsed$keep, extract=chunks$extracts[[i]], 
+                 mem.limit=mem.limit, chunks=chunks$chunks[chunks$chunks==i])
+      })
+    } else {
+      results.list <- parLapplyLB(cluster, unique(chunks$chunks.blocks), function(i) {
+        lassosum(cor=cor[chunks$chunks==i], bfile=bfile, lambda=lambda, shrink=shrink, 
+                 thr=thr, init=init[chunks$chunks==i], trace=trace-0.5, maxiter=maxiter, 
+                 blocks[chunks$chunks==i], keep=parsed$keep, extract=chunks$extracts[[i]], 
+                 mem.limit=mem.limit, chunks=chunks$chunks[chunks$chunks==i])
+      })
+    }
+    return(do.call("merge.lassosum", results.list))
+  }
+
+  #### Group blocks into chunks 
   
   if(is.null(parsed$extract)) {
     extract2 <- list(integer(0), integer(0))
@@ -85,7 +129,9 @@ lassosum <- function(cor, bfile,
                       r=cor, N=parsed$N, P=parsed$P, 
                       col_skip_pos=extract2[[1]], col_skip=extract2[[2]],
                       keepbytes=keepbytes, keepoffset=keepoffset, 
-                      thr=1e-4, x=init, trace=trace, maxiter=maxiter)
+                      thr=1e-4, x=init, trace=trace, maxiter=maxiter,
+                      startvec=Blocks$startvec, endvec=Blocks$endvec)
+  results$sd <- as.vector(results$sd)
   results <- within(results, {
     conv[order] <- conv
     beta[,order] <- beta
@@ -96,7 +142,14 @@ lassosum <- function(cor, bfile,
   })
   results$shrink <- shrink
   
-  if(length(lambda) > 0) results$nparams <- colSums(results$beta != 0)
+  if(length(lambda) > 0) results$nparams <- as.vector(colSums(results$beta != 0)) else 
+    results$nparams <- numeric(0)
+  results$conv <- as.vector(results$conv)
+  results$loss <- as.vector(results$loss)
+  results$fbeta <- as.vector(results$fbeta)
+  results$lambda <- as.vector(results$lambda)
+  
+  class(results) <- "lassosum"
   return(results)
   #' @return A list with the following
   #' \item{lambda}{same as the lambda input}

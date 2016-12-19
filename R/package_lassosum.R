@@ -1,14 +1,9 @@
-#' lassosum: A package for computating the notorious bar statistic.
-#'
-#' The lassosum package provides three categories of important functions:
-#' lassosum, bar and baz.
-#' 
-#' @section Foo functions:
-#' The lassosum functions ...
+#' lassosum: A package for carrying out LASSO regression using GWAS summary statistics
 #'
 #' @docType package
 #' @name lassosum
 #' @importFrom Rcpp evalCpp
 #' @importFrom Matrix Diagonal t
+#' @importFrom data.table fread
 #' @useDynLib lassosum
 NULL

@@ -2,7 +2,8 @@
 #' 
 #' @param bfile Plink file stem
 #' @return an integer with the number of rows
-#' @keywords internal
+#' #@keywords internal
+#' @method nrow bfile
 #' @export
 nrow.bfile <- function(bfile) {
 	famfile <- paste0(bfile, ".fam")

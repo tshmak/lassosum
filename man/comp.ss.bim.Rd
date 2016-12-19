@@ -25,4 +25,6 @@ reference and alternative alleles are reversely coded between the two data.frame
 Both \code{ss.df} and \code{bim.df} must be \code{data.frame}s with exactly 
 three columns in this order: (1) SNP ids, (2) reference allele, (3) alternative allele
 }
+\keyword{#@export}
+\keyword{internal}
 

@@ -12,13 +12,13 @@ pgs(bfile, weights, keep = NULL, extract = NULL, exclude = NULL,
 
 \item{weights}{The weights for the SNPs (\eqn{\beta})}
 
-\item{keep}{SNPs to keep}
+\item{keep}{samples to keep}
 
-\item{extract}{samples to extract}
+\item{extract}{SNPs to extract}
 
-\item{exclude}{samples to exclude}
+\item{exclude}{SNPs to exclude}
 
-\item{remove}{SNPs to remove}
+\item{remove}{samples to remove}
 
 \item{chr}{a vector of chromosomes}
 }

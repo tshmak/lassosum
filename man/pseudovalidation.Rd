@@ -5,7 +5,7 @@
 \title{Performs `pseudovalidation' to select the best \eqn{\lambda} value in lassosum}
 \usage{
 pseudovalidation(bfile, beta, cor, sd = NULL, keep = NULL, extract = NULL,
-  exclude = NULL, remove = NULL, chr = NULL)
+  exclude = NULL, remove = NULL, chr = NULL, ...)
 }
 \arguments{
 \item{bfile}{A plink bfile stem}
@@ -16,13 +16,13 @@ pseudovalidation(bfile, beta, cor, sd = NULL, keep = NULL, extract = NULL,
 
 \item{sd}{The standard deviation of the SNPs}
 
-\item{keep}{SNPs to keep}
+\item{keep}{samples to keep}
 
-\item{extract}{samples to extract}
+\item{extract}{SNPs to extract}
 
-\item{exclude}{samples to exclude}
+\item{exclude}{SNPs to exclude}
 
-\item{remove}{SNPs to remove}
+\item{remove}{samples to remove}
 
 \item{chr}{a vector of chromosomes}
 }

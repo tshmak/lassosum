@@ -5,7 +5,7 @@
 \title{Elastic net using summary statistics}
 \usage{
 elnetR(lambda1, lambda2 = 0, X, b, thr = 1e-04, trace = 0,
-  maxiter = 10000, x = NULL)
+  maxiter = 10000, blocks = NULL, x = NULL)
 }
 \description{
 Coordinate descent algorithm to solve: 

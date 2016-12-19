@@ -20,14 +20,17 @@
 #' @param init Initial values for \eqn{\beta}
 #' @param trace An integer controlling the amount of output generated. 
 #' @param maxiter Maximum number of iterations
+#' @param blocks A vector to split the genome by blocks (coded as c(1,1,..., 2, 2, ..., etc.))
 #' @param ridge Produce ridge regression results also (slow if nrow(refpanel) > 2000)
 #' 
-#' @export
+#' @keywords internal
+#' #@export
 
 lassosumR <- function(cor, refpanel, 
                      lambda=exp(seq(log(0.001), log(0.1), length.out=20)), 
                      shrink=0.9, ridge=F, 
-                     thr=1e-4, init=NULL, trace=0, maxiter=10000) {
+                     thr=1e-4, init=NULL, trace=0, maxiter=10000, 
+                     blocks=NULL) {
   
   stopifnot(is.matrix(refpanel) || is.data.frame(refpanel))
   cor <- as.vector(cor)
@@ -38,21 +41,24 @@ lassosumR <- function(cor, refpanel,
 	p <- ncol(refpanel)
 	X <- scale(refpanel) / sqrt(N-1) * sqrt(1-shrink)
 	X[is.nan(X)] <- 0
-	el <- elnetR(lambda, shrink, X, cor)
+	el <- elnetR(lambda, shrink, X, cor, thr=thr,
+	             trace=trace, maxiter=maxiter, 
+	             blocks=blocks)
 	if(ridge) {
-	  svd <- svd(X, nu=0)
-	  invert <- 1/(svd$d^2 + shrink)
-	  VG <- svd$v %*% Diagonal(x=invert - 1/shrink)
-	  VTr <- t(svd$v) %*% cor
-	  VGVTr <- VG %*% VTr
-	  # yTy <- sum(cor * VGVTr) + 1/shrink * sum(cor^2)
-	  # rss <- el$loss + shrink * colSums(el$beta^2) + yTy
-	  Ridge <- as.vector(VGVTr + 1/shrink * cor)
+	  if(is.null(blocks)) blocks <- rep(1, p)
+	  reps <- 1:max(blocks)
+	  svd <- lapply(1:reps, function(i) svd(X[,blocks==i], nu=0))
+	  invert <- lapply(1:reps, function(i) 1/(svd[[i]]$d^2 + shrink))
+	  VG <- lapply(1:reps, function(i) svd[[i]]$v %*% Diagonal(x=invert[[i]] - 1/shrink))
+	  VTr <- lapply(1:reps, function(i) t(svd[[i]]$v) %*% cor[blocks == i])
+	  VGVTr <- lapply(1:reps, function(i) VG[[i]] %*% VTr[[i]])
+	  Ridge <- lapply(1:reps, function(i) as.vector(VGVTr[[i]] + 1/shrink * cor[blocks==i]))
+	  Ridge <- unlist(Ridge)
 	} else Ridge <- NULL
 
 	nparams <- colSums(el$beta != 0) 
 
-	return(list(lambda=lambda, 
+	toreturn <- list(lambda=lambda, 
 	            beta=el$beta,
 	            conv=el$conv,
 	            pred=el$pred,
@@ -61,7 +67,11 @@ lassosumR <- function(cor, refpanel,
 	            sd=attr(X, "scaled:scale"),
 	            shrink=shrink,
 	            nparams=nparams, 
-	            ridge=Ridge))
+	            ridge=Ridge)
+	
+	class(toreturn) <- "lassosum"
+	return(toreturn)
+	
 	#' @return A list with the following
 	#' \item{lambda}{same as the lambda input}
 	#' \item{beta}{A matrix of estimated coefficients}

@@ -6,8 +6,8 @@
 #' @details Both \code{ss.df} and \code{bim.df} must be \code{data.frame}s with exactly 
 #' three columns in this order: (1) SNP ids, (2) reference allele, (3) alternative allele
 #' 
-#' 
-#' @export
+#' @keywords internal
+#' #@export
 comp.ss.bim <- function(ss.df, bim.df, exclude.ambiguous=F) {
   
   stopifnot(is.data.frame(ss.df))

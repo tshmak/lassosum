@@ -2,10 +2,10 @@
 #'
 #' @param bfile A plink bfile stem
 #' @param weights The weights for the SNPs (\eqn{\beta})
-#' @param extract samples to extract
-#' @param exclude samples to exclude
-#' @param keep SNPs to keep
-#' @param remove SNPs to remove
+#' @param extract SNPs to extract
+#' @param exclude SNPs to exclude
+#' @param keep samples to keep
+#' @param remove samples to remove
 #' @param chr a vector of chromosomes
 #' @note \itemize{
 #' \item Missing genotypes are interpreted as having the homozygous A2 alleles in the 
@@ -21,10 +21,6 @@
 pgs <- function(bfile, weights, keep=NULL, extract=NULL, exclude=NULL, remove=NULL, 
                    chr=NULL) {
 
-  parsed <- parseselect(bfile, extract=extract, exclude = exclude, 
-                        keep=keep, remove=remove, 
-                        chr=chr)
-
   stopifnot(is.numeric(weights))
   stopifnot(!any(is.na(weights)))
   if(is.vector(weights)) weights <- matrix(weights, ncol=1)
@@ -33,7 +29,7 @@ pgs <- function(bfile, weights, keep=NULL, extract=NULL, exclude=NULL, remove=NU
   parsed <- parseselect(bfile, extract=extract, exclude = exclude, 
                         keep=keep, remove=remove, 
                         chr=chr)
-  if(nrow(weights) != parsed$p) stop("Length of cor does not match number
+  if(nrow(weights) != parsed$p) stop("Number of rows in (or vector length of) weights does not match number
 				     of selected columns in bfile")
   # stopifnot(length(cor) == parsed$p)
   

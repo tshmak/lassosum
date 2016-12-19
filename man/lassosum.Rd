@@ -9,8 +9,9 @@ and a reference panel}
 \usage{
 lassosum(cor, bfile, lambda = exp(seq(log(0.001), log(0.1), length.out = 20)),
   shrink = 0.9, thr = 1e-04, init = NULL, trace = 0, maxiter = 10000,
-  keep = NULL, extract = NULL, exclude = NULL, remove = NULL,
-  chr = NULL)
+  blocks = NULL, keep = NULL, remove = NULL, extract = NULL,
+  exclude = NULL, chr = NULL, mem.limit = 4 * 10^9, chunks = NULL,
+  cluster = NULL)
 }
 \arguments{
 \item{cor}{A vector of correlations (\eqn{r})}
@@ -23,28 +24,37 @@ lassosum(cor, bfile, lambda = exp(seq(log(0.001), log(0.1), length.out = 20)),
 
 \item{thr}{convergence threshold for \eqn{\beta}}
 
-\item{init}{Initial values for \eqn{\beta}}
+\item{init}{Initial values for \eqn{\beta} as a vector of the same length as \code{cor}}
 
 \item{trace}{An integer controlling the amount of output generated.}
 
 \item{maxiter}{Maximum number of iterations}
 
-\item{keep}{SNPs to keep}
+\item{blocks}{A vector to split the genome by blocks (coded as c(1,1,..., 2, 2, ..., etc.))}
 
-\item{extract}{samples to extract}
+\item{keep}{samples to keep}
 
-\item{exclude}{samples to exclude}
+\item{remove}{samples to remove}
 
-\item{remove}{SNPs to remove}
+\item{extract}{SNPs to extract}
+
+\item{exclude}{SNPs to exclude}
 
 \item{chr}{a vector of chromosomes}
+
+\item{mem.limit}{Memory limit for genotype matrix loaded. Note that other overheads are not included.}
+
+\item{chunks}{Splitting the genome into chunks for computation. Either an integer 
+indicating the number of chunks or a vector (length equal to \code{cor}) giving the exact split.}
+
+\item{cluster}{A \code{cluster} object from the \code{parallel} package for parallel computing}
 }
 \value{
 A list with the following
 \item{lambda}{same as the lambda input}
 \item{beta}{A matrix of estimated coefficients}
 \item{conv}{A vector of convergence indicators. 1 means converged. 0 not converged.}
-\item{pred}{\eqn{=(1-s)X\beta}}
+\item{pred}{\eqn{=\sqrt(1-s)X\beta}}
 \item{loss}{\eqn{=(1-s)\beta'X'X\beta/n - 2\beta'r}}
 \item{fbeta}{\eqn{=\beta'R\beta - 2\beta'r + 2\lambda||\beta||_1}}
 \item{sd}{The standard deviation of the reference panel SNPs}
@@ -52,8 +62,7 @@ A list with the following
 \item{nparams}{Number of non-zero coefficients}
 }
 \description{
-The lassosum package provides three categories of important functions:
-lassosum, bar and baz.
+lassosum: A package for carrying out LASSO regression using GWAS summary statistics
 }
 \details{
 A function to find the minimum of \eqn{\beta} in  
@@ -73,9 +82,5 @@ SNP ids (matching those in the .bim file).
 \note{
 Missing genotypes are interpreted as having the homozygous A2 alleles in the 
 PLINK files (same as the \code{--fill-missing-a2} option in PLINK).
-}
-\section{Foo functions}{
-
-The lassosum functions ...
 }
 

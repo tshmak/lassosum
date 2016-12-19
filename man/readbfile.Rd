@@ -10,13 +10,13 @@ readbfile(bfile, keep = NULL, extract = NULL, exclude = NULL,
 \arguments{
 \item{bfile}{PLINK bfile (as character, without the .bed extension)}
 
-\item{keep}{SNPs to keep}
+\item{keep}{samples to keep}
 
-\item{extract}{samples to extract}
+\item{extract}{SNPs to extract}
 
-\item{exclude}{samples to exclude}
+\item{exclude}{SNPs to exclude}
 
-\item{remove}{SNPs to remove}
+\item{remove}{samples to remove}
 
 \item{chr}{a vector of chromosomes}
 

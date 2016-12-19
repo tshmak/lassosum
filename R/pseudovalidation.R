@@ -4,10 +4,10 @@
 #' @param beta The matrix of estimated \eqn{\beta}s
 #' @param cor The vector of correlations (\eqn{r})
 #' @param sd The standard deviation of the SNPs
-#' @param extract samples to extract
-#' @param exclude samples to exclude
-#' @param keep SNPs to keep
-#' @param remove SNPs to remove
+#' @param extract SNPs to extract
+#' @param exclude SNPs to exclude
+#' @param keep samples to keep
+#' @param remove samples to remove
 #' @param chr a vector of chromosomes
 #' @details A function to calculate  
 #' \deqn{f(\lambda)=\beta'r/\sqrt{\beta'X'X\beta}} 
@@ -23,7 +23,7 @@
 #' @export
 pseudovalidation <- function(bfile, beta, cor, sd=NULL, 
                              keep=NULL, extract=NULL, exclude=NULL, remove=NULL, 
-                             chr=NULL) {
+                             chr=NULL, ...) {
 
   stopifnot(is.numeric(cor))
   stopifnot(!any(is.na(cor)))
@@ -40,8 +40,8 @@ pseudovalidation <- function(bfile, beta, cor, sd=NULL,
   if(length(cor) != parsed$p) stop("Length of cor does not match number of selected columns in bfile")
   
   
-  if(is.null(sd)) sd <- lassosum(cor = cor, bfile = bfile, lambda=numeric(0), shrink=1, 
-                                 keep=parsed$keep, extract=parsed$extract)$sd
+  if(is.null(sd)) sd <- sd.bfile(bfile = bfile, 
+                                 keep=parsed$keep, extract=parsed$extract, ...)
   stopifnot(length(sd) == length(cor))
 
     weight <- 1/sd

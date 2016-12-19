@@ -7,7 +7,7 @@ and a reference panel (without PLINK bfile)}
 \usage{
 lassosumR(cor, refpanel, lambda = exp(seq(log(0.001), log(0.1), length.out =
   20)), shrink = 0.9, ridge = F, thr = 1e-04, init = NULL, trace = 0,
-  maxiter = 10000)
+  maxiter = 10000, blocks = NULL)
 }
 \arguments{
 \item{cor}{A vector of correlations (\eqn{r})}
@@ -27,6 +27,8 @@ lassosumR(cor, refpanel, lambda = exp(seq(log(0.001), log(0.1), length.out =
 \item{trace}{An integer controlling the amount of output generated.}
 
 \item{maxiter}{Maximum number of iterations}
+
+\item{blocks}{A vector to split the genome by blocks (coded as c(1,1,..., 2, 2, ..., etc.))}
 }
 \value{
 A list with the following
@@ -57,4 +59,6 @@ It is thus up to the user to ensure the SNPs in the reference panel corresponds
 to those in the correlations.
 }
 }
+\keyword{#@export}
+\keyword{internal}
 
