@@ -1,0 +1,33 @@
+pval.thresh <- function(pvals, p.thresholds, beta, bfile, 
+                        keep=NULL, remove=NULL, extract=NULL, exclude=NULL, 
+                        chr=NULL) {
+  #' Fast way to do p-value thresholding (without doing a massive matrix)
+  #' 
+  beta <- as.vector(beta)
+  stopifnot(is.vector(pvals) & is.vector(beta))
+  stopifnot(length(pvals) == length(beta))
+  Pvals <- sort(unique(c(0,p.thresholds,1)))
+  cut <- cut(pvals, Pvals)
+  stopifnot(!any(is.na(cut)))
+  nlevels <- nlevels(cut)
+  
+  parsed <- parseselect(bfile, extract, exclude, keep, remove, chr)
+
+  l <- lapply(levels(cut), function(x) {
+    select2 <- cut == x
+    if(sum(select2) == 0) {
+      return(matrix(0.0, nrow=sum(keep), ncol=1))
+    } else {
+      select <- parsed$extract
+      select[select] <- select2
+      return(pgs(bfile,weights = beta[cut==x],
+                 extract=select, 
+                 keep=keep))
+    }
+  })
+  
+  mat <- do.call(cbind, l)
+  result <- t(apply(t(mat), 2, cumsum))
+  return(result)
+  
+}

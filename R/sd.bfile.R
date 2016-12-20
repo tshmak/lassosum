@@ -11,17 +11,18 @@
 #' @param extract SNPs to extract
 #' @param exclude SNPs to exclude
 #' @param keep samples to keep
-#' @param samples to remove
+#' @param remove samples to remove
 #' @param chr a vector of chromosomes
 #' @note Missing genotypes are interpreted as having the homozygous A2 alleles in the 
 #' PLINK files (same as the \code{--fill-missing-a2} option in PLINK). 
 #' @export
-sd.bfile <- function(bfile, extract=NULL, exclude=NULL, 
-                        keep=NULL, remove=NULL, chr=NULL) {
+sd.bfile <- function(bfile, keep=NULL, remove=NULL, extract=NULL, exclude=NULL, 
+                        chr=NULL,...) {
   
   parsed <- parseselect(bfile, extract=extract, exclude = exclude, 
                         keep=keep, remove=remove, 
                         chr=chr)
-  return(lassosum(cor = rep(0.0, parsed$p), bfile = bfile, lambda=numeric(0), shrink=1, 
-                                 keep=parsed$keep, extract=parsed$extract)$sd)
+  return(lassosum(cor = rep(0.0, parsed$p), bfile = bfile, lambda=numeric(0), 
+                  shrink=1, keep=parsed$keep, extract=parsed$extract, 
+                  blocks=1:parsed$p, ...)$sd)
 }

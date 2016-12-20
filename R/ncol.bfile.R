@@ -3,6 +3,7 @@
 #' @param bfile Plink file stem
 #' @return an integer with the number of columns
 #' @keywords internal
+#' @method ncol bfile
 #' @export
 ncol.bfile <- function(bfile) {
 	bimfile <- paste0(bfile, ".bim")

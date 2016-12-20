@@ -5,7 +5,9 @@
 #' b, regression coefficients
 #' @keywords internal
 elnetR <- function(lambda1, lambda2=0, X, b, thr=1e-4,
-                     trace=0, maxiter=10000, x=NULL) {
+                     trace=0, maxiter=10000, 
+                   blocks=NULL, 
+                   x=NULL) {
   stopifnot(length(b) == ncol(X))
   diag <- colSums(X^2)
 
@@ -36,12 +38,20 @@ elnetR <- function(lambda1, lambda2=0, X, b, thr=1e-4,
     x <- x + 0.0 # Making sure R creates a copy...
   }
 
+  if(is.null(blocks)) {
+    Blocks <- list(startvec=0, endvec=len - 1)
+  } else {
+    Blocks <- parseblocks(blocks)
+    stopifnot(max(Blocks$endvec)==len - 1)
+  }
+  
   X <- as.matrix(X)
   yhat <- as.vector(X %*% x)
 
   for(i in 1:length(lambda1a)) {
     if(trace > 0) cat("lambda1: ", lambda1a[i], "\n")
-    conv[i] <- elnet(lambda1a[i], lambda2, diag, X, b,thr,x,yhat, trace-1,maxiter)
+    conv[i] <- repelnet(lambda1a[i], lambda2, diag, X, b,thr,x,yhat, trace-1,maxiter,
+                        Blocks$startvec, Blocks$endvec)
     if(conv[i] != 1) stop("Not converging...")
 
     beta[,i] <- x

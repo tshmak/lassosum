@@ -1,7 +1,7 @@
-#' @title Performs `pseudovalidation' to select the best \eqn{\lambda} value in lassosum
+#' @title Performs `pseudovalidation' to select the best p-value threshold in PGS
 #' 
 #' @param bfile A plink bfile stem
-#' @param beta The matrix of estimated \eqn{\beta}s
+#' @param beta A vector of estimated \eqn{\beta}s
 #' @param cor The vector of correlations (\eqn{r})
 #' @param sd The standard deviation of the SNPs
 #' @param extract SNPs to extract
@@ -9,6 +9,8 @@
 #' @param keep samples to keep
 #' @param remove samples to remove
 #' @param chr a vector of chromosomes
+#' @param pvals a vector of p-values
+#' @param p.thresholds a vector of p-value thresholds
 #' @details A function to calculate  
 #' \deqn{f(\lambda)=\beta'r/\sqrt{\beta'X'X\beta}} 
 #' where \eqn{X} is the standardized genotype matrix divided by \eqn{\sqrt n}, 
@@ -21,9 +23,9 @@
 #' }
 
 #' @export
-pseudovalidation <- function(bfile, beta, cor, sd=NULL, 
+pseudovalidation.thresh <- function(bfile, beta, cor, sd=NULL, 
                              keep=NULL, extract=NULL, exclude=NULL, remove=NULL, 
-                             chr=NULL, ...) {
+                             chr=NULL, pvals, p.thresholds, ...) {
 
   stopifnot(is.numeric(cor))
   stopifnot(!any(is.na(cor)))
@@ -47,7 +49,8 @@ pseudovalidation <- function(bfile, beta, cor, sd=NULL,
     weight <- 1/sd
     weight[!is.finite(weight)] <- 0
     scaled.beta <- as.matrix(Diagonal(x=weight) %*% beta)
-    pred <- pgs(bfile, keep=parsed$keep, extract=parsed$extract, weights=scaled.beta)
+    pred <- pval.thresh(bfile=bfile, keep=parsed$keep, extract=parsed$extract, 
+                beta=scaled.beta, p.thresholds=p.thresholds, pvals=pvals, ...)
     pred2 <- scale(pred, scale=F)
     bXXb <- colSums(pred2^2) / parsed$n
     bXy <- cor %*% beta 

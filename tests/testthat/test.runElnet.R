@@ -6,7 +6,7 @@ p <- ncol.bfile(plinkfileStem)
 beta <- rnorm(p)
 Xb <- pgs(plinkfileStem, beta)
 X <- genotypeMatrix(plinkfile, n, p, 
-                    integer(0), integer(0), integer(0), integer(0))
+                    integer(0), integer(0), integer(0), integer(0), 1)
 Xb2 <- X %*% beta
 stopifnot(all.equal(Xb2, Xb))
 y <- Xb + rnorm(n)
@@ -17,7 +17,11 @@ x <- rep(0.0, p)
 L <-  runElnet(lambda, 0, plinkfile, 
          corr, n, p, 
          integer(0), integer(0), integer(0), integer(0), 
-         1e-4, x, 0, 1e4)
+         1e-4, x, 0, 1e4, 0, p-1)
+# L <-  runElnet(lambda, 0, plinkfile, 
+#                corr, n, p, 
+#                integer(0), integer(0), integer(0), integer(0), 
+#                1e-4, x, 0, 1e4, c(0,5), c(4,p-1))
 X2 <- scale(X) * sqrt(n/(n-1))
 y <- scale(y) * sqrt(n/(n-1))
 g <- glmnet::glmnet(X2, y = y,alpha=1, lambda = lambda, standardize = F, intercept = F, 
