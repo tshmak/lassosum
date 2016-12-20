@@ -10,17 +10,17 @@ readbfile(bfile, keep = NULL, extract = NULL, exclude = NULL,
 \arguments{
 \item{bfile}{PLINK bfile (as character, without the .bed extension)}
 
-\item{keep}{SNPs to keep}
+\item{keep}{samples to keep}
 
-\item{extract}{samples to extract}
+\item{extract}{SNPs to extract}
 
-\item{exclude}{samples to exclude}
-
-\item{remove}{SNPs to remove}
+\item{exclude}{SNPs to exclude}
 
 \item{chr}{a vector of chromosomes}
 
 \item{fillmissing}{Whether to fill missing values with 0}
+
+\item{samples}{to remove}
 }
 \value{
 A genotype matrix of 0,1, and 2 (possibly with NaNs)

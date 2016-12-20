@@ -1,4 +1,5 @@
 test_that("runElnet" , {
+# setwd("./tests/testthat/")
 plinkfileStem <- "test"
 plinkfile <- paste0(plinkfileStem, ".bed")
 n <- nrow.bfile(plinkfileStem)
@@ -6,7 +7,7 @@ p <- ncol.bfile(plinkfileStem)
 beta <- rnorm(p)
 Xb <- pgs(plinkfileStem, beta)
 X <- genotypeMatrix(plinkfile, n, p, 
-                    integer(0), integer(0), integer(0), integer(0))
+                    integer(0), integer(0), integer(0), integer(0),1)
 Xb2 <- X %*% beta
 stopifnot(all.equal(Xb2, Xb))
 y <- Xb + rnorm(n)

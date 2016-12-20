@@ -23,28 +23,28 @@ lassosum(cor, bfile, lambda = exp(seq(log(0.001), log(0.1), length.out = 20)),
 
 \item{thr}{convergence threshold for \eqn{\beta}}
 
-\item{init}{Initial values for \eqn{\beta}}
+\item{init}{Initial values for \eqn{\beta} as a vector of the same length as \code{cor}}
 
 \item{trace}{An integer controlling the amount of output generated.}
 
 \item{maxiter}{Maximum number of iterations}
 
-\item{keep}{SNPs to keep}
+\item{keep}{samples to keep}
 
-\item{extract}{samples to extract}
+\item{extract}{SNPs to extract}
 
-\item{exclude}{samples to exclude}
-
-\item{remove}{SNPs to remove}
+\item{exclude}{SNPs to exclude}
 
 \item{chr}{a vector of chromosomes}
+
+\item{samples}{to remove}
 }
 \value{
 A list with the following
 \item{lambda}{same as the lambda input}
 \item{beta}{A matrix of estimated coefficients}
 \item{conv}{A vector of convergence indicators. 1 means converged. 0 not converged.}
-\item{pred}{\eqn{=(1-s)X\beta}}
+\item{pred}{\eqn{=\sqrt(1-s)X\beta}}
 \item{loss}{\eqn{=(1-s)\beta'X'X\beta/n - 2\beta'r}}
 \item{fbeta}{\eqn{=\beta'R\beta - 2\beta'r + 2\lambda||\beta||_1}}
 \item{sd}{The standard deviation of the reference panel SNPs}

@@ -4,10 +4,10 @@
 #' @param beta The matrix of estimated \eqn{\beta}s
 #' @param cor The vector of correlations (\eqn{r})
 #' @param sd The standard deviation of the SNPs
-#' @param extract samples to extract
-#' @param exclude samples to exclude
-#' @param keep SNPs to keep
-#' @param remove SNPs to remove
+#' @param extract SNPs to extract
+#' @param exclude SNPs to exclude
+#' @param keep samples to keep
+#' @param samples to remove
 #' @param chr a vector of chromosomes
 #' @details A function to calculate  
 #' \deqn{f(\lambda)=\beta'r/\sqrt{\beta'X'X\beta}} 
