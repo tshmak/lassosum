@@ -9,10 +9,17 @@ Summary statistics are expected to be loaded into memory as a data.frame/data.ta
 
 ### Installation
 
-Installation is easy with `devtools`.
-
+For Windows: 
 ```r
-install.packages("devtools")
+install.packages("https://github.com/tshmak/lassosum/files/710212/lassosum_0.2.zip", repos=NULL)
+```
+For Linux: 
+```r
+install.packages("https://github.com/tshmak/lassosum/files/710243/lassosum_0.2_R_x86_64-pc-linux-gnu.tar.gz", repos=NULL)
+```
+
+Or you can install the latest development version using `devtools`
+```r
 devtools::install_github("tshmak/lassosum")
 ```
 ### Warning!
