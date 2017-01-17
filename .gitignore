@@ -45,3 +45,6 @@ inst/doc
 
 # Manual files. I use Roxygen to generate these
 # *.Rd
+
+# releases 
+/releases/
