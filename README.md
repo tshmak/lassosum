@@ -12,7 +12,7 @@ Summary statistics are expected to be loaded into memory as a data.frame/data.ta
 Installation is easy with `devtools`.
 
 ```r
-package.install("devtools")
+install.packages("devtools")
 devtools::install_github("tshmak/lassosum")
 ```
 ### Warning!
