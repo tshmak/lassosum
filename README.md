@@ -17,6 +17,7 @@ From source:
 ```r
 install.packages("https://github.com/tshmak/lassosum/releases/download/v0.2.0/lassosum_0.2.tar.gz", repos=NULL)
 ```
+You may need to specify the correct method for downloading files by setting `method=` such as `method="wget"` when installing on Linux or Mac. 
 
 Or you can install the latest development version using `devtools`
 ```r
@@ -37,7 +38,7 @@ You can download the repository via
 git clone https://github.com/tshmak/lassosum
 ```
 
-or just download the [ZIP file](https://github.com/tshmak/lassosum/archive/master.zip).
+or just download the [ZIP file](https://github.com/tshmak/lassosum/archive/v0.2.0.zip).
 
 The data for this tutorial is stored in `tutorial/data`. 
 We will assume you have set your `R` working directory at `tutorial/` with 
