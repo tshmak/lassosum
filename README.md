@@ -9,15 +9,15 @@ Summary statistics are expected to be loaded into memory as a data.frame/data.ta
 
 ### Installation
 
-From Windows binary:
+`lassosum` requires the following R packages: `Rcpp`, `data.table`, `Matrix`. Install them by: 
+
 ```r
-install.packages("https://github.com/tshmak/lassosum/releases/download/v0.2.0/lassosum_0.2.zip", repos=NULL)
+install.packages(c("Rcpp", "data.table", "Matrix"))
 ```
-From source: 
+Download the following file [lassosum_0.2.tar.gz](https://github.com/tshmak/lassosum/releases/download/v0.2.0/lassosum_0.2.tar.gz). Install using 
 ```r
-install.packages("https://github.com/tshmak/lassosum/releases/download/v0.2.0/lassosum_0.2.tar.gz", repos=NULL)
+install.packages("/path/to/lassosum_0.2.tar.gz", repos=NULL, type="source")
 ```
-You may need to specify the correct method for downloading files by setting `method=` such as `method="wget"` when installing on Linux or Mac. 
 
 Or you can install the latest development version using `devtools`
 ```r
