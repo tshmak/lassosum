@@ -18,11 +18,11 @@ Download the following precompiled binaries.
 
 * Windows: [lassosum_0.2.zip](https://github.com/tshmak/lassosum/releases/download/v0.2.0/lassosum_0.2.zip)
 
-* Linux: 
+* Linux: [lassosum_0.2_R_x86_64-pc-linux-gnu.tar.gz](https://github.com/tshmak/lassosum/releases/download/v0.2.0/lassosum_0.2_R_x86_64-pc-linux-gnu.tar.gz)
 
 * Mac: 
 
-Install the package by:
+and install the package by:
 ```r
 install.packages("/path/to/downloaded_binary_file", repos=NULL)
 ```
