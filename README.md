@@ -24,28 +24,17 @@ For Mac and Linux users, we recommend downloading the source codes [lassosum_0.2
 install.packages("/path/to/downloaded_source.tar.gz", repos=NULL, type="source")
 ```
 
-Or you can install the latest development version using `devtools`. (Windows users will need [Rtools](https://cran.r-project.org/bin/windows/Rtools/) also.) 
-```r
-devtools::install_github("tshmak/lassosum")
-```
+Or you can clone the latest development version here and install yourself using `devtools`. 
+
 ### Warning!
 
 Most functions in `lassosum` impute missing genotypes in PLINK bfiles with a homozygous A2 genotype, which is the same as using the `--fill-missing-a2` option in PLINK. It is the user's responsibility to filter out individuals and SNPs with too many missing genotypes beforehand. 
 
 ### Tutorial
 
-We advise the use of the packages `data.table` to import summary statistics text files.
+In the following tutorial we make use of two dummy datasets, which can be downloaded [here](https://github.com/tshmak/lassosum/archive/v0.2.0.zip).
 
-In the following tutorial we make use of two dummy datasets, which can be downloaded from this repository.
-You can download the repository via
-
-```bash
-git clone https://github.com/tshmak/lassosum
-```
-
-or just download the [ZIP file](https://github.com/tshmak/lassosum/archive/v0.2.0.zip).
-
-The data for this tutorial is stored in `tutorial/data`. 
+The data for this tutorial can be found in `tutorial/data` after unzipping. 
 We will assume you have set your `R` working directory at `tutorial/` with 
 
 ```r
