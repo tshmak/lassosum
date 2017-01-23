@@ -12,4 +12,5 @@ countlines(fileName)
 \description{
 Count number of lines in a text file
 }
+\keyword{internal}
 

@@ -2,7 +2,7 @@
 #'
 #' @docType package
 #' @name lassosum
-# #' @importFrom Rcpp evalCpp
+#' @importFrom Rcpp evalCpp
 #' @importFrom Matrix Diagonal t
 #' @importFrom data.table fread setkey as.data.table
 #' @useDynLib lassosum

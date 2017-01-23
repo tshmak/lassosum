@@ -4,6 +4,7 @@
 #' Count number of lines in a text file
 #' 
 #' @param fileName Name of file
+#' @keywords internal
 #' 
 countlines <- function(fileName) {
     .Call('lassosum_countlines', PACKAGE = 'lassosum', fileName)

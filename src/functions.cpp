@@ -116,6 +116,7 @@ bool openPlinkBinaryFile(const std::string s, std::ifstream &BIT) {
 //' Count number of lines in a text file
 //' 
 //' @param fileName Name of file
+//' @keywords internal
 //' 
 // [[Rcpp::export]]
 int countlines(const char* fileName) {
