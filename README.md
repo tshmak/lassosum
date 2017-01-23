@@ -16,7 +16,7 @@ install.packages(c("RcppArmadillo", "data.table", "Matrix"), dependencies=TRUE)
 ```
 Download the following precompiled binaries. 
 
-* Windows: [lassosum_0.2.tar.gz](https://github.com/tshmak/lassosum/releases/download/v0.2.0/lassosum_0.2.tar.gz)
+* Windows: [lassosum_0.2.zip](https://github.com/tshmak/lassosum/releases/download/v0.2.0/lassosum_0.2.zip)
 
 * Linux: 
 
@@ -27,7 +27,7 @@ Install the package by:
 install.packages("/path/to/downloaded_binary_file", repos=NULL)
 ```
 
-Or you can install the latest development version using `devtools`
+Or you can install the latest development version using `devtools`. (Windows users will need [Rtools](https://cran.r-project.org/bin/windows/Rtools/) also.) 
 ```r
 devtools::install_github("tshmak/lassosum")
 ```
