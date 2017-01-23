@@ -14,17 +14,14 @@ Summary statistics are expected to be loaded into memory as a data.frame/data.ta
 ```r
 install.packages(c("RcppArmadillo", "data.table", "Matrix"), dependencies=TRUE)
 ```
-Download the following precompiled binaries. 
-
-* Windows: [lassosum_0.2.zip](https://github.com/tshmak/lassosum/releases/download/v0.2.0/lassosum_0.2.zip)
-
-* Linux: [lassosum_0.2_R_x86_64-pc-linux-gnu.tar.gz](https://github.com/tshmak/lassosum/releases/download/v0.2.0/lassosum_0.2_R_x86_64-pc-linux-gnu.tar.gz)
-
-* Mac: 
-
-and install the package by:
+For Windows users, it would be easiest to download the following binary [lassosum_0.2.zip](https://github.com/tshmak/lassosum/releases/download/v0.2.0/lassosum_0.2.zip) and install using: 
 ```r
-install.packages("/path/to/downloaded_binary_file", repos=NULL)
+install.packages("/path/to/downloaded_binary_file.zip", repos=NULL)
+```
+
+For Mac and Linux users, we recommend downloading the source codes [lassosum_0.2.tar.gz](https://github.com/tshmak/lassosum/releases/download/v0.2.0/lassosum_0.2.tar.gz) and compiling on your platform by:
+```r
+install.packages("/path/to/downloaded_source.tar.gz", repos=NULL, type="source")
 ```
 
 Or you can install the latest development version using `devtools`. (Windows users will need [Rtools](https://cran.r-project.org/bin/windows/Rtools/) also.) 
