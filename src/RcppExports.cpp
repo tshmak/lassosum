@@ -6,6 +6,17 @@
 
 using namespace Rcpp;
 
+// countlines
+int countlines(const char* fileName);
+RcppExport SEXP lassosum_countlines(SEXP fileNameSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const char* >::type fileName(fileNameSEXP);
+    rcpp_result_gen = Rcpp::wrap(countlines(fileName));
+    return rcpp_result_gen;
+END_RCPP
+}
 // multiBed3
 arma::mat multiBed3(const std::string fileName, int N, int P, const arma::mat input, arma::Col<int> col_skip_pos, arma::Col<int> col_skip, arma::Col<int> keepbytes, arma::Col<int> keepoffset);
 RcppExport SEXP lassosum_multiBed3(SEXP fileNameSEXP, SEXP NSEXP, SEXP PSEXP, SEXP inputSEXP, SEXP col_skip_posSEXP, SEXP col_skipSEXP, SEXP keepbytesSEXP, SEXP keepoffsetSEXP) {

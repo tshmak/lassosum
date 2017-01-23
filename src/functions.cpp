@@ -113,6 +113,23 @@ bool openPlinkBinaryFile(const std::string s, std::ifstream &BIT) {
   return bfile_SNP_major;
 }
 
+//' Count number of lines in a text file
+//' 
+//' @param fileName Name of file
+//' 
+// [[Rcpp::export]]
+int countlines(const char* fileName) {
+
+  // Stolen from http://stackoverflow.com/questions/3482064/counting-the-number-of-lines-in-a-text-file
+    int number_of_lines = 0;
+    std::string line;
+    std::ifstream myfile(fileName);
+
+    while (std::getline(myfile, line))
+        ++number_of_lines;
+    return number_of_lines;
+}
+
 //' Multiply genotypeMatrix by a constant
 //' 
 //' @param fileName location of bam file
