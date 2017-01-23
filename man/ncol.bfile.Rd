@@ -4,7 +4,7 @@
 \alias{ncol.bfile}
 \title{Obtains the number of column (SNPs) in a PLINK bfile}
 \usage{
-\method{ncol}{bfile}(bfile)
+ncol.bfile(bfile)
 }
 \arguments{
 \item{bfile}{Plink file stem}

@@ -4,7 +4,7 @@
 \alias{nrow.bfile}
 \title{Obtains the number of individuals in a PLINK bfile}
 \usage{
-\method{nrow}{bfile}(bfile)
+nrow.bfile(bfile)
 }
 \arguments{
 \item{bfile}{Plink file stem}
