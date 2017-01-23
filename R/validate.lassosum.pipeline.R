@@ -21,7 +21,7 @@ validate.lassosum.pipeline <- function(ls.pipeline, test.bfile=NULL,
   #' polygenic score against an external phenotype in the testing dataset. 
   #' If \code{pheno} is not specified, then the sixth column in the testing 
   #' dataset \href{https://www.cog-genomics.org/plink2/formats#fam}{.fam}\code{.fam} file is used. 
-  #' 
+  #' @export
   stopifnot(class(ls.pipeline) == "lassosum.pipeline")
   
   results <- list(lambda=ls.pipeline$lambda, s=ls.pipeline$s)

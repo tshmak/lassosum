@@ -64,6 +64,7 @@ lassosum.pipeline <- function(cor, chr, pos,
   #' For \code{keep.ref}, \code{remove.ref}, \code{keep.test}, and \code{remove.test}, 
   #' see the documentation for \code{keep} and \code{remove} in \code{\link{lassosum}} 
   #' for details. 
+  #' @export
   #' 
   ######################### Input validation  (start) #########################
   extensions <- c(".bed", ".bim", ".fam")

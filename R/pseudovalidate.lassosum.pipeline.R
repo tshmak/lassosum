@@ -17,6 +17,7 @@ pseudovalidate.lassosum.pipeline <- function(ls.pipeline, test.bfile=NULL,
   #' @details Pseudovalidation is explained in Mak et al (2016). It helps 
   #' choosing a value of \code{lambda} and \code{s} in the absence of a validation
   #' phenotype. 
+  #' @export
   installed <- installed.packages()[,1]
   if(!("fdrtool" %in% installed)) 
     stop("Pseudovalidation requires fdrtool. Please install from CRAN.")
