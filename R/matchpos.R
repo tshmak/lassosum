@@ -18,8 +18,8 @@ matchpos <- function(tomatch, ref.df,
   #' @param rm.dumplicates Remove SNPs with more than one match
   #' @export 
 
-  tomatch <- as.data.table(tomatch)
-  ref.df <- as.data.table(ref.df)
+  tomatch <- data.table::as.data.table(tomatch)
+  ref.df <- data.table::as.data.table(ref.df)
     
   #### Column matching function ####
   match.col <- function(test, target, default.targets, auto.detect=T, silent=F) {
@@ -133,6 +133,7 @@ matchpos <- function(tomatch, ref.df,
   merged <- merge(ref.df, tomatch, all=F, 
                   by.x=ref.match.cols.names, by.y=match.cols.names)
   setkey(merged, .index.ref)
+  merged <- as.data.frame(merged)
 
   alt.col2 <- alt.col + ncol(ref.df) - n.match.cols
   ref.col2 <- ref.col + ncol(ref.df) - n.match.cols

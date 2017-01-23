@@ -121,6 +121,7 @@ lassosum.pipeline <- function(cor, chr, pos,
   if(!is.null(LDblocks)) {
     if(is.vector(LDblocks)) stopifnot(length(LDblocks) == length(cor)) else 
       if(is.data.frame(LDblocks) || is.data.table(LDblocks)) {
+        LDblocks <- as.data.frame(LDblocks)
         stopifnot(ncol(LDblocks) == 3)
         stopifnot(all(LDblocks[,3] >= LDblocks[,2]))
         LDblocks[,1] <- as.character(sub("^chr", "", LDblocks[,1], ignore.case = T))
