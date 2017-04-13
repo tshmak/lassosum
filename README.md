@@ -82,5 +82,15 @@ v <- validate.lassosum.pipeline(out) # Use the 6th column in .fam file in test d
 v <- pseudovalidate.lassosum.pipeline(out)
 
 ```
+
+Parallel processing with the `parallel` package. Note that parallel processing is done by `LDblocks` so always define LDblocks when running parallel. 
+```r
+library(parallel)
+cl <- makeCluster(2, type="FORK")
+out <- lassosum.pipeline(cor=cor, chr=ss$Chr, pos=ss$Position, 
+                         A1=ss$A1, A2=ss$A2,
+                         ref.bfile=ref.bfile, test.bfile=test.bfile, 
+                         LDblocks = ld, cluster=cl)
+```
 ### Support
 If there are any questions or problems with running or installing `lassosum`, please do email me at tshmak@hku.hk
