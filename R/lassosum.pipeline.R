@@ -208,7 +208,7 @@ lassosum.pipeline <- function(cor, chr, pos,
   if(length(s.minus.1) > 0) {
     ls <- lapply(s.minus.1, function(s) {
       if(trace) cat("s = ", s, "\n")
-      lassosum(cor=cor2, bfile="./data/refpanel", 
+      lassosum(cor=cor2, bfile=ref.bfile, 
                    shrink=s, extract=ref.extract, lambda=lambda,
                    blocks = split, trace=trace-1, 
                    keep=parsed.ref$keep, ...)
