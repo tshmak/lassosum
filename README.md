@@ -82,7 +82,7 @@ v <- pseudovalidate.lassosum.pipeline(out)
 
 ```
 
-Parallel processing with the `parallel` package. Note that parallel processing is done by `LDblocks` so always define LDblocks when running parallel. 
+Parallel processing with the `parallel` package. Note that parallel processing is done by `LDblocks`. 
 ```r
 library(parallel)
 cl <- makeCluster(2, type="FORK")
