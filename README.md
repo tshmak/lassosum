@@ -19,7 +19,7 @@ For Windows users, it would be easiest to download the following binary [lassosu
 install.packages("/path/to/downloaded_binary_file.zip", repos=NULL)
 ```
 
-For Mac and Linux users, we recommend downloading the source codes [lassosum_0.2.tar.gz](https://github.com/tshmak/lassosum/releases/download/v0.2.0/lassosum_0.2.tar.gz) and compiling on your platform by:
+For Mac and Linux users, we recommend downloading the source codes [lassosum_0.2.tar.gz](https://github.com/tshmak/lassosum/releases/download/v0.2.0/lassosum_0.2.tar.gz) and compiling on your computer. Mac users will need to install [Xcode](https://developer.apple.com/xcode/) to do this. After downloading, type:
 ```r
 install.packages("/path/to/downloaded_source.tar.gz", repos=NULL, type="source")
 ```
@@ -41,9 +41,7 @@ We will assume you have set your `R` working directory at `tutorial/` with
 setwd("path/to/repository/tutorial")
 ```
 
-First we read the summary statistics and genotyoe information of the refrence panel into R. (`read.table` is ok, but `fread` from the `data.table` package is much faster for large files.)
-
-
+First we read the summary statistics into R, and provide the `bfile` names of the refrence panel and the test data. If only the reference panel is provided then only the beta coefficients (no polygenic scores) are calculated. You can then apply these subsequently to a test dataset using `validate.lassosum.pipeline` or `pseudovalidate.lassosum.pipeline`. If no reference panel is provided, then the test data is taken as the reference panel. If no ld region file is provided, then `lassosum` is performed by chromosomes. We recommend you use the appropriate LD regions as defined in [Berisa and Pickrell (2015)](https://academic.oup.com/bioinformatics/article/32/2/283/1743626/Approximately-independent-linkage-disequilibrium) which are also included in our package. 
 
 ```r
 library(data.table)
@@ -64,6 +62,7 @@ ld <- fread("./data/Berisa.2015.EUR.bed")
 
 To run `lassosum`, we need to input SNP-wise correlations. This can be converted from p-values via the `p2cor` function. 
 ```r
+library(lassosum)
 cor <- p2cor(p = ss$P_val, n = 60000, sign=log(ss$OR_A1))
 ```
 
