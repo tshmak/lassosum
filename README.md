@@ -95,9 +95,8 @@ out <- lassosum.pipeline(cor=cor, chr=ss$Chr, pos=ss$Position,
 It is possible to include covariates in validation (though not in pseudovalidation). To do so, you need to define an alternative `validate.function` to pass to `validate.lassosum.pipeline`. For example, suppose you have a matrix of covariates in `covar`. Define, e.g.: 
 ```r
 FUN <- function(X, y) {
-	X2 <- cbind(X, covar)
-	lm <- lm(y ~ X2)
-	return(coef(lm)[2])
+  res <- residuals(lm(X ~ covar))
+	return(cor(res, y))
 }
 ```
 Then run:
