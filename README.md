@@ -92,16 +92,19 @@ out <- lassosum.pipeline(cor=cor, chr=ss$Chr, pos=ss$Position,
                          LDblocks = ld, cluster=cl)
 ```
 #### Including covariates in validation
-It is possible to include covariates in validation (though not in pseudovalidation). To do so, you need to define an alternative `validate.function` to pass to `validate.lassosum.pipeline`. This should be a function that takes two arguments, the first of which should be a matrix of PGS and the second the vector of phenotype used in validation. For example, suppose you have a matrix of covariates in `covar`. (covar should have the same number of rows as `X` and `y`.) Define, e.g.: 
+It is possible to include covariates in validation (though not in pseudovalidation). To do so, you need to define an alternative `validate.function` to pass to `validate.lassosum.pipeline`. For example, suppose you have a matrix of covariates in `covar`. Define, e.g.: 
 ```r
 FUN <- function(X, y) {
 	X2 <- cbind(X, covar)
 	lm <- lm(y ~ X2)
 	return(coef(lm)[2])
 }
+```
+Then run:
+```r
 v <- validate.lassosum.pipeline(ls, validate.function=FUN)
 ```
-Note that `X` and `y` are not variables in the R environment, but simply arguments in the function. Only `covar` must be defined.
+Note that `X` and `y` are not variables in the R environment, but simply arguments in the function. Only `covar` must be defined. Moreover, it must have the same number of rows as the number of participants included in the analysis. 
 
 ##### A more technical note
 `validate.lassosum.pipeline` performs `apply(PGS, MARGIN = 2, FUN=validate.function, pheno)))` to create a vector to assess the best PGS in predicting the phenotype. 
