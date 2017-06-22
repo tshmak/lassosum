@@ -1,7 +1,7 @@
 Package: lassosum
 Type: Package
 Title: LASSO with summary statistics and a reference panel
-Version: 0.2
+Version: 0.2.1
 Date: 2015-11-09
 Authors@R: c(
 		person("Timothy", "Mak", email = "tshmak@hku.hk", role = c("aut", "cre")),
