@@ -121,9 +121,11 @@ pseudovalidate.lassosum.pipeline <- function(ls.pipeline, test.bfile=NULL,
   best.s <- ss[best]
   best.lambda <- lambdas[best]
   best.pgs <- PGS[,best]
+  validation.table <- data.frame(lambda=lambdas, s=ss, value=pv)
   results <- c(results, list(best.s=best.s, 
                              best.lambda=best.lambda,
-                             best.pgs=best.pgs))
+                             best.pgs=best.pgs, 
+                             validation.table=validation.table))
   return(results)
   
 }

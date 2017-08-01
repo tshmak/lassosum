@@ -109,9 +109,16 @@ validate.lassosum.pipeline <- function(ls.pipeline, test.bfile=NULL,
 
   suppressWarnings(cors <- as.vector(
     apply(PGS, MARGIN = 2, FUN=validate.function, pheno)))
+  if(is.function(validate.function)) {
+    funcname <- deparse(substitute(validate.function))
+  } else if(is.character(validate.function)) {
+    funcname <- validate.function
+  } else {
+    stop("What is validate.function? I can't figure out.")
+  }
   if(plot) {
     plot(lambdas, cors, log="x", col=as.factor(ss), type="o", 
-         xlab="lambda", ylab=validate.function)
+         xlab="lambda", ylab=funcname)
     legend(x="topright", col=1:length(ls.pipeline$s), pch=1, 
            legend=paste0("s=", ls.pipeline$s))
   }
@@ -120,9 +127,11 @@ validate.lassosum.pipeline <- function(ls.pipeline, test.bfile=NULL,
   best.s <- ss[best]
   best.lambda <- lambdas[best]
   best.pgs <- PGS[,best]
+  validation.table <- data.frame(lambda=lambdas, s=ss, value=cors)
   results <- c(results, list(best.s=best.s, 
                              best.lambda=best.lambda,
-                             best.pgs=best.pgs))
+                             best.pgs=best.pgs, 
+                             validation.table=validation.table))
   return(results)
 
 }
