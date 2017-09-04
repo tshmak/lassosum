@@ -89,7 +89,7 @@ pseudovalidate.lassosum.pipeline <- function(ls.pipeline, test.bfile=NULL,
     } else {
       results <- c(results, list(pgs=ls.pipeline$pgs))
     }
-    
+    beta <- ls.pipeline$beta
   } 
   
   ### Pseudovalidation ###
@@ -121,10 +121,17 @@ pseudovalidate.lassosum.pipeline <- function(ls.pipeline, test.bfile=NULL,
   best.s <- ss[best]
   best.lambda <- lambdas[best]
   best.pgs <- PGS[,best]
+  len.lambda <- length(ls.pipeline$lambda)
+  best.beta.s <- ceiling(best / len.lambda)
+  best.beta.lambda <- best %% len.lambda
+  best.beta.lambda[best.beta.lambda == 0] <- len.lambda
+  best.beta <- beta[[best.beta.s]][,best.beta.lambda]
+  
   validation.table <- data.frame(lambda=lambdas, s=ss, value=pv)
   results <- c(results, list(best.s=best.s, 
                              best.lambda=best.lambda,
                              best.pgs=best.pgs, 
+                             best.beta=best.beta,
                              validation.table=validation.table))
   return(results)
   
