@@ -44,8 +44,10 @@ group.blocks <- function(Blocks, parseselect, mem.limit=2^32*8, chunks=NULL, clu
       while(any(groups == 0)) {
         newgroup <- cum.size <= rough.split & groups==0
         groups[newgroup] <- i
-        add1 <- max(which(newgroup))+1
-        if(add1 < length(groups)) groups[add1] <- i
+        current.index <- max(which(groups > 0), 0)
+        add1 <- current.index + 1
+        # add1 <- max(which(newgroup))+1
+        if(add1 <= length(groups)) groups[add1] <- i
         cum.size <- cum.size - max(cum.size[groups == i])
         if(max(cum.size[groups == i]) * parseselect$n * 8 > mem.limit) {
           stop("Chunks too large. Either increase the number of chunks or mem.limit.")

@@ -143,7 +143,9 @@ lassosum.pipeline <- function(cor, chr, pos,
 
   if(is.null(ref.bfile) && trace > 0) cat("Reference panel assumed the same as test data.") 
 
-  ss <- data.frame(chr=chr, pos=pos, A1=A1, A2=A2, cor=cor)
+  ss <- list(chr=chr, pos=pos, A1=A1, A2=A2, cor=cor)
+  ss[sapply(ss, is.null)] <- NULL
+  ss <- as.data.frame(ss)
   ### Compare summary statistics and reference panel ###
   if(trace) cat("Coordinating summary stats with reference panel...\n")
   m.ref <- matchpos(ss, ref.bim, auto.detect.ref = F, 
@@ -186,7 +188,7 @@ lassosum.pipeline <- function(cor, chr, pos,
   ### Split data by ld region ###
   if(!is.null(LDblocks)) {
     if(is.vector(LDblocks)) {
-      split <- LDblocks
+      split <- LDblocks[m.ref$order][m.common$order]
     } else {
       if(trace) cat("Splitting genome by LD blocks ...\n")
       split <- splitgenome(CHR = ref.bim$V1[ref.extract], 
@@ -195,7 +197,7 @@ lassosum.pipeline <- function(cor, chr, pos,
                            ref.breaks = LDblocks[,3])
     }
   } else {
-    split <- ref.bim$V1[ref.extract]
+    # split <- ref.bim$V1[ref.extract]
   }
 
   ### Number of different s values to try ###

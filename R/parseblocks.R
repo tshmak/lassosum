@@ -2,7 +2,7 @@ parseblocks <- function(vec) {
 
   #' @keywords internal
   if(is.factor(vec)) vec <- as.integer(vec)
-  vec <- as.integer(as.factor(vec))
+  vec <- as.integer(factor(vec, levels=unique(vec)))
   blocks <- unique(vec)
   stopifnot(blocks == sort(blocks))
   stopifnot(min(blocks) == 1)
