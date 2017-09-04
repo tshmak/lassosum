@@ -14,19 +14,19 @@ Summary statistics are expected to be loaded into memory as a data.frame/data.ta
 ```r
 install.packages(c("RcppArmadillo", "data.table", "Matrix"), dependencies=TRUE)
 ```
-For Windows users, it would be easiest to download the following binary [lassosum_0.2.2.zip](https://github.com/tshmak/lassosum/releases/download/v0.2.2/lassosum_0.2.2.zip) and install using: 
+For Windows users, it would be easiest to download the following binary [lassosum_0.2.3.zip](https://github.com/tshmak/lassosum/releases/download/v0.2.3/lassosum_0.2.3.zip) and install using: 
 ```r
 install.packages("/path/to/downloaded_binary_file.zip", repos=NULL)
 ```
 
-For Mac and Linux users, we recommend downloading the source codes [lassosum_0.2.2.tar.gz](https://github.com/tshmak/lassosum/releases/download/v0.2.2/lassosum_0.2.2.tar.gz) and compiling on your computer. Mac users will need to install [Xcode](https://developer.apple.com/xcode/) to do this. After downloading, type:
+For Mac and Linux users, we recommend downloading the source codes [lassosum_0.2.3.tar.gz](https://github.com/tshmak/lassosum/releases/download/v0.2.3/lassosum_0.2.3.tar.gz) and compiling on your computer. Mac users will need to install [Xcode](https://developer.apple.com/xcode/) to do this. After downloading, type:
 ```r
 install.packages("/path/to/downloaded_source.tar.gz", repos=NULL, type="source")
 ```
 
 If you have `devtools`, you can also type: 
 ```r
-install_github("tshmak/lassosum@v0.2.2")
+install_github("tshmak/lassosum@v0.2.3")
 ```
 or
 ```r
@@ -40,7 +40,7 @@ Most functions in `lassosum` impute missing genotypes in PLINK bfiles with a hom
 
 ### Tutorial
 
-In the following tutorial we make use of two dummy datasets, which can be downloaded [here](https://github.com/tshmak/lassosum/archive/v0.2.2.zip).
+In the following tutorial we make use of two dummy datasets, which can be downloaded [here](https://github.com/tshmak/lassosum/archive/v0.2.3.zip).
 
 The data for this tutorial can be found in `tutorial/data` after unzipping. 
 We will assume you have set your `R` working directory at `tutorial/` with 
