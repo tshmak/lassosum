@@ -109,12 +109,6 @@ pseudovalidate.lassosum.pipeline <- function(ls.pipeline, test.bfile=NULL,
                          extract=toextract, 
                          keep=keep, remove=remove,
                          sd=ls.pipeline$sd, ...)
-  if(plot) {
-    plot(lambdas, pv, log="x", col=as.factor(ss), type="o", 
-         xlab="lambda", ylab="Pseudovalidation")
-    legend(x="topright", col=1:length(ls.pipeline$s), pch=1, 
-           legend=paste0("s=", ls.pipeline$s))
-  }
 
   pv[is.na(pv)] <- -Inf
   best <- which(pv == max(pv))[1]
@@ -132,7 +126,10 @@ pseudovalidate.lassosum.pipeline <- function(ls.pipeline, test.bfile=NULL,
                              best.lambda=best.lambda,
                              best.pgs=best.pgs, 
                              best.beta=best.beta,
-                             validation.table=validation.table))
+                             validation.table=validation.table, 
+                             validation.type="pseudovalidation"))
+  class(results) <- "validate.lassosum"
+  if(plot) plot(results)
   return(results)
   
 }

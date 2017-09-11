@@ -116,12 +116,7 @@ validate.lassosum.pipeline <- function(ls.pipeline, test.bfile=NULL,
   } else {
     stop("What is validate.function? I can't figure out.")
   }
-  if(plot) {
-    plot(lambdas, cors, log="x", col=as.factor(ss), type="o", 
-         xlab="lambda", ylab=funcname)
-    legend(x="topright", col=1:length(ls.pipeline$s), pch=1, 
-           legend=paste0("s=", ls.pipeline$s))
-  }
+
   cors[is.na(cors)] <- -Inf
   best <- which(cors == max(cors))[1]
   best.s <- ss[best]
@@ -138,7 +133,10 @@ validate.lassosum.pipeline <- function(ls.pipeline, test.bfile=NULL,
                              best.lambda=best.lambda,
                              best.pgs=best.pgs, 
                              best.beta=best.beta, 
-                             validation.table=validation.table))
+                             validation.table=validation.table, 
+                             validation.type=funcname))
+  class(results) <- "validate.lassosum"
+  if(plot) plot(results)
   return(results)
 
 }

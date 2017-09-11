@@ -21,7 +21,7 @@ lassosum.pipeline <- function(cor, chr, pos,
   #' @param ref.bfile \code{bfile} (\href{https://www.cog-genomics.org/plink2/formats#bed}{PLINK binary format}, without .bed) for 
   #'                  reference panel
   #' @param test.bfile \code{bfile} for test dataset
-  #' @param LDblocks \code{A vector to define LD blocks}
+  #' @param LDblocks \code{A vector to define LD blocks or alternatively a data.frame of regions in bed format (\href{https://www.ensembl.org/info/website/upload/bed.html})}
   #' @param lambda to pass on to \code{\link{lassosum}}
   #' @param s A vector of s
   #' @param destandardize Should coefficients from \code{\link{lassosum}} be 
@@ -68,7 +68,7 @@ lassosum.pipeline <- function(cor, chr, pos,
   #' 
   ######################### Input validation  (start) #########################
   extensions <- c(".bed", ".bim", ".fam")
-  stopifnot(!is.null(ref.bfile) || !is.null(test.bfile))
+  stopifnot(!is.null(ref.bfile) || !is.null(test.bfile) || all(s == 1))
   if(!is.null(ref.bfile)) {
     for(i in 1:length(extensions)) {
       if(!file.exists(paste0(ref.bfile, extensions[i]))) {
@@ -87,6 +87,8 @@ lassosum.pipeline <- function(cor, chr, pos,
   }
   if(is.null(A1) && is.null(A2)) {
     stop("At least one of A1 (alternative allele) or A2 (reference allele) must be specified. Preferably both.")
+  } else if(is.null(A1) || is.null(A2)) {
+    # message("Matching on 1 allele only.")
   }
 
   stopifnot(!any(is.na(cor)))
@@ -259,11 +261,17 @@ lassosum.pipeline <- function(cor, chr, pos,
     } else {
       xcl.test <- in.refpanel & FALSE
     }
-    if(any(xcl.test)) {
-      toextract <- m.test$ref.extract
-      toextract[toextract] <- xcl.test
-      sd[xcl.test] <- sd.bfile(bfile = test.bfile, extract=toextract, 
-                          keep=parsed.test$keep, ...)
+    
+    if(ref.equal.test) {
+      if(any(xcl.test)) { # xcl.test => exclusive to test.bfile
+        toextract <- m.test$ref.extract
+        toextract[toextract] <- xcl.test
+        sd[xcl.test] <- sd.bfile(bfile = test.bfile, extract=toextract, 
+                                 keep=parsed.test$keep, ...)
+      }
+    } else {
+      sd <- sd.bfile(bfile = test.bfile, extract=m.test$ref.extract,  
+                               keep=parsed.test$keep, ...)
     }
 
     if(trace) cat("De-standardize lassosum coefficients ...\n")

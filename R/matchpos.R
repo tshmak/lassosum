@@ -124,7 +124,7 @@ matchpos <- function(tomatch, ref.df,
     }
   }
   
-  if(match1allele != "") warning("Matching on 1 allele only!")
+  # if(match1allele != "") warning("Matching on 1 allele only!")
   
   tomatch$.index.tomatch <- 1:nrow(tomatch)
   ref.df$.index.ref <- 1:nrow(ref.df)

@@ -27,7 +27,7 @@ reference panel}
 
 \item{test.bfile}{\code{bfile} for test dataset}
 
-\item{LDblocks}{\code{A vector to define LD blocks}}
+\item{LDblocks}{\code{A vector to define LD blocks or alternatively a data.frame of regions in bed format (\href{https://www.ensembl.org/info/website/upload/bed.html})}}
 
 \item{lambda}{to pass on to \code{\link{lassosum}}}
 
