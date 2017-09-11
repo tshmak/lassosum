@@ -5,7 +5,7 @@
 \title{Parse the keep/remove/extract/exclude/chr options}
 \usage{
 parseselect(bfile, extract = NULL, exclude = NULL, keep = NULL,
-  remove = NULL, chr = NULL)
+  remove = NULL, chr = NULL, export = FALSE)
 }
 \arguments{
 \item{bfile}{plink file stem}

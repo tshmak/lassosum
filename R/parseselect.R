@@ -17,15 +17,21 @@
 #' @keywords internal
 #' @export
 parseselect <- function(bfile, extract=NULL, exclude=NULL, 
-                        keep=NULL, remove=NULL, chr=NULL) {
+                        keep=NULL, remove=NULL, chr=NULL, 
+                        export=FALSE) {
   
   stopifnot(is.character(bfile) && length(bfile) == 1)
-  stopifnot(file.exists(paste0(bfile, ".bed")))
-  stopifnot(file.exists(paste0(bfile, ".bim")))
-  stopifnot(file.exists(paste0(bfile, ".fam")))
+  bedfile <- paste0(bfile, ".bed")
+  bimfile <- paste0(bfile, ".bim")
+  famfile <- paste0(bfile, ".fam")
+  stopifnot(file.exists(bedfile))
+  stopifnot(file.exists(bimfile))
+  stopifnot(file.exists(famfile))
   
   p <- P <- ncol.bfile(bfile)
   n <- N <- nrow.bfile(bfile)
+  bim <- NULL
+  fam <- NULL
 
   #### extract ####
   if(!is.null(extract)) {
@@ -40,7 +46,7 @@ parseselect <- function(bfile, extract=NULL, exclude=NULL,
       }
       if(is.vector(extract)) {
         extract <- as.character(extract)
-        bim <- read.table2(paste0(bfile, ".bim"))
+        bim <- read.table2(bimfile)
         extract <- bim$V2 %in% extract
       } else {
         stop("I don't know what to do with this type of input for extract")
@@ -63,7 +69,7 @@ parseselect <- function(bfile, extract=NULL, exclude=NULL,
       }
       if(is.vector(exclude)) {
         exclude <- as.character(exclude)
-        if(!exists("bim")) bim <- read.table2(paste0(bfile, ".bim"))
+        if(!exists("bim")) bim <- read.table2(bimfile)
         exclude <- bim$V2 %in% exclude
       } else {
         stop("I don't know what to do with this type of input for exclude")
@@ -83,7 +89,7 @@ parseselect <- function(bfile, extract=NULL, exclude=NULL,
     stopifnot(is.vector(chr))
     chr <- as.character(chr)
     
-    if(!exists("bim")) bim <- read.table2(paste0(bfile, ".bim"))
+    if(!exists("bim")) bim <- read.table2(bimfile)
     bimchr <- bim$V1
     bimchr[bimchr==""]
     extract.chr <- bim$V1 %in% chr
@@ -106,7 +112,7 @@ parseselect <- function(bfile, extract=NULL, exclude=NULL,
       }
       if(is.data.frame(keep)) {
         stopifnot(ncol(keep)==2)
-        fam <- read.table2(paste0(bfile, ".fam"))
+        fam <- read.table2(famfile)
         famID <- paste(fam[,1], fam[,2], sep=".")
         keepID <- paste(keep[,1], keep[,2], sep=".")
         keep <- famID %in% keepID
@@ -129,7 +135,7 @@ parseselect <- function(bfile, extract=NULL, exclude=NULL,
       }
       if(is.data.frame(remove)) {
         stopifnot(ncol(remove)==2)
-        if(!exists("fam")) fam <- read.table2(paste0(bfile, ".fam"))
+        if(!exists("fam")) fam <- read.table2(famfile)
         famID <- paste(fam[,1], fam[,2], sep=".")
         removeID <- paste(remove[,1], remove[,2], sep=".")
         remove <- famID %in% removeID
@@ -147,8 +153,15 @@ parseselect <- function(bfile, extract=NULL, exclude=NULL,
   if(n==0) stop("No individuals left after keep/remove! Make sure the FID/IID are correct.")
   if(p==0) stop("No SNPs left after extract/exclude/chr! Make sure the SNP ids are correct.")
   
+  if(!export) {
     return(list(keep=keep, extract=extract, 
-              N=N, P=P, n=n, p=p))
+                N=N, P=P, n=n, p=p))
+  } else {
+    return(list(keep=keep, extract=extract, 
+                N=N, P=P, n=n, p=p, 
+                bimfile=bimfile, famfile=famfile, 
+                bim=bim, fam=fam))
+  }
   #' @return a list with
   #' \item{keep}{Either NULL or a logical vector of which individuals to keep}
   #' \item{extract}{Either NULL or a logical vector of which SNPs to extract}
