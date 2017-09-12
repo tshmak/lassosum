@@ -9,6 +9,7 @@
 #' @param keep samples to keep
 #' @param remove samples to remove
 #' @param chr a vector of chromosomes
+#' @param cluster A \code{cluster} object from the \code{parallel} package for parallel computing
 #' @details A function to calculate  
 #' \deqn{f(\lambda)=\beta'r/\sqrt{\beta'X'X\beta}} 
 #' where \eqn{X} is the standardized genotype matrix divided by \eqn{\sqrt n}, 
@@ -23,7 +24,7 @@
 #' @export
 pseudovalidation <- function(bfile, beta, cor, sd=NULL, 
                              keep=NULL, extract=NULL, exclude=NULL, remove=NULL, 
-                             chr=NULL, ...) {
+                             chr=NULL, cluster=NULL, ...) {
 
   stopifnot(is.numeric(cor))
   stopifnot(!any(is.na(cor)))
@@ -47,7 +48,8 @@ pseudovalidation <- function(bfile, beta, cor, sd=NULL,
     weight <- 1/sd
     weight[!is.finite(weight)] <- 0
     scaled.beta <- as.matrix(Diagonal(x=weight) %*% beta)
-    pred <- pgs(bfile, keep=parsed$keep, extract=parsed$extract, weights=scaled.beta)
+    pred <- pgs(bfile, keep=parsed$keep, extract=parsed$extract, 
+                weights=scaled.beta, cluster=cluster)
     pred2 <- scale(pred, scale=F)
     bXXb <- colSums(pred2^2) / parsed$n
     bXy <- cor %*% beta 

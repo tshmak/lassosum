@@ -8,7 +8,8 @@ lassosum.pipeline(cor, chr, pos, A1 = NULL, A2 = NULL, ref.bfile = NULL,
   test.bfile = NULL, LDblocks = chr, lambda = exp(seq(log(0.001),
   log(0.1), length.out = 20)), s = c(0.2, 0.5, 0.9, 1), destandardize = F,
   trace = 1, exclude.ambiguous = TRUE, keep.ref = NULL,
-  remove.ref = NULL, keep.test = NULL, remove.test = NULL, ...)
+  remove.ref = NULL, keep.test = NULL, remove.test = NULL,
+  cluster = NULL, ...)
 }
 \arguments{
 \item{cor}{A vector of SNP-wise correlations with phenotype
@@ -27,7 +28,7 @@ reference panel}
 
 \item{test.bfile}{\code{bfile} for test dataset}
 
-\item{LDblocks}{\code{A vector to define LD blocks or alternatively a data.frame of regions in bed format (\href{https://www.ensembl.org/info/website/upload/bed.html})}}
+\item{LDblocks}{A vector to define LD blocks or alternatively a data.frame of regions in \href{https://www.ensembl.org/info/website/upload/bed.html}{bed format}}
 
 \item{lambda}{to pass on to \code{\link{lassosum}}}
 
@@ -40,13 +41,15 @@ destandardized using test dataset standard deviations before being returned?}
 
 \item{exclude.ambiguous}{Should ambiguous SNPs (C/G, A/T) be excluded?}
 
-\item{keep.ref}{Participants to keep from the reference panel}
+\item{keep.ref}{Participants to keep from the reference panel (see \code{\link{parseselect}})}
 
-\item{remove.ref}{Participants to remove from the reference panel}
+\item{remove.ref}{Participants to remove from the reference panel(see \code{\link{parseselect}})}
 
-\item{keep.test}{Participants to keep from the testing dataset}
+\item{keep.test}{Participants to keep from the testing dataset (see \code{\link{parseselect}})}
 
-\item{remove.test}{Participants to remove from the testing dataset}
+\item{remove.test}{Participants to remove from the testing dataset (see \code{\link{parseselect}})}
+
+\item{cluster}{A \code{cluster} object from the \code{parallel} package for parallel computing}
 
 \item{...}{parameters to pass to \code{\link{lassosum}}}
 }

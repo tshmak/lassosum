@@ -5,7 +5,7 @@
 \title{Performs `pseudovalidation' to select the best \eqn{\lambda} value in lassosum}
 \usage{
 pseudovalidation(bfile, beta, cor, sd = NULL, keep = NULL, extract = NULL,
-  exclude = NULL, remove = NULL, chr = NULL, ...)
+  exclude = NULL, remove = NULL, chr = NULL, cluster = NULL, ...)
 }
 \arguments{
 \item{bfile}{A plink bfile stem}
@@ -25,6 +25,8 @@ pseudovalidation(bfile, beta, cor, sd = NULL, keep = NULL, extract = NULL,
 \item{remove}{samples to remove}
 
 \item{chr}{a vector of chromosomes}
+
+\item{cluster}{A \code{cluster} object from the \code{parallel} package for parallel computing}
 }
 \value{
 the results of the pseudovalidation, i.e. \eqn{f(\lambda)}

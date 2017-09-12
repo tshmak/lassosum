@@ -6,7 +6,7 @@
 \usage{
 pseudovalidate.lassosum.pipeline(ls.pipeline, test.bfile = NULL,
   keep = NULL, remove = NULL, trace = 1, destandardize = F, plot = T,
-  exclude.ambiguous = T, ...)
+  exclude.ambiguous = T, cluster = NULL, ...)
 }
 \arguments{
 \item{ls.pipeline}{A lassosum.pipeline object}
@@ -25,6 +25,8 @@ destandardized using test dataset standard deviations before being returned?}
 \item{plot}{Should the validation plot be plotted?}
 
 \item{exclude.ambiguous}{Should ambiguous SNPs (C/G, A/T) be excluded?}
+
+\item{cluster}{A \code{cluster} object from the \code{parallel} package for parallel computing}
 
 \item{...}{parameters to pass to \code{\link{pseudovalidation}}}
 }

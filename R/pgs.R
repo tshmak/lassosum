@@ -2,11 +2,13 @@
 #'
 #' @param bfile A plink bfile stem
 #' @param weights The weights for the SNPs (\eqn{\beta})
-#' @param extract SNPs to extract
-#' @param exclude SNPs to exclude
-#' @param keep samples to keep
-#' @param remove samples to remove
+#' @param extract SNPs to extract (see \code{\link{parseselect}})
+#' @param exclude SNPs to exclude (see \code{\link{parseselect}})
+#' @param keep samples to keep (see \code{\link{parseselect}})
+#' @param remove samples to remove (see \code{\link{parseselect}})
 #' @param chr a vector of chromosomes
+#' @param cluster A \code{cluster} object from the \code{parallel} package. 
+#' For parallel processing. 
 #' @note \itemize{
 #' \item Missing genotypes are interpreted as having the homozygous A2 alleles in the 
 #' PLINK files (same as the \code{--fill-missing-a2} option in PLINK). 
@@ -19,7 +21,7 @@
 
 #' @export
 pgs <- function(bfile, weights, keep=NULL, extract=NULL, exclude=NULL, remove=NULL, 
-                   chr=NULL) {
+                   chr=NULL, cluster=NULL) {
 
   stopifnot(is.numeric(weights))
   stopifnot(!any(is.na(weights)))
@@ -29,9 +31,32 @@ pgs <- function(bfile, weights, keep=NULL, extract=NULL, exclude=NULL, remove=NU
   parsed <- parseselect(bfile, extract=extract, exclude = exclude, 
                         keep=keep, remove=remove, 
                         chr=chr)
-  if(nrow(weights) != parsed$p) stop("Number of rows in (or vector length of) weights does not match number
-				     of selected columns in bfile")
+  if(nrow(weights) != parsed$p) stop("Number of rows in (or vector length of) weights does not match number of selected columns in bfile")
   # stopifnot(length(cor) == parsed$p)
+  
+  if(!is.null(cluster)) {
+    nclusters <- length(cluster)
+    if(nclusters == 1) break
+    split <- ceiling(seq(1/parsed$p, nclusters, length=parsed$p))
+    t <- table(split)
+    compute.size <- min(t) * parsed$n * ncol(weights)
+    if(compute.size < 1e8) {
+      # Too many clusters
+      f <- 1e8 / compute.size
+      recommended <- ceiling(nclusters / f)
+      return(pgs(bfile, weights, keep=parsed$keep, extract=parsed$extract, 
+                 cluster=cluster[1:recommended]))
+    }
+    l <- parallel::parLapply(cluster, 1:nclusters, function(i) {
+      toextract <- if(!is.null(parsed$extract)) parsed$extract else rep(TRUE, parsed$P)
+      select <- toextract[toextract] <- split == i
+      return(pgs(bfile, weights, keep=parsed$keep, extract=select))
+    })
+    result <- l[[1]]
+    if(nclusters > 1) for(i in 2:nclusters) result <- result + l[[i]]
+    return(result)
+
+  }
   
   if(is.null(parsed$extract)) {
     extract2 <- list(integer(0), integer(0))

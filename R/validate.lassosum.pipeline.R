@@ -2,7 +2,8 @@ validate.lassosum.pipeline <- function(ls.pipeline, test.bfile=NULL,
                               keep=NULL, remove=NULL, pheno=NULL, 
                               validate.function="cor", trace=1, 
                               destandardize=F, plot=T, 
-                              exclude.ambiguous=T, ...) {
+                              exclude.ambiguous=T, 
+                              cluster=NULL, ...) {
   
   #' @title Function to validate output from lassosum.pipeline with external phenotype
   #' @param ls.pipeline A lassosum.pipeline object
@@ -16,6 +17,7 @@ validate.lassosum.pipeline <- function(ls.pipeline, test.bfile=NULL,
   #' destandardized using test dataset standard deviations before being returned?
   #' @param plot Should the validation plot be plotted? 
   #' @param exclude.ambiguous Should ambiguous SNPs (C/G, A/T) be excluded? 
+  #' @param cluster A \code{cluster} object from the \code{parallel} package for parallel computing
   #' @param ... parameters to pass to \code{\link{sd.bfile}}
   #' @details Chooses the best \code{lambda} and \code{s} by validating 
   #' polygenic score against an external phenotype in the testing dataset. 
@@ -74,7 +76,8 @@ validate.lassosum.pipeline <- function(ls.pipeline, test.bfile=NULL,
     
     pgs <- lapply(beta, function(x) pgs(bfile=test.bfile, weights = x, 
                                         extract=m$ref.extract, 
-                                        keep=keep, remove=remove))
+                                        keep=keep, remove=remove, 
+                                        cluster=cluster))
     names(pgs) <- as.character(ls.pipeline$s)
     results <- c(results, list(pgs=pgs))
 
@@ -83,7 +86,8 @@ validate.lassosum.pipeline <- function(ls.pipeline, test.bfile=NULL,
       if(trace) cat("Calculating PGS...\n")
       pgs <- lapply(ls.pipeline$beta, function(x) pgs(bfile=test.bfile, 
                                           weights = x, 
-                                          keep=keep))
+                                          keep=keep, 
+                                          cluster=cluster))
       names(pgs) <- as.character(ls.pipeline$s)
       results <- c(results, list(pgs=pgs))
     } else {

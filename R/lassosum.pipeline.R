@@ -9,6 +9,7 @@ lassosum.pipeline <- function(cor, chr, pos,
                               exclude.ambiguous=TRUE, 
                               keep.ref=NULL, remove.ref=NULL, 
                               keep.test=NULL, remove.test=NULL, 
+                              cluster=NULL, 
                               ...) {
   #' @title Run lassosum with standard pipeline
   #' @description The easy way to run lassosum 
@@ -21,17 +22,18 @@ lassosum.pipeline <- function(cor, chr, pos,
   #' @param ref.bfile \code{bfile} (\href{https://www.cog-genomics.org/plink2/formats#bed}{PLINK binary format}, without .bed) for 
   #'                  reference panel
   #' @param test.bfile \code{bfile} for test dataset
-  #' @param LDblocks \code{A vector to define LD blocks or alternatively a data.frame of regions in bed format (\href{https://www.ensembl.org/info/website/upload/bed.html})}
+  #' @param LDblocks A vector to define LD blocks or alternatively a data.frame of regions in \href{https://www.ensembl.org/info/website/upload/bed.html}{bed format}
   #' @param lambda to pass on to \code{\link{lassosum}}
   #' @param s A vector of s
   #' @param destandardize Should coefficients from \code{\link{lassosum}} be 
   #' destandardized using test dataset standard deviations before being returned?
   #' @param trace Controls the amount of output.
   #' @param exclude.ambiguous Should ambiguous SNPs (C/G, A/T) be excluded? 
-  #' @param keep.ref Participants to keep from the reference panel 
-  #' @param remove.ref Participants to remove from the reference panel 
-  #' @param keep.test Participants to keep from the testing dataset 
-  #' @param remove.test Participants to remove from the testing dataset
+  #' @param keep.ref Participants to keep from the reference panel (see \code{\link{parseselect}})
+  #' @param remove.ref Participants to remove from the reference panel(see \code{\link{parseselect}})
+  #' @param keep.test Participants to keep from the testing dataset (see \code{\link{parseselect}})
+  #' @param remove.test Participants to remove from the testing dataset (see \code{\link{parseselect}})
+  #' @param cluster A \code{cluster} object from the \code{parallel} package for parallel computing
   #' @param ... parameters to pass to \code{\link{lassosum}}
   #' 
   #' @details To run \bold{lassosum} we assume as a minimum you have a vector of summary 
@@ -68,7 +70,7 @@ lassosum.pipeline <- function(cor, chr, pos,
   #' 
   ######################### Input validation  (start) #########################
   extensions <- c(".bed", ".bim", ".fam")
-  stopifnot(!is.null(ref.bfile) || !is.null(test.bfile) || all(s == 1))
+  stopifnot(!is.null(ref.bfile) || !is.null(test.bfile))
   if(!is.null(ref.bfile)) {
     for(i in 1:length(extensions)) {
       if(!file.exists(paste0(ref.bfile, extensions[i]))) {
@@ -215,7 +217,7 @@ lassosum.pipeline <- function(cor, chr, pos,
       lassosum(cor=cor2, bfile=ref.bfile, 
                    shrink=s, extract=ref.extract, lambda=lambda,
                    blocks = split, trace=trace-1, 
-                   keep=parsed.ref$keep, ...)
+                   keep=parsed.ref$keep, cluster=cluster, ...)
     })
   }
 
@@ -305,7 +307,8 @@ lassosum.pipeline <- function(cor, chr, pos,
   ### Polygenic scores 
   if(trace) cat("Calculating polygenic scores ...\n")
   pgs <- lapply(beta, function(x) pgs(bfile=test.bfile, weights = x, 
-           extract=m.test$ref.extract, keep=parsed.test$keep))
+           extract=m.test$ref.extract, keep=parsed.test$keep, 
+           cluster=cluster))
   names(pgs) <- as.character(s)
   results <- c(results, list(pgs=pgs))
   class(results) <- "lassosum.pipeline"
