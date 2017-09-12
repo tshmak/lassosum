@@ -5,22 +5,25 @@
 \title{Computes polygenic scores as a genotype matrix multiplied by a matrix of weights}
 \usage{
 pgs(bfile, weights, keep = NULL, extract = NULL, exclude = NULL,
-  remove = NULL, chr = NULL)
+  remove = NULL, chr = NULL, cluster = NULL)
 }
 \arguments{
 \item{bfile}{A plink bfile stem}
 
 \item{weights}{The weights for the SNPs (\eqn{\beta})}
 
-\item{keep}{samples to keep}
+\item{keep}{samples to keep (see \code{\link{parseselect}})}
 
-\item{extract}{SNPs to extract}
+\item{extract}{SNPs to extract (see \code{\link{parseselect}})}
 
-\item{exclude}{SNPs to exclude}
+\item{exclude}{SNPs to exclude (see \code{\link{parseselect}})}
 
-\item{remove}{samples to remove}
+\item{remove}{samples to remove (see \code{\link{parseselect}})}
 
 \item{chr}{a vector of chromosomes}
+
+\item{cluster}{A \code{cluster} object from the \code{parallel} package. 
+For parallel processing.}
 }
 \value{
 A matrix of Polygenic Scores
