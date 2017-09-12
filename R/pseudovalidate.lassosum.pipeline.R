@@ -2,7 +2,8 @@ pseudovalidate.lassosum.pipeline <- function(ls.pipeline, test.bfile=NULL,
                                        keep=NULL, remove=NULL, 
                                        trace=1, 
                                        destandardize=F, plot=T, 
-                                       exclude.ambiguous=T, ...) {
+                                       exclude.ambiguous=T, 
+                                       cluster=NULL, ...) {
   #' @title Function to perform pseudovalidation from a lassosum.pipeline object
   #' @param ls.pipeline A lassosum.pipeline object
   #' @param test.bfile The (\href{https://www.cog-genomics.org/plink2/formats#bed}{PLINK bfile} for the test dataset 
@@ -13,6 +14,7 @@ pseudovalidate.lassosum.pipeline <- function(ls.pipeline, test.bfile=NULL,
   #' destandardized using test dataset standard deviations before being returned?
   #' @param plot Should the validation plot be plotted? 
   #' @param exclude.ambiguous Should ambiguous SNPs (C/G, A/T) be excluded? 
+  #' @param cluster A \code{cluster} object from the \code{parallel} package for parallel computing
   #' @param ... parameters to pass to \code{\link{pseudovalidation}}
   #' @details Pseudovalidation is explained in Mak et al (2016). It helps 
   #' choosing a value of \code{lambda} and \code{s} in the absence of a validation
@@ -73,7 +75,8 @@ pseudovalidate.lassosum.pipeline <- function(ls.pipeline, test.bfile=NULL,
     toextract <- m$ref.extract
     pgs <- lapply(beta, function(x) pgs(bfile=test.bfile, weights = x, 
                                         extract=toextract, 
-                                        keep=keep, remove=remove))
+                                        keep=keep, remove=remove, 
+                                        cluster=cluster))
     names(pgs) <- as.character(ls.pipeline$s)
     results <- c(results, list(pgs=pgs))
     
@@ -83,7 +86,8 @@ pseudovalidate.lassosum.pipeline <- function(ls.pipeline, test.bfile=NULL,
       if(trace) cat("Calculating PGS...\n")
       pgs <- lapply(ls.pipeline$beta, function(x) pgs(bfile=test.bfile, 
                                                       weights = x, 
-                                                      keep=keep))
+                                                      keep=keep, 
+                                                      cluster=cluster))
       names(pgs) <- as.character(ls.pipeline$s)
       results <- c(results, list(pgs=pgs))
     } else {
@@ -108,7 +112,8 @@ pseudovalidate.lassosum.pipeline <- function(ls.pipeline, test.bfile=NULL,
                          cor=cor.shrunk, 
                          extract=toextract, 
                          keep=keep, remove=remove,
-                         sd=ls.pipeline$sd, ...)
+                         sd=ls.pipeline$sd, 
+                         cluster=cluster, ...)
 
   pv[is.na(pv)] <- -Inf
   best <- which(pv == max(pv))[1]
