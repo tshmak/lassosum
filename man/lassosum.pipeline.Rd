@@ -27,7 +27,7 @@ reference panel}
 
 \item{test.bfile}{\code{bfile} for test dataset}
 
-\item{LDblocks}{\code{A vector to define LD blocks or alternatively a data.frame of regions in bed format (\href{https://www.ensembl.org/info/website/upload/bed.html})}}
+\item{LDblocks}{A vector to define LD blocks or alternatively a data.frame of regions in \href{https://www.ensembl.org/info/website/upload/bed.html}{bed format}}
 
 \item{lambda}{to pass on to \code{\link{lassosum}}}
 
@@ -40,13 +40,13 @@ destandardized using test dataset standard deviations before being returned?}
 
 \item{exclude.ambiguous}{Should ambiguous SNPs (C/G, A/T) be excluded?}
 
-\item{keep.ref}{Participants to keep from the reference panel}
+\item{keep.ref}{Participants to keep from the reference panel (see \link{parseselect})}
 
-\item{remove.ref}{Participants to remove from the reference panel}
+\item{remove.ref}{Participants to remove from the reference panel(see \link{parseselect})}
 
-\item{keep.test}{Participants to keep from the testing dataset}
+\item{keep.test}{Participants to keep from the testing dataset (see \link{parseselect})}
 
-\item{remove.test}{Participants to remove from the testing dataset}
+\item{remove.test}{Participants to remove from the testing dataset (see \link{parseselect})}
 
 \item{...}{parameters to pass to \code{\link{lassosum}}}
 }
