@@ -43,7 +43,7 @@ pgs <- function(bfile, weights, keep=NULL, extract=NULL, exclude=NULL, remove=NU
     if(compute.size < 1e8) {
       # Too many clusters
       f <- 1e8 / compute.size
-      recommended <- ceiling(nclusters / f)
+      recommended <- min(ceiling(nclusters / f), nclusters - 1)
       return(pgs(bfile, weights, keep=parsed$keep, extract=parsed$extract, 
                  cluster=cluster[1:recommended]))
     }
