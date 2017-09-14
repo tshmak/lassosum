@@ -98,3 +98,7 @@ runElnet <- function(lambda, shrink, fileName, r, N, P, col_skip_pos, col_skip, 
     .Call('lassosum_runElnet', PACKAGE = 'lassosum', lambda, shrink, fileName, r, N, P, col_skip_pos, col_skip, keepbytes, keepoffset, thr, x, trace, maxiter, startvec, endvec)
 }
 
+# Register entry points for exported C++ functions
+methods::setLoadAction(function(ns) {
+    .Call('lassosum_RcppExport_registerCCallable', PACKAGE = 'lassosum')
+})

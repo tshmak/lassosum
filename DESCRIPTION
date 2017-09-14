@@ -10,6 +10,7 @@ Authors@R: c(
 Description: Carries out LASSO estimation of a linear model given correlations between SNPs and phenotype and a reference panel of genotypes. 
 License: GPL-3
 LazyData: TRUE
+Includes: Rcpp
 LinkingTo: Rcpp, RcppArmadillo
 Imports:
     Rcpp (>= 0.11.0),

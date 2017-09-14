@@ -9,6 +9,8 @@
    @version 0.1
 
  */
+// [[Rcpp::interfaces(r, cpp)]]
+
 #include <stdio.h>
 #include <string>
 #include <bitset>
@@ -17,8 +19,8 @@
 #include <iostream>
 #include <cmath>
 #include <RcppArmadillo.h>
-// [[Rcpp::depends(RcppArmadillo)]]
 
+// [[Rcpp::depends(RcppArmadillo)]]
 using namespace Rcpp;
 
 /**
@@ -29,6 +31,7 @@ using namespace Rcpp;
 	@return is plink file in major mode
 
 */
+
 bool openPlinkBinaryFile(const std::string s, std::ifstream &BIT) {
   BIT.open(s.c_str(), std::ios::in | std::ios::binary);
   if (!BIT.is_open()) {
