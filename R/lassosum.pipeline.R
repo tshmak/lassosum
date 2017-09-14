@@ -10,6 +10,7 @@ lassosum.pipeline <- function(cor, chr, pos,
                               keep.ref=NULL, remove.ref=NULL, 
                               keep.test=NULL, remove.test=NULL, 
                               cluster=NULL, 
+                              max.ref.bfile.n=20000, 
                               ...) {
   #' @title Run lassosum with standard pipeline
   #' @description The easy way to run lassosum 
@@ -34,6 +35,7 @@ lassosum.pipeline <- function(cor, chr, pos,
   #' @param keep.test Participants to keep from the testing dataset (see \code{\link{parseselect}})
   #' @param remove.test Participants to remove from the testing dataset (see \code{\link{parseselect}})
   #' @param cluster A \code{cluster} object from the \code{parallel} package for parallel computing
+  #' @param max.ref.bfile.n The maximum sample size allowed in the reference panel
   #' @param ... parameters to pass to \code{\link{lassosum}}
   #' 
   #' @details To run \bold{lassosum} we assume as a minimum you have a vector of summary 
@@ -140,6 +142,16 @@ lassosum.pipeline <- function(cor, chr, pos,
       stop("keep.test and remove.test should not be specified without test.bfile.")
   }
   parsed.ref <- parseselect(ref.bfile, keep=keep.ref, remove=remove.ref)
+  if(parsed.ref$n > max.ref.bfile.n) {
+    stop(paste("We don't recommend using such a large sample size",
+               paste0("(", parsed.ref$n, ")"), 
+               "for the reference panel as it can be slow.", 
+               "Alter max.ref.bfile.n to proceed anyway (it will be more accurate).",
+               "Alternatively use", 
+               "'keep.ref=logical.vector(sample(nrow.bfile(...), 5000), nrow.bfile(...))'", 
+               "where ... is your reference panel bfile, ",
+               "to take a random sample of 5000."))
+  }
   parsed.test <- parseselect(test.bfile, keep=keep.test, remove=remove.test)
   ref.equal.test <- identical(list(ref.bfile, keep.ref, remove.ref), 
                               list(test.bfile, keep.test, remove.test))
@@ -227,8 +239,8 @@ lassosum.pipeline <- function(cor, chr, pos,
   ss3$A1 <- test.bim$V5[m.test$ref.extract]
   ss3$A2 <- test.bim$V6[m.test$ref.extract]
   
-  if(trace) cat("Running lassosum with s=1...\n")
   if(any(s == 1)) {
+    if(trace) cat("Running lassosum with s=1...\n")
     il <- indeplasso(ss3$cor, lambda=lambda)
   } else {
     il <- list(beta=matrix(0, nrow=length(m.test$order), ncol=length(lambda)))
