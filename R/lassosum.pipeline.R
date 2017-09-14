@@ -239,8 +239,8 @@ lassosum.pipeline <- function(cor, chr, pos,
   ss3$A1 <- test.bim$V5[m.test$ref.extract]
   ss3$A2 <- test.bim$V6[m.test$ref.extract]
   
-  if(trace) cat("Running lassosum with s=1...\n")
   if(any(s == 1)) {
+    if(trace) cat("Running lassosum with s=1...\n")
     il <- indeplasso(ss3$cor, lambda=lambda)
   } else {
     il <- list(beta=matrix(0, nrow=length(m.test$order), ncol=length(lambda)))
