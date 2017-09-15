@@ -36,26 +36,28 @@ pgs <- function(bfile, weights, keep=NULL, extract=NULL, exclude=NULL, remove=NU
   
   if(!is.null(cluster)) {
     nclusters <- length(cluster)
-    if(nclusters == 1) break
-    split <- ceiling(seq(1/parsed$p, nclusters, length=parsed$p))
-    t <- table(split)
-    compute.size <- min(t) * parsed$n * ncol(weights)
-    if(compute.size < 1e8) {
-      # Too many clusters
-      f <- 1e8 / compute.size
-      recommended <- min(ceiling(nclusters / f), nclusters - 1)
-      return(pgs(bfile, weights, keep=parsed$keep, extract=parsed$extract, 
-                 cluster=cluster[1:recommended]))
+    if(nclusters > 1) {
+      split <- ceiling(seq(1/parsed$p, nclusters, length=parsed$p))
+      t <- table(split)
+      compute.size <- min(t) * parsed$n * ncol(weights)
+      if(compute.size < 1e8) {
+        # Too many clusters
+        f <- 1e8 / compute.size
+        recommended <- min(ceiling(nclusters / f), nclusters - 1)
+        return(pgs(bfile, weights, keep=parsed$keep, extract=parsed$extract, 
+                   cluster=cluster[1:recommended]))
+      }
+      l <- parallel::parLapply(cluster, 1:nclusters, function(i) {
+        toextract <- if(!is.null(parsed$extract)) parsed$extract else 
+          rep(TRUE, parsed$P)
+        touse <- split == i
+        select <- toextract[toextract] <- touse
+        return(pgs(bfile, weights[touse, ], keep=parsed$keep, extract=select))
+      })
+      result <- l[[1]]
+      if(nclusters > 1) for(i in 2:nclusters) result <- result + l[[i]]
+      return(result)
     }
-    l <- parallel::parLapply(cluster, 1:nclusters, function(i) {
-      toextract <- if(!is.null(parsed$extract)) parsed$extract else rep(TRUE, parsed$P)
-      select <- toextract[toextract] <- split == i
-      return(pgs(bfile, weights, keep=parsed$keep, extract=select))
-    })
-    result <- l[[1]]
-    if(nclusters > 1) for(i in 2:nclusters) result <- result + l[[i]]
-    return(result)
-
   }
   
   if(is.null(parsed$extract)) {

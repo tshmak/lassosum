@@ -135,8 +135,8 @@ matchpos <- function(tomatch, ref.df,
   setkey(merged, .index.ref)
   merged <- as.data.frame(merged)
 
-  alt.col2 <- alt.col + ncol(ref.df) - n.match.cols
-  ref.col2 <- ref.col + ncol(ref.df) - n.match.cols
+  alt.col2 <- alt.col + ncol(ref.df) - sum(match.cols < alt.col)
+  ref.col2 <- ref.col + ncol(ref.df) - sum(match.cols < alt.col)
   ref.alt.col2 <- ref.alt.col
   ref.ref.col2 <- ref.ref.col
   

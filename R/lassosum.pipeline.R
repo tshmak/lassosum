@@ -1,4 +1,4 @@
-lassosum.pipeline <- function(cor, chr, pos, 
+lassosum.pipeline <- function(cor, chr=NULL, pos=NULL, snp=NULL, 
                               A1=NULL, A2=NULL, 
                               ref.bfile=NULL, test.bfile=NULL, 
                               LDblocks=chr, 
@@ -89,6 +89,12 @@ lassosum.pipeline <- function(cor, chr, pos,
   } else {
     if(destandardize) stop("destandardize cannot be specified without test.bfile")
   }
+  
+  chrpos <- !is.null(chr) && !is.null(pos)
+  if(is.null(snp) && !chrpos) {
+    stop("Either snp or chr/pos must be specified.")
+  } 
+  
   if(is.null(A1) && is.null(A2)) {
     stop("At least one of A1 (alternative allele) or A2 (reference allele) must be specified. Preferably both.")
   } else if(is.null(A1) || is.null(A2)) {
@@ -97,11 +103,18 @@ lassosum.pipeline <- function(cor, chr, pos,
 
   stopifnot(!any(is.na(cor)))
   stopifnot(all(cor > -1 & cor < 1))
-  stopifnot(length(chr) == length(pos))
-  stopifnot(length(chr) == length(cor))
+
+  if(chrpos) {
+    stopifnot(length(chr) == length(pos))
+    stopifnot(length(chr) == length(cor))
+    chr <- as.character(sub("^chr", "", chr, ignore.case = T))
+  }
+  
+  if(!is.null(snp)) {
+    stopifnot(length(snp) == length(cor))
+  }
   stopifnot(is.null(A1) || length(A1) == length(cor))
   stopifnot(is.null(A2) || length(A2) == length(cor))
-  chr <- as.character(sub("^chr", "", chr, ignore.case = T))
 
   onefile <- F  
   notest <- F
@@ -159,13 +172,14 @@ lassosum.pipeline <- function(cor, chr, pos,
 
   if(is.null(ref.bfile) && trace > 0) cat("Reference panel assumed the same as test data.") 
 
-  ss <- list(chr=chr, pos=pos, A1=A1, A2=A2, cor=cor)
+  ss <- list(chr=chr, pos=pos, A1=A1, A2=A2, snp=snp, cor=cor)
   ss[sapply(ss, is.null)] <- NULL
   ss <- as.data.frame(ss)
   ### Compare summary statistics and reference panel ###
   if(trace) cat("Coordinating summary stats with reference panel...\n")
   m.ref <- matchpos(ss, ref.bim, auto.detect.ref = F, 
-                    ref.chr = "V1", ref.pos="V4", ref.alt="V5", ref.ref="V6", 
+                    ref.chr = "V1", ref.snp="V2", 
+                    ref.pos="V4", ref.alt="V5", ref.ref="V6", 
                     rm.duplicates = T, exclude.ambiguous = exclude.ambiguous, 
                     silent=T)
   ss2 <- ss[m.ref$order,]
@@ -177,14 +191,15 @@ lassosum.pipeline <- function(cor, chr, pos,
   if(!onefile) {
     if(trace) cat("Coordinating summary stats with test data...\n")
     m.test <- matchpos(ss, test.bim, auto.detect.ref = F, 
-                       ref.chr = "V1", ref.pos="V4", ref.alt="V5", ref.ref="V6", 
+                       ref.chr = "V1", ref.snp="V2", 
+                       ref.pos="V4", ref.alt="V5", ref.ref="V6", 
                        rm.duplicates = T, exclude.ambiguous = exclude.ambiguous, 
                        silent=T)
     ### Find SNPs that are common to all three datasets ###
     if(trace) cat("Coordinating summary stats, reference panel, and test data...\n")
     m.common <- matchpos(ss2, test.bim, auto.detect.ref = F, 
-                         ref.chr = "V1", ref.pos="V4", 
-                         ref.alt="V5", ref.ref="V6",
+                         ref.chr = "V1", ref.snp="V2", 
+                         ref.pos="V4", ref.alt="V5", ref.ref="V6",
                          rm.duplicates = T, 
                          exclude.ambiguous = exclude.ambiguous, 
                          silent=T)
