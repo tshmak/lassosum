@@ -1,4 +1,4 @@
-xp.lassosum <- function(ss, LDblocks=ss$chr, 
+xp.lassosum <- function(xp.plink.linear, LDblocks=xp.plink.linear$chr, 
                         ref.bfile=NULL, 
                         destandardize=TRUE, 
                         max.ref.bfile.n=5000, 
@@ -12,9 +12,9 @@ xp.lassosum <- function(ss, LDblocks=ss$chr,
   #' @title lassosum with cross-prediction
   #' @description We assume correlations are pre-calculated for the various 
   #' folds, using PLINK or otherwise (cos PLINK is a lot faster).
-  #' @param ss An object from xp.plink.linear()
+  #' @param xp.plink.linear An object from xp.plink.linear()
   #' @param LDblocks LD blocks. See \code{\link{lassosum.pipeline}}
-  #' @param ref.bfile bfile of reference panel (if different from that used in \code{ss})
+  #' @param ref.bfile bfile of reference panel (if different from that used in \code{xp.plink.linear})
   #' @param destandardize Should coefficients be destandardized
   #' @param max.ref.bfile.n Maximum number of samples to use in ref.bfile (to improve speed)
   #' @param details Should a detailed output be given?
@@ -25,6 +25,7 @@ xp.lassosum <- function(ss, LDblocks=ss$chr,
   #' @param ... Other parameters to pass to lassosum.pipeline()
 
   # ref.bfile <- NULL; max.ref.bfile.n <- 100; details <- TRUE; destandardize=TRUE
+  ss <- xp.plink.linear # get a shorter name
   if(is.null(keep.ref)) {
     if(is.null(ref.bfile)) refsamplesize <- ss$n else {
       refsamplesize <- nrow.bfile(ref.bfile)
@@ -49,6 +50,7 @@ xp.lassosum <- function(ss, LDblocks=ss$chr,
     l[[i]] <- lassosum.pipeline(cor=ss$cor[[i]], 
                                 chr=ss$chr, 
                                 pos=ss$pos,
+                                snp=ss$snp,
                                 A1=ss$A1, 
                                 LDblocks=LDblocks,
                                 exclude.ambiguous=exclude.ambiguous, 
@@ -89,6 +91,7 @@ xp.lassosum <- function(ss, LDblocks=ss$chr,
                                   validate.function = validate.function)
 
   tab <- data.frame(pheno=pheno, fold=fold, best.pgs=v$best.pgs)
+  attr(tab, "keep.ref") <- keep.ref
   
   if(details) {
     attr(tab, "lassosum") <- l

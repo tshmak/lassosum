@@ -5,7 +5,7 @@ plink.linear <- function(bfile, pheno, out=tempfile("lassosum.out"),
                          covar=NULL, 
                          plink.cmd="--linear standard-beta", 
                          ext=".assoc.linear",
-                         show.output.on.console=FALSE, 
+                         ignore.stdout=TRUE, 
                          ...) {
   
   #' @title Obtain standardized coefficients from linear regression in PLINK
@@ -75,7 +75,7 @@ plink.linear <- function(bfile, pheno, out=tempfile("lassosum.out"),
     
   #### run plink ####
   cmd <- paste(plink, cmd, plink.cmd)
-  system(cmd, show.output.on.console=show.output.on.console)
+  system(cmd, ignore.stdout=ignore.stdout)
   
   tab <- read.table2(paste0(out, ext), header=TRUE)
   attr(tab, "out") <- options$out

@@ -75,18 +75,22 @@ xp.plink.linear <- function(bfile, nfolds=5, fold=NULL,
   chr <- lapply(result, function(x) x$CHR)
   pos <- lapply(result, function(x) x$BP)
   A1 <- lapply(result, function(x) x$A1)
+  snp <- lapply(result, function(x) x$SNP)
+  nmiss <- as.data.frame(lapply(result, function(x) x$NMISS))
   
   # Checks 
   stopifnot(all(sapply(chr, function(x) identical(x, chr[[1]]))))
   stopifnot(all(sapply(pos, function(x) identical(x, pos[[1]]))))
   stopifnot(all(sapply(A1, function(x) identical(x, A1[[1]]))))
+  stopifnot(all(sapply(snp, function(x) identical(x, snp[[1]]))))
   
-  chr <- chr[[1]]; pos <- pos[[1]]; A1 <- A1[[1]]
+  chr <- chr[[1]]; pos <- pos[[1]]; A1 <- A1[[1]]; snp <- snp[[1]]
   
-  return(list(cor=cor, chr=chr, pos=pos, A1=A1, fold=fold, 
+  return(list(cor=cor, chr=chr, pos=pos, A1=A1, snp=snp, 
+              fold=fold, 
               pheno.by.fold=pheno.by.fold, 
               keep=parsed$keep, extract=parsed$extract, 
-              n=parsed$n, p=parsed$p, 
+              n=parsed$n, p=parsed$p, nonmiss=nmiss, 
               bfile=bfile))
 
 }
