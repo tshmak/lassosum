@@ -86,7 +86,7 @@ lassosum <- function(cor, bfile,
       })
     } else {
       Cor <- cor; Bfile <- bfile; Lambda <- lambda; Shrink=shrink; Thr <- thr; 
-      Maxiter=Maxiter; Mem.limit <- mem.limit ; Trace <- trace; Init <- init; 
+      Maxiter=maxiter; Mem.limit <- mem.limit ; Trace <- trace; Init <- init; 
       Blocks <- blocks
       # Make sure these are defined within the function and so copied to 
       # the child processes
