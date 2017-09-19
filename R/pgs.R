@@ -47,12 +47,14 @@ pgs <- function(bfile, weights, keep=NULL, extract=NULL, exclude=NULL, remove=NU
         return(pgs(bfile, weights, keep=parsed$keep, extract=parsed$extract, 
                    cluster=cluster[1:recommended]))
       }
+      Bfile <- bfile # Define this within the function so that it is copied
+                      # to the child processes
       l <- parallel::parLapply(cluster, 1:nclusters, function(i) {
         toextract <- if(!is.null(parsed$extract)) parsed$extract else 
           rep(TRUE, parsed$P)
         touse <- split == i
         select <- toextract[toextract] <- touse
-        return(pgs(bfile, weights[touse, ], keep=parsed$keep, extract=select))
+        return(pgs(Bfile, weights[touse, ], keep=parsed$keep, extract=select))
       })
       result <- l[[1]]
       if(nclusters > 1) for(i in 2:nclusters) result <- result + l[[i]]
