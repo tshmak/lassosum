@@ -85,11 +85,18 @@ lassosum <- function(cor, bfile,
                  mem.limit=mem.limit, chunks=chunks$chunks[chunks$chunks==i])
       })
     } else {
+      Cor <- cor; Bfile <- bfile; Lambda <- lambda; Shrink=shrink; Thr <- thr; 
+      Maxiter=Maxiter; Mem.limit <- mem.limit ; Trace <- trace; Init <- init; 
+      Blocks <- blocks
+      # Make sure these are defined within the function and so copied to 
+      # the child processes
       results.list <- parLapplyLB(cluster, unique(chunks$chunks.blocks), function(i) {
-        lassosum(cor=cor[chunks$chunks==i], bfile=bfile, lambda=lambda, shrink=shrink, 
-                 thr=thr, init=init[chunks$chunks==i], trace=trace-0.5, maxiter=maxiter, 
-                 blocks[chunks$chunks==i], keep=parsed$keep, extract=chunks$extracts[[i]], 
-                 mem.limit=mem.limit, chunks=chunks$chunks[chunks$chunks==i])
+        lassosum(cor=Cor[chunks$chunks==i], bfile=Bfile, lambda=Lambda, 
+                 shrink=Shrink, thr=Thr, init=Init[chunks$chunks==i], 
+                 trace=trace-0.5, maxiter=Maxiter, 
+                 blocks=Blocks[chunks$chunks==i], 
+                 keep=parsed$keep, extract=chunks$extracts[[i]], 
+                 mem.limit=Mem.limit, chunks=chunks$chunks[chunks$chunks==i])
       })
     }
     return(do.call("merge.lassosum", results.list))

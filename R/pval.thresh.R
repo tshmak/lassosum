@@ -31,6 +31,8 @@ pval.thresh <- function(pvals, p.thresholds, beta, bfile,
       return(mat %*% dummy[groups$chunks == i,])
     })
   } else {
+    Bfile <- bfile # Define this within the function so it is copied 
+                   # to the child processes
     l <- parLapplyLB(cluster, unique(groups$chunks), function(i) {
       if(trace > 0) cat("Processing chunk", i, "\n")
       select[select] <- groups$chunks == i
