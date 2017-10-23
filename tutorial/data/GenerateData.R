@@ -23,5 +23,5 @@ m <- matchpos(sumstats,bim, ref.chr = "V1", ref.pos="V4", rm.duplicates = T)
 sumstats.tokeep <- sumstats[m$order]
 colnames(sumstats.tokeep)[c(3,6,7,8,9)] <- c("Position", "OR_A1", "OR_95_CIlow", "OR_95_CIup", "P_val")
 write.table.tim(sumstats.tokeep, file="summarystats.txt")
-system("cp ~/DATA/ldetect/src/EUR/fourier_ls-all.bed .")
+# system("cp ~/DATA/ldetect/src/EUR/fourier_ls-all.bed .")
 system("rm chr21.* chr22.* test.* *.log *.nosex")

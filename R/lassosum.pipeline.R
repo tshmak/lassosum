@@ -226,6 +226,7 @@ lassosum.pipeline <- function(cor, chr=NULL, pos=NULL, snp=NULL,
                            POS = ref.bim$V4[ref.extract],
                            ref.CHR = LDblocks[,1], 
                            ref.breaks = LDblocks[,3])
+      # Assumes base 1 for the 3rd column of LDblocks (like normal bed files)
     }
   } else {
     # split <- ref.bim$V1[ref.extract]

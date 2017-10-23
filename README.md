@@ -65,7 +65,7 @@ ref.bfile <- "./data/refpanel"
 test.bfile <- "./data/testsample"
 
 ### Read ld region file ###
-ld <- fread("./data/Berisa.2015.EUR.bed")
+ld <- fread("./data/Berisa.EUR.hg19.bed")
 ```
 
 To run `lassosum`, we need to input SNP-wise correlations. This can be converted from p-values via the `p2cor` function. 
