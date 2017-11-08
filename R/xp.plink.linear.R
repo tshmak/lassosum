@@ -4,6 +4,7 @@ xp.plink.linear <- function(bfile, nfolds=5, fold=NULL,
                             extract=NULL, exclude=NULL, 
                             chr=NULL, 
                             force=FALSE, 
+                            fast=TRUE, 
                             ...) {
   #' @title Generate summary statistics for cross-prediction
   #' @param nfolds Number of folds
@@ -64,7 +65,8 @@ xp.plink.linear <- function(bfile, nfolds=5, fold=NULL,
   #### Cross-prediction ####
   result <- list()
   for(i in 1:nfolds) {
-    training <- logical.vector(touse[fold != i], parsed$N)
+    if(fast) training <- logical.vector(touse[fold == i], parsed$N) else 
+      training <- logical.vector(touse[fold != i], parsed$N)
     result[[i]] <- plink.linear(bfile=bfile, 
                                 pheno=pheno[training],
                                 keep = training, 
@@ -85,6 +87,13 @@ xp.plink.linear <- function(bfile, nfolds=5, fold=NULL,
   stopifnot(all(sapply(snp, function(x) identical(x, snp[[1]]))))
   
   chr <- chr[[1]]; pos <- pos[[1]]; A1 <- A1[[1]]; snp <- snp[[1]]
+  
+  if(fast) {
+    Cor <- as.data.frame(cor)
+    for(i in 1:nfolds) {
+      cor[[i]] <- rowMeans(Cor[,-i])
+    }
+  }
   
   return(list(cor=cor, chr=chr, pos=pos, A1=A1, snp=snp, 
               fold=fold, 
