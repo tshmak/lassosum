@@ -39,7 +39,7 @@ pgs <- function(bfile, weights, keep=NULL, extract=NULL, exclude=NULL, remove=NU
     if(nclusters > 1) {
       split <- ceiling(seq(1/parsed$p, nclusters, length=parsed$p))
       t <- table(split)
-      compute.size <- min(t) * parsed$n * ncol(weights)
+      compute.size <- as.double(min(t)) * parsed$n * ncol(weights)
       if(compute.size < 1e8) {
         # Too many clusters
         f <- 1e8 / compute.size
