@@ -13,4 +13,3 @@ nrow.bfile(bfile)
 an integer with the number of rows
 #@keywords internal
 }
-

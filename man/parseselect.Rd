@@ -40,4 +40,3 @@ except with the role of the FID/IID data.frame replaced with a character vector 
 SNP ids (matching those in the .bim file).
 }
 \keyword{internal}
-

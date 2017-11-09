@@ -14,4 +14,3 @@ Function to get elastic net solutions given X, a reference panel, and
 b, regression coefficients
 }
 \keyword{internal}
-

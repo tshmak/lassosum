@@ -12,4 +12,3 @@ Function to remove an individual study's effect contribution to a
 fixed-effect meta-analysis summary statistics
 }
 \keyword{internal}
-

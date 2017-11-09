@@ -43,4 +43,3 @@ a list of results
 Runs elnet with various parameters
 }
 \keyword{internal}
-

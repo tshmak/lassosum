@@ -9,4 +9,3 @@ parse.pheno.covar(input, parsed)
 \description{
 Parse the pheno and covariates input
 }
-

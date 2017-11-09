@@ -45,4 +45,3 @@ PLINK files (same as the \code{--fill-missing-a2} option in PLINK).
 SNPs in the bfile after extract/exclude/chr.
 }
 }
-

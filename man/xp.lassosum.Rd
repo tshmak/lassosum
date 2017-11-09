@@ -4,17 +4,20 @@
 \alias{xp.lassosum}
 \title{lassosum with cross-prediction}
 \usage{
-xp.lassosum(ss, LDblocks = ss$chr, ref.bfile = NULL, destandardize = TRUE,
+xp.lassosum(xp.plink.linear, LDblocks = xp.plink.linear$chr,
+  pseudovalidation = FALSE, ref.bfile = NULL, destandardize = TRUE,
   max.ref.bfile.n = 5000, details = FALSE, keep.ref = NULL,
   exclude.ambiguous = FALSE, validate.function = "cor", plot = TRUE,
-  trace = 1, ...)
+  trace = 1, cluster = NULL, ...)
 }
 \arguments{
-\item{ss}{An object from xp.plink.linear()}
+\item{xp.plink.linear}{An object from xp.plink.linear()}
 
 \item{LDblocks}{LD blocks. See \code{\link{lassosum.pipeline}}}
 
-\item{ref.bfile}{bfile of reference panel (if different from that used in \code{ss})}
+\item{pseudovalidation}{Should pseudovalidation be performed on each fold?}
+
+\item{ref.bfile}{bfile of reference panel (if different from that used in \code{xp.plink.linear})}
 
 \item{destandardize}{Should coefficients be destandardized}
 
@@ -36,4 +39,3 @@ xp.lassosum(ss, LDblocks = ss$chr, ref.bfile = NULL, destandardize = TRUE,
 We assume correlations are pre-calculated for the various 
 folds, using PLINK or otherwise (cos PLINK is a lot faster).
 }
-

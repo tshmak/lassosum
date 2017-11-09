@@ -21,4 +21,3 @@ matchpos(tomatch, ref.df, auto.detect.tomatch = T, auto.detect.ref = T,
 If REF/ALT alleles available, will also check them for reverse coding. 
 Specify the exclude.ambiguous option for possible sense/antisense ambiguity.
 }
-

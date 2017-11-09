@@ -6,7 +6,7 @@
 \usage{
 xp.plink.linear(bfile, nfolds = 5, fold = NULL, pheno = NULL,
   covar = NULL, keep = NULL, remove = NULL, extract = NULL,
-  exclude = NULL, chr = NULL, force = FALSE, ...)
+  exclude = NULL, chr = NULL, force = FALSE, fast = TRUE, ...)
 }
 \arguments{
 \item{nfolds}{Number of folds}
@@ -19,4 +19,3 @@ xp.plink.linear(bfile, nfolds = 5, fold = NULL, pheno = NULL,
 
 \item{keep, remove, extract, exclude, chr}{see \code{parseselect}}
 }
-

@@ -17,7 +17,7 @@ namespace lassosum {
             require("lassosum", Rcpp::Named("quietly") = true);
             typedef int(*Ptr_validate)(const char*);
             static Ptr_validate p_validate = (Ptr_validate)
-                R_GetCCallable("lassosum", "lassosum_RcppExport_validate");
+                R_GetCCallable("lassosum", "_lassosum_RcppExport_validate");
             if (!p_validate(sig)) {
                 throw Rcpp::function_not_exported(
                     "C++ function with signature '" + std::string(sig) + "' not found in lassosum");
@@ -30,12 +30,12 @@ namespace lassosum {
         static Ptr_countlines p_countlines = NULL;
         if (p_countlines == NULL) {
             validateSignature("int(*countlines)(const char*)");
-            p_countlines = (Ptr_countlines)R_GetCCallable("lassosum", "lassosum_countlines");
+            p_countlines = (Ptr_countlines)R_GetCCallable("lassosum", "_lassosum_countlines");
         }
         RObject rcpp_result_gen;
         {
             RNGScope RCPP_rngScope_gen;
-            rcpp_result_gen = p_countlines(Rcpp::wrap(fileName));
+            rcpp_result_gen = p_countlines(Shield<SEXP>(Rcpp::wrap(fileName)));
         }
         if (rcpp_result_gen.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();
@@ -49,12 +49,12 @@ namespace lassosum {
         static Ptr_multiBed3 p_multiBed3 = NULL;
         if (p_multiBed3 == NULL) {
             validateSignature("arma::mat(*multiBed3)(const std::string,int,int,const arma::mat,arma::Col<int>,arma::Col<int>,arma::Col<int>,arma::Col<int>)");
-            p_multiBed3 = (Ptr_multiBed3)R_GetCCallable("lassosum", "lassosum_multiBed3");
+            p_multiBed3 = (Ptr_multiBed3)R_GetCCallable("lassosum", "_lassosum_multiBed3");
         }
         RObject rcpp_result_gen;
         {
             RNGScope RCPP_rngScope_gen;
-            rcpp_result_gen = p_multiBed3(Rcpp::wrap(fileName), Rcpp::wrap(N), Rcpp::wrap(P), Rcpp::wrap(input), Rcpp::wrap(col_skip_pos), Rcpp::wrap(col_skip), Rcpp::wrap(keepbytes), Rcpp::wrap(keepoffset));
+            rcpp_result_gen = p_multiBed3(Shield<SEXP>(Rcpp::wrap(fileName)), Shield<SEXP>(Rcpp::wrap(N)), Shield<SEXP>(Rcpp::wrap(P)), Shield<SEXP>(Rcpp::wrap(input)), Shield<SEXP>(Rcpp::wrap(col_skip_pos)), Shield<SEXP>(Rcpp::wrap(col_skip)), Shield<SEXP>(Rcpp::wrap(keepbytes)), Shield<SEXP>(Rcpp::wrap(keepoffset)));
         }
         if (rcpp_result_gen.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();
@@ -68,12 +68,12 @@ namespace lassosum {
         static Ptr_elnet p_elnet = NULL;
         if (p_elnet == NULL) {
             validateSignature("int(*elnet)(double,double,const arma::vec&,const arma::mat&,const arma::vec&,double,arma::vec&,arma::vec&,int,int)");
-            p_elnet = (Ptr_elnet)R_GetCCallable("lassosum", "lassosum_elnet");
+            p_elnet = (Ptr_elnet)R_GetCCallable("lassosum", "_lassosum_elnet");
         }
         RObject rcpp_result_gen;
         {
             RNGScope RCPP_rngScope_gen;
-            rcpp_result_gen = p_elnet(Rcpp::wrap(lambda1), Rcpp::wrap(lambda2), Rcpp::wrap(diag), Rcpp::wrap(X), Rcpp::wrap(r), Rcpp::wrap(thr), Rcpp::wrap(x), Rcpp::wrap(yhat), Rcpp::wrap(trace), Rcpp::wrap(maxiter));
+            rcpp_result_gen = p_elnet(Shield<SEXP>(Rcpp::wrap(lambda1)), Shield<SEXP>(Rcpp::wrap(lambda2)), Shield<SEXP>(Rcpp::wrap(diag)), Shield<SEXP>(Rcpp::wrap(X)), Shield<SEXP>(Rcpp::wrap(r)), Shield<SEXP>(Rcpp::wrap(thr)), Shield<SEXP>(Rcpp::wrap(x)), Shield<SEXP>(Rcpp::wrap(yhat)), Shield<SEXP>(Rcpp::wrap(trace)), Shield<SEXP>(Rcpp::wrap(maxiter)));
         }
         if (rcpp_result_gen.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();
@@ -87,12 +87,12 @@ namespace lassosum {
         static Ptr_repelnet p_repelnet = NULL;
         if (p_repelnet == NULL) {
             validateSignature("int(*repelnet)(double,double,arma::vec&,arma::mat&,arma::vec&,double,arma::vec&,arma::vec&,int,int,arma::Col<int>&,arma::Col<int>&)");
-            p_repelnet = (Ptr_repelnet)R_GetCCallable("lassosum", "lassosum_repelnet");
+            p_repelnet = (Ptr_repelnet)R_GetCCallable("lassosum", "_lassosum_repelnet");
         }
         RObject rcpp_result_gen;
         {
             RNGScope RCPP_rngScope_gen;
-            rcpp_result_gen = p_repelnet(Rcpp::wrap(lambda1), Rcpp::wrap(lambda2), Rcpp::wrap(diag), Rcpp::wrap(X), Rcpp::wrap(r), Rcpp::wrap(thr), Rcpp::wrap(x), Rcpp::wrap(yhat), Rcpp::wrap(trace), Rcpp::wrap(maxiter), Rcpp::wrap(startvec), Rcpp::wrap(endvec));
+            rcpp_result_gen = p_repelnet(Shield<SEXP>(Rcpp::wrap(lambda1)), Shield<SEXP>(Rcpp::wrap(lambda2)), Shield<SEXP>(Rcpp::wrap(diag)), Shield<SEXP>(Rcpp::wrap(X)), Shield<SEXP>(Rcpp::wrap(r)), Shield<SEXP>(Rcpp::wrap(thr)), Shield<SEXP>(Rcpp::wrap(x)), Shield<SEXP>(Rcpp::wrap(yhat)), Shield<SEXP>(Rcpp::wrap(trace)), Shield<SEXP>(Rcpp::wrap(maxiter)), Shield<SEXP>(Rcpp::wrap(startvec)), Shield<SEXP>(Rcpp::wrap(endvec)));
         }
         if (rcpp_result_gen.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();
@@ -106,12 +106,12 @@ namespace lassosum {
         static Ptr_genotypeMatrix p_genotypeMatrix = NULL;
         if (p_genotypeMatrix == NULL) {
             validateSignature("arma::mat(*genotypeMatrix)(const std::string,int,int,arma::Col<int>,arma::Col<int>,arma::Col<int>,arma::Col<int>,const int)");
-            p_genotypeMatrix = (Ptr_genotypeMatrix)R_GetCCallable("lassosum", "lassosum_genotypeMatrix");
+            p_genotypeMatrix = (Ptr_genotypeMatrix)R_GetCCallable("lassosum", "_lassosum_genotypeMatrix");
         }
         RObject rcpp_result_gen;
         {
             RNGScope RCPP_rngScope_gen;
-            rcpp_result_gen = p_genotypeMatrix(Rcpp::wrap(fileName), Rcpp::wrap(N), Rcpp::wrap(P), Rcpp::wrap(col_skip_pos), Rcpp::wrap(col_skip), Rcpp::wrap(keepbytes), Rcpp::wrap(keepoffset), Rcpp::wrap(fillmissing));
+            rcpp_result_gen = p_genotypeMatrix(Shield<SEXP>(Rcpp::wrap(fileName)), Shield<SEXP>(Rcpp::wrap(N)), Shield<SEXP>(Rcpp::wrap(P)), Shield<SEXP>(Rcpp::wrap(col_skip_pos)), Shield<SEXP>(Rcpp::wrap(col_skip)), Shield<SEXP>(Rcpp::wrap(keepbytes)), Shield<SEXP>(Rcpp::wrap(keepoffset)), Shield<SEXP>(Rcpp::wrap(fillmissing)));
         }
         if (rcpp_result_gen.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();
@@ -125,12 +125,12 @@ namespace lassosum {
         static Ptr_normalize p_normalize = NULL;
         if (p_normalize == NULL) {
             validateSignature("arma::vec(*normalize)(arma::mat&)");
-            p_normalize = (Ptr_normalize)R_GetCCallable("lassosum", "lassosum_normalize");
+            p_normalize = (Ptr_normalize)R_GetCCallable("lassosum", "_lassosum_normalize");
         }
         RObject rcpp_result_gen;
         {
             RNGScope RCPP_rngScope_gen;
-            rcpp_result_gen = p_normalize(Rcpp::wrap(genotypes));
+            rcpp_result_gen = p_normalize(Shield<SEXP>(Rcpp::wrap(genotypes)));
         }
         if (rcpp_result_gen.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();
@@ -144,12 +144,12 @@ namespace lassosum {
         static Ptr_runElnet p_runElnet = NULL;
         if (p_runElnet == NULL) {
             validateSignature("List(*runElnet)(arma::vec&,double,const std::string,arma::vec&,int,int,arma::Col<int>&,arma::Col<int>&,arma::Col<int>&,arma::Col<int>&,double,arma::vec&,int,int,arma::Col<int>&,arma::Col<int>&)");
-            p_runElnet = (Ptr_runElnet)R_GetCCallable("lassosum", "lassosum_runElnet");
+            p_runElnet = (Ptr_runElnet)R_GetCCallable("lassosum", "_lassosum_runElnet");
         }
         RObject rcpp_result_gen;
         {
             RNGScope RCPP_rngScope_gen;
-            rcpp_result_gen = p_runElnet(Rcpp::wrap(lambda), Rcpp::wrap(shrink), Rcpp::wrap(fileName), Rcpp::wrap(r), Rcpp::wrap(N), Rcpp::wrap(P), Rcpp::wrap(col_skip_pos), Rcpp::wrap(col_skip), Rcpp::wrap(keepbytes), Rcpp::wrap(keepoffset), Rcpp::wrap(thr), Rcpp::wrap(x), Rcpp::wrap(trace), Rcpp::wrap(maxiter), Rcpp::wrap(startvec), Rcpp::wrap(endvec));
+            rcpp_result_gen = p_runElnet(Shield<SEXP>(Rcpp::wrap(lambda)), Shield<SEXP>(Rcpp::wrap(shrink)), Shield<SEXP>(Rcpp::wrap(fileName)), Shield<SEXP>(Rcpp::wrap(r)), Shield<SEXP>(Rcpp::wrap(N)), Shield<SEXP>(Rcpp::wrap(P)), Shield<SEXP>(Rcpp::wrap(col_skip_pos)), Shield<SEXP>(Rcpp::wrap(col_skip)), Shield<SEXP>(Rcpp::wrap(keepbytes)), Shield<SEXP>(Rcpp::wrap(keepoffset)), Shield<SEXP>(Rcpp::wrap(thr)), Shield<SEXP>(Rcpp::wrap(x)), Shield<SEXP>(Rcpp::wrap(trace)), Shield<SEXP>(Rcpp::wrap(maxiter)), Shield<SEXP>(Rcpp::wrap(startvec)), Shield<SEXP>(Rcpp::wrap(endvec)));
         }
         if (rcpp_result_gen.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();

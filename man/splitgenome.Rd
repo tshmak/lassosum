@@ -12,4 +12,3 @@ Function to split a set of SNPs by their position using a reference
 Break points should be given for the reference by chromosome
 }
 \keyword{internal}
-

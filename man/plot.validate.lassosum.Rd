@@ -6,4 +6,3 @@
 \usage{
 \method{plot}{validate.lassosum}(obj)
 }
-

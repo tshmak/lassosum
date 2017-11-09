@@ -16,4 +16,3 @@ p2cor(p, n, sign = rep(1, length(p)))
 \value{
 A vector of correlations
 }
-

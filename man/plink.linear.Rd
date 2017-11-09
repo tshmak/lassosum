@@ -7,9 +7,8 @@
 plink.linear(bfile, pheno, out = tempfile("lassosum.out"), keep = NULL,
   remove = NULL, extract = NULL, exclude = NULL, chr = NULL,
   covar = NULL, plink.cmd = "--linear standard-beta",
-  ext = ".assoc.linear", show.output.on.console = FALSE, ...)
+  ext = ".assoc.linear", ignore.stdout = TRUE, ...)
 }
 \arguments{
 \item{keep, remove, extract, exclude, chr}{see parseselect()}
 }
-

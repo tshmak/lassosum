@@ -10,4 +10,3 @@ selectregion(keep)
 \item{keep}{A boolean vector of which position to keep}
 }
 \keyword{internal}
-

@@ -4,12 +4,12 @@
 \alias{lassosum.pipeline}
 \title{Run lassosum with standard pipeline}
 \usage{
-lassosum.pipeline(cor, chr, pos, A1 = NULL, A2 = NULL, ref.bfile = NULL,
-  test.bfile = NULL, LDblocks = chr, lambda = exp(seq(log(0.001),
-  log(0.1), length.out = 20)), s = c(0.2, 0.5, 0.9, 1), destandardize = F,
-  trace = 1, exclude.ambiguous = TRUE, keep.ref = NULL,
-  remove.ref = NULL, keep.test = NULL, remove.test = NULL,
-  cluster = NULL, ...)
+lassosum.pipeline(cor, chr = NULL, pos = NULL, snp = NULL, A1 = NULL,
+  A2 = NULL, ref.bfile = NULL, test.bfile = NULL, LDblocks = chr,
+  lambda = exp(seq(log(0.001), log(0.1), length.out = 20)), s = c(0.2, 0.5,
+  0.9, 1), destandardize = F, trace = 1, exclude.ambiguous = TRUE,
+  keep.ref = NULL, remove.ref = NULL, keep.test = NULL,
+  remove.test = NULL, cluster = NULL, max.ref.bfile.n = 20000, ...)
 }
 \arguments{
 \item{cor}{A vector of SNP-wise correlations with phenotype
@@ -50,6 +50,8 @@ destandardized using test dataset standard deviations before being returned?}
 \item{remove.test}{Participants to remove from the testing dataset (see \code{\link{parseselect}})}
 
 \item{cluster}{A \code{cluster} object from the \code{parallel} package for parallel computing}
+
+\item{max.ref.bfile.n}{The maximum sample size allowed in the reference panel}
 
 \item{...}{parameters to pass to \code{\link{lassosum}}}
 }
@@ -119,4 +121,3 @@ for details.
                           LDblocks = ld)
 ## End(**Not run**)
 }
-
