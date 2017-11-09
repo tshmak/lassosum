@@ -1,13 +1,14 @@
 xp.lassosum <- function(xp.plink.linear, 
                         LDblocks=xp.plink.linear$chr, 
-                        pseudovalidation=FALSE, 
+                        pseudovalidation=FALSE,
+                        Type2=FALSE, 
                         ref.bfile=NULL, 
                         destandardize=TRUE, 
                         max.ref.bfile.n=5000, 
                         details=FALSE, 
                         keep.ref=NULL, 
                         exclude.ambiguous=FALSE,
-                        validate.function="cor", 
+                        validate.function=function(x) cor(x, use="complete"),
                         plot=TRUE, 
                         trace=1, 
                         cluster=NULL, 
@@ -49,6 +50,7 @@ xp.lassosum <- function(xp.plink.linear,
   nfolds <- length(ss$cor)
   l <- list()
   pv <- list()
+  t2 <- list()
   for(i in 1:nfolds) {
     # i <- 1
     if(trace > 0) cat("Processing fold", i, "of", nfolds, "\n")
@@ -85,13 +87,32 @@ xp.lassosum <- function(xp.plink.linear,
                trace=trace - 1, plot=plot, 
                cluster=cluster)
     }
+    if(Type2) {
+      split <- sample(as.logical(round(seq(0,1, length=sum(ss$fold == i)))))
+      split <- rep(list(split), 2)
+      split[[2]] <- !split[[2]]
+      pheno2 <- rep(list(ss$pheno.by.fold[[i]]), 2)
+      pheno2[[1]][!split] <- NA
+      pheno2[[2]][split] <- NA
+      
+      T2 <- list()
+      t2.pgs <- rep(NA, length(pheno.by.fold[[i]]))
+      for(ii in 1:2) {
+        T2[[ii]] <- validate.lassosum.pipeline(l[[i]], pheno=pheno2[[ii]], 
+                                          trace=trace-1, plot=plot, 
+                                          validate.function=validate.function, 
+                                          cluster=cluster)
+        t2.pgs[split[[ii]]] <- T2[[ii]]$best.pgs[split[[ii]]]
+      }
+      best.pgs.t2[ss$fold == i] <- t2.pgs
+    }
   }
   
   pgs <- l[[1]]$pgs
   for(s in 1:length(pgs)) {
     pgs[[s]] <- matrix(NA, nrow=ss$n, ncol=ncol(pgs[[1]]))
   }
-  best.pgs.pv <- pheno <- fold <- rep(NA, ss$n)
+  best.pgs.t2 <- best.pgs.pv <- pheno <- fold <- rep(NA, ss$n)
   for(i in 1:nfolds) {
     fold[ss$fold == i] <- i
     pheno[ss$fold == i] <- ss$pheno.by.fold[[i]]
@@ -113,12 +134,14 @@ xp.lassosum <- function(xp.plink.linear,
 
   tab <- data.frame(pheno=pheno, fold=fold, best.pgs=v$best.pgs)
   if(pseudovalidation) tab <- cbind(tab, best.pgs.pv)
+  if(Type2) tab <- cbind(tab, best.pgs.t2)
   attr(tab, "keep.ref") <- keep.ref
   
   if(details) {
     attr(tab, "lassosum") <- l
     attr(tab, "validate") <- v
     if(pseudovalidation) attr(tab, "pseudovalidate") <- pv
+    if(Type2) attr(tab, "Type2") <- T2
   } 
   
   return(tab)

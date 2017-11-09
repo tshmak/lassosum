@@ -1,6 +1,7 @@
 validate.lassosum.pipeline <- function(ls.pipeline, test.bfile=NULL, 
                               keep=NULL, remove=NULL, pheno=NULL, 
-                              validate.function="cor", trace=1, 
+                              validate.function=function(x) cor(x, use="complete"),
+                              trace=1, 
                               destandardize=F, plot=T, 
                               exclude.ambiguous=T, 
                               cluster=NULL, ...) {
