@@ -296,11 +296,11 @@ lassosum.pipeline <- function(cor, chr=NULL, pos=NULL, snp=NULL,
         toextract <- m.test$ref.extract
         toextract[toextract] <- xcl.test
         sd[xcl.test] <- sd.bfile(bfile = test.bfile, extract=toextract, 
-                                 keep=parsed.test$keep, ...)
+                                 keep=parsed.test$keep, cluster=cluster, ...)
       }
     } else {
       sd <- sd.bfile(bfile = test.bfile, extract=m.test$ref.extract,  
-                               keep=parsed.test$keep, ...)
+                               keep=parsed.test$keep, cluster=cluster, ...)
     }
 
     if(trace) cat("De-standardize lassosum coefficients ...\n")

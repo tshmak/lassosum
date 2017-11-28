@@ -1,5 +1,7 @@
-group.blocks <- function(Blocks, parseselect, mem.limit=2^32*8, chunks=NULL, cluster=NULL) {
-  #' @title Group blocks into chunks so as not to exhaust memory or hit matrix size ceiling
+group.blocks <- function(Blocks, parseselect, mem.limit=2^32*8, chunks=NULL, 
+                         cluster=NULL) {
+  #' @title Group blocks into chunks so as not to exhaust memory or hit 
+  #' matrix size ceiling
   #' 
   #' @param parseselect An object returned by parseselect()
   #' @keywords internal
