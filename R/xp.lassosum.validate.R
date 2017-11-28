@@ -1,0 +1,91 @@
+xp.lassosum.validate <- function(list.of.lassosum, 
+                                 xp.plink.linear, 
+                                 Type2, pseudovalidation, 
+                                 plot, 
+                                 validate.function,
+                                 cluster, 
+                                 trace, 
+                                 details) {
+  #' For a list of xp.plink.linear objects
+  #' @keywords internal
+
+  # Get shorthands  
+  l <- list.of.lassosum
+  ss <- xp.plink.linear
+
+  # Initialize stacked PGS matrix
+  pgs <- l[[1]]$pgs
+  for(s in 1:length(pgs)) {
+    pgs[[s]] <- matrix(NA, nrow=ss$n, ncol=ncol(pgs[[1]]))
+  }
+  
+  # Initialize 
+  best.pgs.pv <- best.pgs.t2 <- pheno <- fold <- rep(NA, ss$n)
+  T2 <- pv <- list()
+  
+  ### Loop over folds
+  nfolds <- length(ss$pheno.by.fold)
+  for(i in 1:nfolds) {
+    
+    # pseudovalidation
+    if(pseudovalidation) {
+      pv[[i]] <- pseudovalidate.lassosum.pipeline(l[[i]], 
+                                                  trace=trace, plot=plot, 
+                                                  cluster=cluster)
+      best.pgs.pv[ss$fold == i] <- pv[[i]]$best.pgs
+    }
+    
+    # Type 2
+    if(Type2) {
+      split <- sample(as.logical(round(seq(0,1, length=sum(ss$fold == i)))))
+      split <- rep(list(split), 2)
+      split[[2]] <- !split[[2]]
+      pheno2 <- rep(list(ss$pheno.by.fold[[i]]), 2)
+      pheno2[[1]][!split[[1]]] <- NA
+      pheno2[[2]][!split[[2]]] <- NA
+      
+      t2 <- list()
+      t2.pgs <- rep(NA, length(ss$pheno.by.fold[[i]]))
+      for(ii in 1:2) {
+        t2[[ii]] <- validate.lassosum.pipeline(l[[i]], pheno=pheno2[[ii]], 
+                                               trace=trace, plot=plot, 
+                                               validate.function=validate.function, 
+                                               cluster=cluster)
+        t2.pgs[split[[ii]]] <- t2[[ii]]$best.pgs[split[[ii]]]
+      }
+      best.pgs.t2[ss$fold == i] <- t2.pgs
+      T2[[i]] <- t2
+    }
+    
+    # Stacking pgs
+    # fold[ss$fold == i] <- i # Seems to be useless... 
+    pheno[ss$fold == i] <- ss$pheno.by.fold[[i]]
+    for(s in 1:length(pgs)) {
+      pgs[[s]][ss$fold == i, ] <- l[[i]]$pgs[[s]]
+    }
+    
+  }
+  
+  # Validation 
+  ll <- l[[1]]
+  ll$pgs <- pgs
+  ll$keep.test <- ss$keep
+  v <- validate.lassosum.pipeline(ll, pheno=pheno, trace=trace-1, plot=plot,
+                                  validate.function = validate.function, 
+                                  cluster=cluster)
+  
+  # Generate output table
+  tab <- data.frame(pheno=pheno, fold=ss$fold, best.pgs=v$best.pgs)
+  if(pseudovalidation) tab <- cbind(tab, best.pgs.pv)
+  if(Type2) tab <- cbind(tab, best.pgs.t2)
+  
+  if(details) {
+    attr(tab, "lassosum") <- l
+    attr(tab, "validate") <- v
+    if(pseudovalidation) attr(tab, "pseudovalidate") <- pv
+    if(Type2) attr(tab, "Type2") <- T2
+  } 
+  
+  return(tab)
+
+}
