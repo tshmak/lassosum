@@ -91,15 +91,17 @@ xp.plink.linear <- function(bfile, nfolds=5, fold=NULL,
   if(fast) {
     Cor <- as.data.frame(cor)
     for(i in 1:nfolds) {
-      cor[[i]] <- rowMeans(Cor[,-i])
+      cor[[i]] <- rowMeans(Cor[,-i, drop=FALSE])
     }
   }
-  
-  return(list(cor=cor, chr=chr, pos=pos, A1=A1, snp=snp, 
-              fold=fold, 
-              pheno.by.fold=pheno.by.fold, 
-              keep=parsed$keep, extract=parsed$extract, 
-              n=parsed$n, p=parsed$p, nonmiss=nmiss, 
-              bfile=bfile))
+
+  toreturn <- list(cor=cor, chr=chr, pos=pos, A1=A1, snp=snp, 
+                fold=fold, 
+                pheno.by.fold=pheno.by.fold, 
+                keep=parsed$keep, extract=parsed$extract, 
+                n=parsed$n, p=parsed$p, nonmiss=nmiss, 
+                bfile=bfile)
+  class(toreturn) <- "xp.plink.linear"
+  return(toreturn)
 
 }

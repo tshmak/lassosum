@@ -1,6 +1,7 @@
 validate.lassosum.pipeline <- function(ls.pipeline, test.bfile=NULL, 
                               keep=NULL, remove=NULL, pheno=NULL, 
-                              validate.function=function(x) cor(x, use="complete"),
+                              validate.function=function(x, y) 
+                                cor(x, y, use="complete"),
                               trace=1, 
                               destandardize=F, plot=T, 
                               exclude.ambiguous=T, 
@@ -105,7 +106,7 @@ validate.lassosum.pipeline <- function(ls.pipeline, test.bfile=NULL,
     if(is.null(parsed.test$keep)) pheno <- fam$V6 else 
       pheno <- fam$V6[parsed.test$keep]
   }
-  if(sd(pheno) == 0) stop("There's no variation in phenotype")
+  if(sd(pheno, na.rm = TRUE) == 0) stop("There's no variation in phenotype")
   
   ### Validate ###
   lambdas <- rep(ls.pipeline$lambda, length(ls.pipeline$s))
