@@ -49,3 +49,9 @@ inst/doc
 # releases 
 /releases/
 .Rproj.user
+
+# files from Rcpp::compileAttributes
+R/RcppExports.R
+inst/include/lassosum_RcppExports.h
+src/RcppExports.cpp
+
