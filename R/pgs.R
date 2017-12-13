@@ -23,6 +23,11 @@
 pgs <- function(bfile, weights, keep=NULL, extract=NULL, exclude=NULL, remove=NULL, 
                    chr=NULL, cluster=NULL) {
 
+  if(length(bfile) > 1) {
+    call <- match.call()
+    return(do.call("pgs.vec", as.list(call[-1])))
+  }
+
   stopifnot(is.numeric(weights))
   stopifnot(!any(is.na(weights)))
   if(is.vector(weights)) weights <- matrix(weights, ncol=1)
