@@ -11,6 +11,7 @@ lassosum.pipeline <- function(cor, chr=NULL, pos=NULL, snp=NULL,
                               keep.test=NULL, remove.test=NULL, 
                               cluster=NULL, 
                               max.ref.bfile.n=20000, 
+                              nomatch=FALSE, 
                               ...) {
   #' @title Run lassosum with standard pipeline
   #' @description The easy way to run lassosum 
@@ -90,6 +91,19 @@ lassosum.pipeline <- function(cor, chr=NULL, pos=NULL, snp=NULL,
     if(destandardize) stop("destandardize cannot be specified without test.bfile")
   }
   
+  onefile <- F  
+  notest <- F
+  if(is.null(ref.bfile)) {
+    ref.bfile <- test.bfile
+    onefile <- T
+  } else {
+    if(is.null(test.bfile)) {
+      test.bfile <- ref.bfile
+      notest <- T
+      onefile <- T
+    }
+  }
+  
   chrpos <- !is.null(chr) && !is.null(pos)
   if(is.null(snp) && !chrpos) {
     stop("Either snp or chr/pos must be specified.")
@@ -115,27 +129,6 @@ lassosum.pipeline <- function(cor, chr=NULL, pos=NULL, snp=NULL,
   }
   stopifnot(is.null(A1) || length(A1) == length(cor))
   stopifnot(is.null(A2) || length(A2) == length(cor))
-
-  onefile <- F  
-  notest <- F
-  if(is.null(ref.bfile)) {
-    ref.bfile <- test.bfile
-    onefile <- T
-  } else {
-    if(is.null(test.bfile)) {
-      test.bfile <- ref.bfile
-      notest <- T
-      onefile <- T
-    }
-  }
-  
-  ref.bim <- fread(paste0(ref.bfile, ".bim"))
-  ref.bim$V1 <- as.character(sub("^chr", "", ref.bim$V1, ignore.case = T))
-  
-  if(!onefile) {
-      test.bim <- fread(paste0(test.bfile, ".bim"))
-      test.bim$V1 <- as.character(sub("^chr", "", test.bim$V1, ignore.case = T))
-  } else test.bim <- ref.bim
 
   if(!is.null(LDblocks)) {
     if(is.factor(LDblocks)) LDblocks <- as.integer(LDblocks)
@@ -169,53 +162,77 @@ lassosum.pipeline <- function(cor, chr=NULL, pos=NULL, snp=NULL,
   parsed.test <- parseselect(test.bfile, keep=keep.test, remove=remove.test)
   ref.equal.test <- identical(list(ref.bfile, keep.ref, remove.ref), 
                               list(test.bfile, keep.test, remove.test))
-  ######################### Input validation  (End) #########################
-
-  if(is.null(ref.bfile) && trace > 0) cat("Reference panel assumed the same as test data.") 
-
+                              
+  ### ss ###
   ss <- list(chr=chr, pos=pos, A1=A1, A2=A2, snp=snp, cor=cor)
   ss[sapply(ss, is.null)] <- NULL
   ss <- as.data.frame(ss)
-  ### Compare summary statistics and reference panel ###
-  if(trace) cat("Coordinating summary stats with reference panel...\n")
-  m.ref <- matchpos(ss, ref.bim, auto.detect.ref = F, 
-                    ref.chr = "V1", ref.snp="V2", 
-                    ref.pos="V4", ref.alt="V5", ref.ref="V6", 
-                    rm.duplicates = T, exclude.ambiguous = exclude.ambiguous, 
-                    silent=T)
-  ss2 <- ss[m.ref$order,]
-  ss2$cor <- ss2$cor * m.ref$rev
-  ss2$A1 <- ref.bim$V5[m.ref$ref.extract]
-  ss2$A2 <- ref.bim$V6[m.ref$ref.extract]
   
-  ### Compare summary statistics and test data ###
-  if(!onefile) {
-    if(trace) cat("Coordinating summary stats with test data...\n")
-    m.test <- matchpos(ss, test.bim, auto.detect.ref = F, 
-                       ref.chr = "V1", ref.snp="V2", 
-                       ref.pos="V4", ref.alt="V5", ref.ref="V6", 
-                       rm.duplicates = T, exclude.ambiguous = exclude.ambiguous, 
-                       silent=T)
-    ### Find SNPs that are common to all three datasets ###
-    if(trace) cat("Coordinating summary stats, reference panel, and test data...\n")
-    m.common <- matchpos(ss2, test.bim, auto.detect.ref = F, 
+  ### Read ref.bim and test.bim ###
+  if(!nomatch) {
+    ref.bim <- read.table2(paste0(ref.bfile, ".bim"))
+    ref.bim$V1 <- as.character(sub("^chr", "", ref.bim$V1, ignore.case = T))
+    
+    if(!onefile) {
+        test.bim <- read.table2(paste0(test.bfile, ".bim"))
+        test.bim$V1 <- as.character(sub("^chr", "", test.bim$V1, ignore.case = T))
+    } else test.bim <- ref.bim
+
+    if(is.null(ref.bfile) && trace > 0) cat("Reference panel assumed the same as test data.") 
+
+    ### Compare summary statistics and reference panel ###
+    if(trace) cat("Coordinating summary stats with reference panel...\n")
+    m.ref <- matchpos(ss, ref.bim, auto.detect.ref = F, 
+                      ref.chr = "V1", ref.snp="V2", 
+                      ref.pos="V4", ref.alt="V5", ref.ref="V6", 
+                      rm.duplicates = T, exclude.ambiguous = exclude.ambiguous, 
+                      silent=T)
+    ss2 <- ss[m.ref$order,]
+    ss2$cor <- ss2$cor * m.ref$rev
+    ss2$A1 <- ref.bim$V5[m.ref$ref.extract]
+    ss2$A2 <- ref.bim$V6[m.ref$ref.extract]
+    
+    ### Compare summary statistics and test data ###
+    if(!onefile) {
+      if(trace) cat("Coordinating summary stats with test data...\n")
+      m.test <- matchpos(ss, test.bim, auto.detect.ref = F, 
                          ref.chr = "V1", ref.snp="V2", 
-                         ref.pos="V4", ref.alt="V5", ref.ref="V6",
-                         rm.duplicates = T, 
-                         exclude.ambiguous = exclude.ambiguous, 
+                         ref.pos="V4", ref.alt="V5", ref.ref="V6", 
+                         rm.duplicates = T, exclude.ambiguous = exclude.ambiguous, 
                          silent=T)
-  } else {
-    m.common <- m.test <- m.ref
-    m.common$order <- 1:length(m.test$order)
-    m.common$rev <- abs(m.common$rev)
+      ### Find SNPs that are common to all three datasets ###
+      if(trace) cat("Coordinating summary stats, reference panel, and test data...\n")
+      m.common <- matchpos(ss2, test.bim, auto.detect.ref = F, 
+                           ref.chr = "V1", ref.snp="V2", 
+                           ref.pos="V4", ref.alt="V5", ref.ref="V6",
+                           rm.duplicates = T, 
+                           exclude.ambiguous = exclude.ambiguous, 
+                           silent=T)
+    } else {
+      m.common <- m.test <- m.ref
+      m.common$order <- 1:length(m.test$order)
+      m.common$rev <- abs(m.common$rev)
+    }
+
+    ### Summary statistics that are common to all three datasets ###
+    # ss.common <- ss2[m.common$order, ] # redundant...
+
+    ### Positions of reference dataset that are common to summary statistics and test dataset ###
+    ref.extract <- rep(FALSE, nrow(ref.bim))
+    ref.extract[m.ref$ref.extract][m.common$order] <- TRUE
+  } else {   # For use in xp.lassosum only!!!
+    ss2 <- ss
+    stopifnot(parsed.ref$p == nrow(ss))
+    stopifnot(parsed.test$p == nrow(ss))
+    m.ref <- list(order=1:parsed.ref$p, ref.extract=rep(TRUE, parsed.ref$p), 
+      rev=rep(1, parsed.ref$p))
+    m.common <- m.test <- m.ref 
+    ref.bim <- list(V1=ss$chr, V2=ss$snp, V4=ss$pos, V5=ss$A1, V6=ss$A2) 
+    # Note that some of these could be NULL... 
+    test.bim <- ref.bim
+    ref.extract <- m.ref$ref.extract
   }
-
-  ### Summary statistics that are common to all three datasets ###
-  ss.common <- ss2[m.common$order, ]
-
-  ### Positions of reference dataset that are common to summary statistics and test dataset ###
-  ref.extract <- rep(FALSE, nrow(ref.bim))
-  ref.extract[m.ref$ref.extract][m.common$order] <- TRUE
+  
   
   ### Split data by ld region ###
   if(!is.null(LDblocks)) {
@@ -308,9 +325,9 @@ lassosum.pipeline <- function(cor, chr=NULL, pos=NULL, snp=NULL,
       }
     } else {
       sd <- sd.bfile(bfile = test.bfile, extract=m.test$ref.extract,  
-                               keep=parsed.test$keep, cluster=cluster, ...)
+                     keep=parsed.test$keep, ...)
     }
-
+    
     if(trace) cat("De-standardize lassosum coefficients ...\n")
     ### regression coefficients = correlation coefficients / sd(X) * sd(y) ###
     sd[sd <= 0] <- Inf # Do not want infinite beta's!
@@ -320,18 +337,29 @@ lassosum.pipeline <- function(cor, chr=NULL, pos=NULL, snp=NULL,
   ### Getting some results ###
   results <- list(beta=beta, test.extract=m.test$ref.extract, 
                   also.in.refpanel=m.common$ref.extract, 
-                  sumstats=ss3, test.bfile=test.bfile, sd=sd, 
-                  lambda=lambda, s=s, keep.test=parsed.test$keep, 
-                  destandardized=destandardize)
+                  sumstats=ss3, sd=sd, 
+                  lambda=lambda, s=s, 
+                  test.bfile=test.bfile, 
+                  keep.test=parsed.test$keep, 
+                  ref.bfile=ref.bfile, 
+                  keep.ref=parsed.ref$keep, 
+                  LDblocks=as.integer(split), 
+                  destandardized=destandardize, 
+                  exclude.ambiguous=exclude.ambiguous)
   #' @return A \code{lassosum.pipeline} object with the following elements
   #' \item{beta}{A list of lassosum coefficients: one list element for each \code{s}}
   #' \item{test.extract}{A logical vector for the SNPs in \code{test.bfile} that are used in estimation.}
   #' \item{also.in.refpanel}{A logical vector for the SNPs in \code{test.bfile} that are used in \code{lassosum}.}
   #' \item{sumstats}{A \code{data.frame} of summary statistics used in estimation.}
-  #' \item{test.bfile}{The testing dataset}
   #' \item{sd}{The standard deviation for the testing dataset}
+  #' \item{test.bfile}{The testing dataset}
+  #' \item{keep.test}{Sample to keep in the testing dataset}
+  #' \item{ref.bfile}{The reference panel dataset}
+  #' \item{keep.ref}{Sample to keep in the reference panel dataset}
   #' \item{lambda, s, keep.test, destandardized}{Information to pass on to \code{\link{validate.lassosum.pipeline}} or \code{\link{pseudovalidate.lassosum.pipeline}}}
   #' \item{pgs}{A matrix of polygenic scores}
+  #' \item{destandardized}{Are the coefficients destandardized?}
+  #' \item{exclude.ambiguous}{Were ambiguous SNPs excluded?}
   #' 
   
   if(notest) {
