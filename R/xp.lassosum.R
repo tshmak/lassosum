@@ -3,7 +3,7 @@ xp.lassosum <- function(xp.plink.linear,
                         pseudovalidation=FALSE,
                         Type2=FALSE, 
                         ref.bfile=NULL, 
-                        destandardize=TRUE, 
+                        destandardize=FALSE, 
                         max.ref.bfile.n=5000, 
                         details=FALSE, 
                         keep.ref=NULL, 
@@ -13,7 +13,8 @@ xp.lassosum <- function(xp.plink.linear,
                         plot=FALSE, 
                         trace=1, 
                         cluster=NULL, 
-                        list.of.lassosum.only=FALSE, 
+                        list.of.lpipe.output=FALSE, 
+                        list.of.lpipe.input=NULL, 
                         ...) {
   #' @title lassosum with cross-prediction
   #' @description We assume correlations are pre-calculated for the various 
@@ -34,30 +35,28 @@ xp.lassosum <- function(xp.plink.linear,
   # ref.bfile <- NULL; max.ref.bfile.n <- 100; details <- TRUE; destandardize=TRUE
   
   ss <- xp.plink.linear # get a shorter name
-  err.message <- "Input must be an xp.plink.linear object or a list of these objects."
-  if(class(ss) != "xp.plink.linear") {
-    if(is.list(ss)) {
-      if(all(sapply(ss, class) == "xp.plink.linear")) {
-        multiple.ss <- TRUE
-        call <- match.call()
-        l <- do.call("xp.lassosum.list", as.list(call[-1]))
-        ss <- ss[[1]]
-        # Need to replace test.bfile with a single bfile to trick validate.lassosum.pipeline
-        # Otherwise will give an error
-        real.test.bfiles <- l[[1]]$test.bfile
-        for(i in 1:length(l)) {
-          l[[i]]$test.bfile <- l[[i]]$test.bfile[1]
+  is.list <- check.class(ss, "xp.plink.linear", list.of.class=TRUE)
+  
+  if(is.null(list.of.lpipe.input)) {
+
+    if(is.list) {
+      call <- match.call()
+      l <- do.call("xp.lassosum.list", as.list(call[-1]))
+      ss <- ss[[1]]
+    } else {
+      if(is.null(keep.ref)) {
+        if(is.null(ref.bfile)) {
+          refsamplesize <- ss$n 
+        } else {
+          refsamplesize <- nrow.bfile(ref.bfile)
         }
-      } else stop(err.message)
-    } else stop(err.message)
-  } else {
-    multiple.ss <- FALSE
-    if(is.null(keep.ref)) {
-      if(is.null(ref.bfile)) refsamplesize <- ss$n else {
-        refsamplesize <- nrow.bfile(ref.bfile)
-      }
-      if(refsamplesize > max.ref.bfile.n) {
-        touse <- sample(refsamplesize, max.ref.bfile.n)
+        
+        if(refsamplesize > max.ref.bfile.n) {
+          touse <- sample(refsamplesize, max.ref.bfile.n)
+        } else {
+          touse <- 1:refsamplesize
+        }
+        
         if(is.null(ss$keep)) {
           keep.ref <- logical.vector(touse, refsamplesize)
         } else {
@@ -65,77 +64,92 @@ xp.lassosum <- function(xp.plink.linear,
           keep.ref[keep.ref] <- logical.vector(touse, refsamplesize)
         }
       } else {
-        keep.ref <- ss$keep
+        stopifnot(is.logical(keep.ref))
+        if(is.null(ref.bfile)) {
+          stopifnot(length(keep.ref) == nrow.bfile(ss$bfile))
+        } else {
+          stopifnot(length(keep.ref) == nrow.bfile(ref.bfile))
+        }
       }
-    } 
-    nfolds <- length(ss$cor)
-    l <- list()
-    pv <- list()
-    t2 <- list()
-    best.pgs.t2 <- rep(NA, ss$n)
-    for(i in 1:nfolds) {
-      # i <- 1
-      if(trace > 0) cat("Processing fold", i, "of", nfolds, "\n")
       
-      na <- is.na(ss$cor[[i]])
-      # if(mean(na) > 0.1) {
-      #   stop("There seems to be a lot of NA's in the correlations...")
-      # }
-      ss$cor[[i]][na] <- 0
-      l[[i]] <- lassosum.pipeline(cor=ss$cor[[i]], 
-                                  chr=ss$chr, 
-                                  pos=ss$pos,
-                                  snp=ss$snp,
-                                  A1=ss$A1, 
-                                  LDblocks=LDblocks,
-                                  exclude.ambiguous=exclude.ambiguous, 
-                                  destandardize=destandardize, 
-                                  ref.bfile=ref.bfile, 
-                                  test.bfile=ss$bfile, 
-                                  keep.ref=keep.ref, 
-                                  cluster=cluster,
-                                  # Using the same reference 
-                                  # panel for all folds.
-                                  # This is neater and shouldn't
-                                  # affect performance much
-                                  # I think... 
-                                  keep.test=ss$fold == i, 
-                                  trace=trace-1, 
-                                  ...)  # no need to include extract
-                                        # as they will not have been
-                                        # included in ss$cor anyway. 
+      if(is.null(ss$keep)) {
+        fold.test <- ss$fold
+      } else {
+        fold.test <- rep(0, ss$n)
+        fold.test[ss$keep] <- ss$fold
+      }
       
+      nfolds <- length(ss$cor)
+      l <- list()
+      pv <- list()
+      t2 <- list()
+      best.pgs.t2 <- rep(NA, ss$n)
+      test.bfile <- ss$bfile
+      for(i in 1:nfolds) {
+        # i <- 1
+        if(trace > 0) cat("Processing fold", i, "of", nfolds, "\n")
+        
+        na <- is.na(ss$cor[[i]])
+        # if(mean(na) > 0.1) {
+        #   stop("There seems to be a lot of NA's in the correlations...")
+        # }
+        ss$cor[[i]][na] <- 0
+        l[[i]] <- lassosum.pipeline(cor=ss$cor[[i]], 
+                                    chr=ss$chr, 
+                                    pos=ss$pos,
+                                    snp=ss$snp,
+                                    A1=ss$A1, 
+                                    nomatch=TRUE, 
+                                    LDblocks=LDblocks,
+                                    exclude.ambiguous=exclude.ambiguous, 
+                                    destandardize=destandardize, 
+                                    ref.bfile=ref.bfile, 
+                                    keep.ref=keep.ref, 
+                                    # Using the same reference 
+                                    # panel for all folds.
+                                    # This is neater and shouldn't
+                                    # affect performance much
+                                    # I think... 
+                                    test.bfile=test.bfile, 
+                                    keep.test=fold.test == i, 
+                                    cluster=cluster,
+                                    trace=trace-1, 
+                                    ...)  # no need to include extract
+        # as they will not have been
+        # included in ss$cor anyway. 
+        if(i == 1) LDblocks <- l[[i]]$LDblocks
+      }
+      # For use by xp.lassosum.list() only 
+      if(list.of.lpipe.output) {
+        return(l)
+      } 
     }
-    # For use by xp.lassosum.list() only 
-    if(list.of.lassosum.only) {
-      return(l)
-    } 
+  } else {
+    l <- list.of.lpipe.input # by fold
+    check.class(l, "lassosum.pipeline")
   }
   
-  # Get results 
+  # Is ss a list?
+  if(is.list) ss <- ss[[1]]
   
+  # Get results 
   result <- xp.lassosum.validate(l, ss, Type2=Type2, 
     pseudovalidation=pseudovalidation, plot=plot, 
     validate.function=validate.function, cluster=cluster, 
     trace=trace-1, details=details)
-
-  ### Attributes see in xp.lassosum.validate() ###
-  # if(details) {
-  #   attr(tab, "lassosum") <- l
-  #   attr(tab, "validate") <- v
-  #   if(pseudovalidation) attr(tab, "pseudovalidate") <- pv
-  #   if(Type2) attr(tab, "Type2") <- T2
-  # } 
+  result$split <- l[[1]]$split
+  result$beta.split <- l[[1]]$beta.split
+  result$ref.bfile <- l[[1]]$ref.bfile
+  result$keep.ref <- l[[1]]$keep.ref
+  result$test.bfile <- l[[1]]$test.bfile
+  result$keep.test <- ss$keep  # l[[1]] is for fold 1 only
+  result$fold <- ss$fold  # l[[1]] is for fold 1 only
+  result$LDblocks <- l[[1]]$LDblocks
+  result$destandardized <- l[[1]]$destandardized
+  result$exclude.ambiguous <- l[[1]]$exclude.ambiguous
   
-  attr(result, "keep.ref") <- keep.ref
+  class(result) <- "xp.lassosum"
 
-  if(multiple.ss) {
-    for(i in 1:length(l)) {
-      l[[i]]$test.bfile <- real.test.bfiles
-    }
-  }
-  
   return(result)
-  
-  
+
 }

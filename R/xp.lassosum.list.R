@@ -29,22 +29,17 @@ xp.lassosum.list <- function(xp.plink.linear,
   for(i in 1:length(ss.list)) {
     if(trace > 0) cat("Processing list item", i, "of", length(ss.list), "\n")
     if(is.null(keep.ref) & i > 1) {
-      keep.ref <- attr(l[[1]], "keep.ref")
+      keep.ref <- l[[1]]$keep.ref # Keep the same keep.ref from before
     } 
     l[[i]] <- xp.lassosum(ss.list[[i]], trace=trace-1,
                           keep.ref=keep.ref, 
-                          list.of.lassosum.only=TRUE, ...)
+                          list.of.lpipe.output=TRUE, ...)
     gc()
   }
   
   # Organize by folds 
-  xp.l <- l[[1]]
-  nfolds <- length(xp.l)
-  ll <- l.folds <- list()
-  for(f in 1:nfolds) {
-    l.folds[[f]] <- lapply(l, function(x) x[[f]])
-    ll[[f]] <- do.call("merge.lassosum.pipeline", l.folds[[f]])
-  }
+
+  ll <- organize.by.fold(l)
   
   return(ll)
 

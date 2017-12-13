@@ -11,9 +11,9 @@ xp.beta <- function(xp.plink.linear, xp.lassosum,
                     save="", 
                     force=FALSE) {
   
-  if(!is.list(xp.plink.linear) != "xp.plink.linear") 
+  if(!is(xp.plink.linear, "xp.plink.linear")) 
     stop("Is this a xp.plink.linear object?")
-  if(!is.data.frame(xp.lassosum)) 
+  if(!is(xp.lassosum, "xp.lassosum")) 
     stop("Is this a xp.lassosum object?")
   
   ss <- xp.plink.linear
