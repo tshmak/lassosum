@@ -39,7 +39,7 @@ pgs <- function(bfile, weights, keep=NULL, extract=NULL, exclude=NULL, remove=NU
     if(nclusters > 1) {
       split <- ceiling(seq(1/parsed$p, nclusters, length=parsed$p))
       t <- table(split)
-      compute.size <- as.double(min(t)) * parsed$n * ncol(weights)
+      compute.size <- as.double(min(t)) * parsed$N * ncol(weights)
       if(compute.size < 1e8) {
         # Too many clusters
         f <- 1e8 / compute.size
@@ -53,8 +53,8 @@ pgs <- function(bfile, weights, keep=NULL, extract=NULL, exclude=NULL, remove=NU
         toextract <- if(!is.null(parsed$extract)) parsed$extract else 
           rep(TRUE, parsed$P)
         touse <- split == i
-        select <- toextract[toextract] <- touse
-        return(pgs(Bfile, weights[touse,,drop=FALSE], keep=parsed$keep, extract=select))
+        toextract[toextract] <- touse
+        return(pgs(Bfile, weights[touse, ], keep=parsed$keep, extract=toextract))
       })
       result <- l[[1]]
       if(nclusters > 1) for(i in 2:nclusters) result <- result + l[[i]]
