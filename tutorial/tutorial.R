@@ -9,7 +9,7 @@ ref.bfile <-"./data/refpanel"
 test.bfile <-"./data/testsample" 
 
 ### Read ld region file ###
-ld <- fread("./data/Berisa.2015.EUR.bed")
+ld <- fread("./data/Berisa.EUR.hg19.bed")
 
 ### Read summary statistics file ###
 ss <- fread("./data/summarystats.txt")

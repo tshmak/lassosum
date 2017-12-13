@@ -14,19 +14,19 @@ Summary statistics are expected to be loaded into memory as a data.frame/data.ta
 ```r
 install.packages(c("RcppArmadillo", "data.table", "Matrix"), dependencies=TRUE)
 ```
-For Windows users, it would be easiest to download the following binary [lassosum_0.2.3.zip](https://github.com/tshmak/lassosum/releases/download/v0.2.3/lassosum_0.2.3.zip) and install using: 
+For Windows users, it would be easiest to download the following binary [lassosum_0.2.4.zip](https://github.com/tshmak/lassosum/releases/download/v0.2.4/lassosum_0.2.4.zip) and install using: 
 ```r
 install.packages("/path/to/downloaded_binary_file.zip", repos=NULL)
 ```
 
-For Mac and Linux users, we recommend downloading the source codes [lassosum_0.2.3.tar.gz](https://github.com/tshmak/lassosum/releases/download/v0.2.3/lassosum_0.2.3.tar.gz) and compiling on your computer. Mac users will need to install [Xcode](https://developer.apple.com/xcode/) to do this. After downloading, type:
+For Mac and Linux users, we recommend downloading the source codes [lassosum_0.2.4.tar.gz](https://github.com/tshmak/lassosum/releases/download/v0.2.4/lassosum_0.2.4.tar.gz) and compiling on your computer. Mac users will need to install [Xcode](https://developer.apple.com/xcode/) to do this. After downloading, type:
 ```r
 install.packages("/path/to/downloaded_source.tar.gz", repos=NULL, type="source")
 ```
 
 If you have `devtools`, you can also type: 
 ```r
-install_github("tshmak/lassosum@v0.2.3")
+install_github("tshmak/lassosum@v0.2.4")
 ```
 or
 ```r
@@ -40,7 +40,7 @@ Most functions in `lassosum` impute missing genotypes in PLINK bfiles with a hom
 
 ### Tutorial
 
-In the following tutorial we make use of two dummy datasets, which can be downloaded [here](https://github.com/tshmak/lassosum/archive/v0.2.3.zip).
+In the following tutorial we make use of two dummy datasets, which can be downloaded [here](https://github.com/tshmak/lassosum/archive/v0.2.4.zip).
 
 The data for this tutorial can be found in `tutorial/data` after unzipping. 
 We will assume you have set your `R` working directory at `tutorial/` with 
@@ -49,7 +49,7 @@ We will assume you have set your `R` working directory at `tutorial/` with
 setwd("path/to/repository/tutorial")
 ```
 
-First we read the summary statistics into R, and provide the `bfile` names of the refrence panel and the test data. If only the reference panel is provided then only the beta coefficients (no polygenic scores) are calculated. You can then apply these subsequently to a test dataset using `validate.lassosum.pipeline` or `pseudovalidate.lassosum.pipeline`. If no reference panel is provided, then the test data is taken as the reference panel. If no ld region file is provided, then `lassosum` is performed by chromosomes. We recommend you use the appropriate LD regions as defined in [Berisa and Pickrell (2015)](https://academic.oup.com/bioinformatics/article/32/2/283/1743626/Approximately-independent-linkage-disequilibrium) which are also included in our package. 
+First we read the summary statistics into R, and provide the `bfile` names of the reference panel and the test data. If only the reference panel is provided then only the beta coefficients (no polygenic scores) are calculated. You can then apply these subsequently to a test dataset using `validate.lassosum.pipeline` or `pseudovalidate.lassosum.pipeline`. If no reference panel is provided, then the test data is taken as the reference panel. If no ld region file is provided, then `lassosum` is performed by chromosomes. We recommend you use the appropriate LD regions as defined in [Berisa and Pickrell (2015)](https://academic.oup.com/bioinformatics/article/32/2/283/1743626/Approximately-independent-linkage-disequilibrium) which are also included in our package. 
 
 ```r
 library(data.table)
@@ -65,7 +65,7 @@ ref.bfile <- "./data/refpanel"
 test.bfile <- "./data/testsample"
 
 ### Read ld region file ###
-ld <- fread("./data/Berisa.2015.EUR.bed")
+ld <- fread("./data/Berisa.EUR.hg19.bed")
 ```
 
 To run `lassosum`, we need to input SNP-wise correlations. This can be converted from p-values via the `p2cor` function. 

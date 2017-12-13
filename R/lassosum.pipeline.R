@@ -138,6 +138,7 @@ lassosum.pipeline <- function(cor, chr=NULL, pos=NULL, snp=NULL,
   } else test.bim <- ref.bim
 
   if(!is.null(LDblocks)) {
+    if(is.factor(LDblocks)) LDblocks <- as.integer(LDblocks)
     if(is.vector(LDblocks)) stopifnot(length(LDblocks) == length(cor)) else 
       if(is.data.frame(LDblocks) || is.data.table(LDblocks)) {
         LDblocks <- as.data.frame(LDblocks)
@@ -226,6 +227,7 @@ lassosum.pipeline <- function(cor, chr=NULL, pos=NULL, snp=NULL,
                            POS = ref.bim$V4[ref.extract],
                            ref.CHR = LDblocks[,1], 
                            ref.breaks = LDblocks[,3])
+      # Assumes base 1 for the 3rd column of LDblocks (like normal bed files)
     }
   } else {
     # split <- ref.bim$V1[ref.extract]
@@ -297,6 +299,12 @@ lassosum.pipeline <- function(cor, chr=NULL, pos=NULL, snp=NULL,
         toextract[toextract] <- xcl.test
         sd[xcl.test] <- sd.bfile(bfile = test.bfile, extract=toextract, 
                                  keep=parsed.test$keep, cluster=cluster, ...)
+      } else if(length(s.minus.1) == 0) {
+        # sd not calculated because no s < 1 was used. 
+        sd <- sd.bfile(bfile = test.bfile, extract=m.test$ref.extract,  
+                               keep=parsed.test$keep, cluster=cluster, ...)
+      } else {
+        # sd should already be calculated at lassosum
       }
     } else {
       sd <- sd.bfile(bfile = test.bfile, extract=m.test$ref.extract,  
