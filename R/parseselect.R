@@ -19,7 +19,16 @@
 parseselect <- function(bfile, extract=NULL, exclude=NULL, 
                         keep=NULL, remove=NULL, chr=NULL, 
                         export=FALSE) {
+
+  #### Introduced for parsing multiple bfiles ####  
+  if(length(bfile) > 1) {
+    if(!is.null(chr) || !is.null(extract) || !is.null(exclude)) {
+      stop("bfile cannot be a vector if we are parsing extract/exclude/chr. yet.")
+    }
+    bfile <- bfile[1]
+  }
   
+  #### Checks ####
   stopifnot(is.character(bfile) && length(bfile) == 1)
   bedfile <- paste0(bfile, ".bed")
   bimfile <- paste0(bfile, ".bim")
