@@ -69,6 +69,7 @@ To run `lassosum`, we need to input SNP-wise correlations. This can be converted
 ```r
 library(lassosum)
 cor <- p2cor(p = ss$P_val, n = 60000, sign=log(ss$OR_A1))
+# n is the sample size
 ```
 
 Running lassosum using standard pipeline: 
