@@ -3,6 +3,7 @@
 \docType{package}
 \name{lassosum}
 \alias{lassosum}
+\alias{lassosum}
 \alias{lassosum-package}
 \title{Function to obtain LASSO estimates of a regression problem given summary statistics
 and a reference panel}
@@ -83,4 +84,3 @@ SNP ids (matching those in the .bim file).
 Missing genotypes are interpreted as having the homozygous A2 alleles in the 
 PLINK files (same as the \code{--fill-missing-a2} option in PLINK).
 }
-

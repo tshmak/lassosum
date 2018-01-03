@@ -9,4 +9,3 @@
 \description{
 e.g. when calculated over different blocks/chromosomes
 }
-

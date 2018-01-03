@@ -41,4 +41,3 @@ polygenic score against an external phenotype in the testing dataset.
 If \code{pheno} is not specified, then the sixth column in the testing 
 dataset \href{https://www.cog-genomics.org/plink2/formats#fam}{.fam}\code{.fam} file is used.
 }
-

@@ -29,7 +29,7 @@ test_that("lassosum" , {
   g <- lassosum(corr, plinkfileStem, lambda, shrink,blocks = blocks)
   
   max(abs(g$beta - g12$beta))
-  expect_equal(g$beta, g12.beta)
+  expect_equal(g$beta, g12$beta)
 })
 
 

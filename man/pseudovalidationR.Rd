@@ -30,4 +30,3 @@ same as the number of columns in \code{genotype.mat}.
 }
 }
 \keyword{internal}
-

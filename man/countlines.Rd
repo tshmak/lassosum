@@ -13,4 +13,3 @@ countlines(fileName)
 Count number of lines in a text file
 }
 \keyword{internal}
-

@@ -13,4 +13,3 @@ ncol.bfile(bfile)
 an integer with the number of columns
 #@keywords internal
 }
-

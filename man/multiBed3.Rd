@@ -30,4 +30,3 @@ an armadillo genotype matrix
 Multiply genotypeMatrix by a constant
 }
 \keyword{internal}
-

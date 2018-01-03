@@ -23,4 +23,3 @@ where \eqn{r} is the vector of regression coefficients. The analytical solution
 is given by
 \deqn{\hat{\beta}=sign(r)(max(|r| - \lambda))}
 }
-

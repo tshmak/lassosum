@@ -29,4 +29,3 @@ an armadillo genotype matrix
 imports genotypeMatrix
 }
 \keyword{internal}
-

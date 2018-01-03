@@ -27,4 +27,3 @@ three columns in this order: (1) SNP ids, (2) reference allele, (3) alternative 
 }
 \keyword{#@export}
 \keyword{internal}
-

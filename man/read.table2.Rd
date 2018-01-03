@@ -7,4 +7,3 @@
 read.table2(file, header = F)
 }
 \keyword{internal}
-

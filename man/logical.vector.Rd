@@ -15,4 +15,3 @@ logical.vector(positions, size)
 \description{
 It's basically the reverse of base::which()
 }
-

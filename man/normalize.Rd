@@ -16,4 +16,3 @@ standard deviation
 normalize genotype matrix
 }
 \keyword{internal}
-

@@ -11,4 +11,3 @@ group.blocks(Blocks, parseselect, mem.limit = 2^32 * 8, chunks = NULL,
 \item{parseselect}{An object returned by parseselect()}
 }
 \keyword{internal}
-
