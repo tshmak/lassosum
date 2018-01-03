@@ -17,6 +17,7 @@ Imports:
     Matrix, 
     data.table
 Suggests:
+    glmnet, 
     testthat,
     fdrtool,
     knitr,
