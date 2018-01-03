@@ -1,18 +1,18 @@
-# load_all(); setwd("./tutorial")
+# load_all()
 ### Use data.table for speed ###
 library(data.table)
 
 ### Locate reference panel .bfile (the .bed, .bim and .fam files without the extensions) ###
-ref.bfile <-"./data/refpanel"
+ref.bfile <- paste0(system.file(package="lassosum"), "/data/refpanel")
 
 ### Locate test sample .bfile ###
-test.bfile <-"./data/testsample" 
+test.bfile <- paste0(system.file(package="lassosum"), "/data/testsample")
 
 ### Read ld region file ###
-ld <- fread("./data/Berisa.EUR.hg19.bed")
+ld <- fread(paste0(system.file(package="lassosum"), "/data/Berisa.EUR.hg19.bed"))
 
 ### Read summary statistics file ###
-ss <- fread("./data/summarystats.txt")
+ss <- fread(paste0(system.file(package="lassosum"), "/data/summarystats.txt"))
 head(ss)
 
 ### Convert p-values to correlations, assuming a sample size of 60000 for the p-values ###
