@@ -1,7 +1,0 @@
-# The Berisa.XXX.hg19.bed files are copied from src/XXX/fourier_ls-all.bed 
-# obtained from https://bitbucket.org/nygcresearch/ldetect-data
-# The Berisa.AFR.hg19.bed has been modified slightly as there were two rows that contained "None" as a position. 
-# I believe this was a bug, which is fixed here.  
-# The Berisa.XXX.hg38.bed files are lifted over from the Berisa.XXX.hg19.bed file, using 
-# LiftOver (https://genome.sph.umich.edu/wiki/LiftOver)
-
