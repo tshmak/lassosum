@@ -4,3 +4,8 @@
 .ycm_extra_conf.pyc
 .gitignore
 releases/
+.git/
+.travis.yml
+LICENSE
+changelog.md
+README.md

@@ -381,8 +381,7 @@ lassosum.pipeline <- function(cor, chr=NULL, pos=NULL, snp=NULL,
   return(results) 
  
   #' @examples 
-  #' ## Not run:
-  #' 
+  #' \dontrun{
   #'  ### Read ld region file ###
   #'  ld <- fread("./data/Berisa.2015.EUR.bed")
   #'  
@@ -398,6 +397,6 @@ lassosum.pipeline <- function(cor, chr=NULL, pos=NULL, snp=NULL,
   #'                           A1=ss$A1, A2=ss$A2,
   #'                           ref.bfile=ref.bfile, test.bfile=test.bfile, 
   #'                           LDblocks = ld)
-  #' ## End(**Not run**)
-  
+  #' }
+
 }
