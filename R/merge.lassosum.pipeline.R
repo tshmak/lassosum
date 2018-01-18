@@ -31,7 +31,7 @@ merge.lassosum.pipeline <- function(...) {
     
     # vecs
     vecs <- c("test.extract", "also.in.refpanel", "sd", 
-              "ref.bfile", "test.bfile", "LDblocks")
+              "ref.bfile", "test.bfile", "LDblocks", "time")
     for(m in 1:length(vecs)) {
       lpipe[[vecs[m]]] <- do.call("c", lapply(l, function(x) x[[vecs[m]]]))
     }

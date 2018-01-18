@@ -71,6 +71,8 @@ lassosum.pipeline <- function(cor, chr=NULL, pos=NULL, snp=NULL,
   #' for details. 
   #' @export
   #' 
+  
+  time.start <- proc.time()
   ######################### Input validation  (start) #########################
   extensions <- c(".bed", ".bim", ".fam")
   stopifnot(!is.null(ref.bfile) || !is.null(test.bfile))
@@ -374,6 +376,7 @@ lassosum.pipeline <- function(cor, chr=NULL, pos=NULL, snp=NULL,
            cluster=cluster))
   names(pgs) <- as.character(s)
   results <- c(results, list(pgs=pgs))
+  results$time <- (proc.time() - time.start)["elapsed"]
   class(results) <- "lassosum.pipeline"
   return(results) 
  

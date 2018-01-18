@@ -2,6 +2,7 @@ xp.lassosum <- function(xp.plink.linear,
                         LDblocks=xp.plink.linear$chr, 
                         pseudovalidation=FALSE,
                         Type2=FALSE, 
+                        scale=TRUE, 
                         ref.bfile=NULL, 
                         destandardize=FALSE, 
                         max.ref.bfile.n=5000, 
@@ -134,7 +135,7 @@ xp.lassosum <- function(xp.plink.linear,
   
   # Get results 
   result <- xp.lassosum.validate(l, ss, Type2=Type2, 
-    pseudovalidation=pseudovalidation, plot=plot, 
+    pseudovalidation=pseudovalidation, scale=scale, plot=plot, 
     validate.function=validate.function, cluster=cluster, 
     trace=trace-1, details=details)
   result$split <- l[[1]]$split
@@ -147,6 +148,7 @@ xp.lassosum <- function(xp.plink.linear,
   result$LDblocks <- l[[1]]$LDblocks
   result$destandardized <- l[[1]]$destandardized
   result$exclude.ambiguous <- l[[1]]$exclude.ambiguous
+  result$time <- sum(unlist(lapply(l, function(x) x$time)))
   
   class(result) <- "xp.lassosum"
 
