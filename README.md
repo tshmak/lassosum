@@ -40,7 +40,7 @@ Most functions in `lassosum` impute missing genotypes in PLINK bfiles with a hom
 
 ### Tutorial
 
-_If you are using lassosum for __cross prediction__, please refer to the manual [here](https://github.com/tshmak/lassosum/blob/master/CrossPrediction.md)_
+_If you are using lassosum for __cross prediction__, please refer to the manual [here](https://github.com/tshmak/lassosum/blob/master/inst/CrossPrediction.md)_
 
 Otherwise, run the following: 
 ```r

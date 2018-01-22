@@ -45,7 +45,7 @@ src/*.dll
 inst/doc
 
 # Manual files. I use Roxygen to generate these
-*.Rd
+# *.Rd # Do not ignore these, cos otherwise the source will have to be compiled by Roxygen to have the manual files
 
 # releases 
 /releases/
