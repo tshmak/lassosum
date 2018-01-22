@@ -52,9 +52,9 @@ inst/doc
 .Rproj.user
 
 # files from Rcpp::compileAttributes
-R/RcppExports.R
-inst/include/lassosum_RcppExports.h
-src/RcppExports.cpp
+# R/RcppExports.R
+# inst/include/lassosum_RcppExports.h
+# src/RcppExports.cpp
 
 # .html files from .md
 *.html
