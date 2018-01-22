@@ -56,3 +56,5 @@ R/RcppExports.R
 inst/include/lassosum_RcppExports.h
 src/RcppExports.cpp
 
+# .html files from .md
+*.html

@@ -9,7 +9,32 @@ plink.linear <- function(bfile, pheno, out=tempfile("lassosum.out"),
                          ...) {
   
   #' @title Obtain standardized coefficients from linear regression in PLINK
+  #' @param pheno Phenotype. see details.
+  #' @param out The \code{--out} option in plink
   #' @param keep,remove,extract,exclude,chr see parseselect() 
+  #' @param covar Covariates. see details
+  #' @param plink.cmd The command passed to plink
+  #' @param ext The extension for the output file generated from the plink command
+  #' @param ignore.stdout Ignore stdout. see \code{\link[base]{base::system}}
+  #' @param ... Other parameters to pass to plink. See details
+  #' @export
+  #' @details \code{pheno} and \code{covar} can take one of three formats:
+  #'          \itemize{
+  #'          \item a vector/matrix with length/number of rows equal the 
+  #'          number of included samples, or
+  #'          \item a data.frame with the 
+  #'          first two columns labelled "FID" and "IID" and the other columns
+  #'          giving the phenotype/covariates, or
+  #'          \item the name of a file in a format 
+  #'          understood by plink's \code{--pheno} or \code{--covar} options
+  #'          } 
+  #'          Only one column can be given for \code{pheno}, although covar can take 
+  #'          more than one columns. 
+  #'          
+  #'          \code{...}: Other options to plink can be given by, e.g., 
+  #'          \code{keep.allele.order=T} for \code{--keep-allele-order}, 
+  #'          \code{maf=0.01} for \code{--maf 0.01}, etc.
+  #'           
   
   #### checks ####
   plink <- getOption("lassosum.plink")

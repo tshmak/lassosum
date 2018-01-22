@@ -12,6 +12,15 @@ xp.plink.linear <- function(bfile, nfolds=5, fold=NULL,
   #' @param pheno A vector of phenotype
   #' @param covar A vector/matrix of covariates
   #' @param keep,remove,extract,exclude,chr see \code{parseselect}
+  #' @param force Force
+  #' @param fast see details 
+  #' @details If fast == TRUE, the summary statistics are calculated for 
+  #'          each fold, and then combined together by averaging. For example,
+  #'          assume there are 5 folds, then for fold 1, the summary stats
+  #'          for fold 2, 3, 4, and 5 are averaged. If fast == FALSE, 
+  #'          we actually run plink using the entire dataset minus the fold 1, 
+  #'          and repeat this process for folds 2, 3, 4, and 5.
+  #' @export
   
   parsed <- parseselect(bfile=bfile, keep=keep, remove=remove, 
                         extract=extract, exclude=exclude, chr=chr, 
@@ -28,7 +37,10 @@ xp.plink.linear <- function(bfile, nfolds=5, fold=NULL,
   }
   
   t <- table(fold) 
-  if(min(t) < 50 & !force) stop("The minimum fold has less than 50 observations. Perhaps reduce the number of folds.")
+  if(min(t) < 50 & !force) 
+    stop(paste("The minimum fold has less than 50 observations.",
+               "Perhaps reduce the number of folds,", 
+               "or specify force=T to run anyway."))
   
   if(!is.null(parsed$keep)) {
     touse <- which(parsed$keep)  
@@ -39,7 +51,7 @@ xp.plink.linear <- function(bfile, nfolds=5, fold=NULL,
   #### pheno ####
   if(is.null(pheno)) {
     if(is.null(parsed$fam)) parsed$fam <- read.table2(parsed$famfile)
-    pheno <- fam[,6]
+    pheno <- parsed$fam[,6]
     if(!is.null(parsed$keep)) pheno <- pheno[parsed$keep]
   } else {
     if(length(pheno) != parsed$n) stop("Length of phenotype vector does not match number of samples")

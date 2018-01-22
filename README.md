@@ -4,7 +4,7 @@ lassosum [![Build Status](https://travis-ci.org/tshmak/lassosum.svg?branch=maste
 ### Description
 
 `lassosum` is a method for computing LASSO estimates of a linear regression problem given summary statistics from GWAS and Genome-wide meta-analyses, accounting for Linkage Disequilibrium (LD), via a reference panel.
-The reference panel is assumed to be in PLINK [format](https://www.cog-genomics.org/plink2/).
+The reference panel is assumed to be in PLINK 1 [format](https://www.cog-genomics.org/plink/1.9/input#bed).
 Summary statistics are expected to be loaded into memory as a data.frame/data.table. 
 
 ### Installation
@@ -14,19 +14,19 @@ Summary statistics are expected to be loaded into memory as a data.frame/data.ta
 ```r
 install.packages(c("RcppArmadillo", "data.table", "Matrix"), dependencies=TRUE)
 ```
-For Windows users, it would be easiest to download the following binary [lassosum_0.2.5.zip](https://github.com/tshmak/lassosum/releases/download/v0.2.5/lassosum_0.2.5.zip) and install using: 
+For Windows users, it would be easiest to download the following binary [lassosum_0.3.0.zip](https://github.com/tshmak/lassosum/releases/download/v0.3.0/lassosum_0.3.0.zip) and install using: 
 ```r
 install.packages("/path/to/downloaded_binary_file.zip", repos=NULL)
 ```
 
-For Mac and Linux users, we recommend downloading the source codes [lassosum_0.2.5.tar.gz](https://github.com/tshmak/lassosum/releases/download/v0.2.5/lassosum_0.2.5.tar.gz) and compiling on your computer. Mac users will need to install [Xcode](https://developer.apple.com/xcode/) to do this. After downloading, type:
+For Mac and Linux users, we recommend downloading the source codes [lassosum_0.3.0.tar.gz](https://github.com/tshmak/lassosum/releases/download/v0.3.0/lassosum_0.3.0.tar.gz) and compiling on your computer. Mac users will need to install [Xcode](https://developer.apple.com/xcode/) to do this. After downloading, type:
 ```r
 install.packages("/path/to/downloaded_source.tar.gz", repos=NULL, type="source")
 ```
 
 If you have `devtools`, you can also type: 
 ```r
-install_github("tshmak/lassosum@v0.2.5")
+install_github("tshmak/lassosum@v0.3.0")
 ```
 or
 ```r
@@ -40,7 +40,9 @@ Most functions in `lassosum` impute missing genotypes in PLINK bfiles with a hom
 
 ### Tutorial
 
-Run the following: 
+_If you are using lassosum for __cross prediction__, please refer to the manual [here](https://github.com/tshmak/lassosum/blob/master/CrossPrediction.md)_
+
+Otherwise, run the following: 
 ```r
 library(lassosum)
 setwd(system.file("data", package="lassosum")) # Directory where data and LD region files are stored
@@ -117,4 +119,4 @@ Note that `X` and `y` are not variables in the R environment, but simply argumen
 
 
 ### Support
-If there are any questions or problems with running or installing `lassosum`, please do email me at tshmak@hku.hk
+If there are any questions or problems with running or installing `lassosum`, please do email me at <tshmak@hku.hk>. 

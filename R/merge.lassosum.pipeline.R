@@ -1,6 +1,7 @@
 merge.lassosum.pipeline <- function(...) {
   #' Merge a list of lassosum.pipeline objects
-  #' @keywords internal
+  #' @param ... \code{lassosum.pipeline} objects, separated by commas
+  #' @export
   
   l <- list(...)
   names(l) <- NULL # This will save a LOT of memory!!!

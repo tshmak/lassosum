@@ -1,7 +1,7 @@
 xp.lassosum <- function(xp.plink.linear, 
                         LDblocks=xp.plink.linear$chr, 
                         pseudovalidation=FALSE,
-                        Type2=FALSE, 
+                        Type2=TRUE, 
                         scale=TRUE, 
                         ref.bfile=NULL, 
                         destandardize=FALSE, 
@@ -23,6 +23,8 @@ xp.lassosum <- function(xp.plink.linear,
   #' @param xp.plink.linear An object from xp.plink.linear()
   #' @param LDblocks LD blocks. See \code{\link{lassosum.pipeline}}
   #' @param pseudovalidation Should pseudovalidation be performed on each fold?
+  #' @param Type2 Should Type 2 cross-prediction performed on each fold?
+  #' @param scale Should PGS be standardized before stacking?
   #' @param ref.bfile bfile of reference panel (if different from that used in \code{xp.plink.linear})
   #' @param destandardize Should coefficients be destandardized
   #' @param max.ref.bfile.n Maximum number of samples to use in ref.bfile (to improve speed)
@@ -31,9 +33,20 @@ xp.lassosum <- function(xp.plink.linear,
   #' @param exclude.ambiguous Should ambiguous SNPs be excluded? 
   #' @param validate.function Function for validating polygenic score
   #' @param plot Whether a validation plot should be drawn
+  #' @param trace How much output should be given (0 for none)
+  #' @param cluster A "cluster" object from the parallel package for parallel processing
+  #' @param list.of.lpipe.output logical. see details. 
+  #' @param list.of.lpipe.input A list of lassosum.pipeline organized by fold. 
   #' @param ... Other parameters to pass to lassosum.pipeline()
+  #' @export
+  #' @details If one wishes to carry out cross-prediction by chromosome, 
+  #' one can request set \code{list.of.lpipe.output=TRUE} to produce a list of 
+  #' lassosum.pipeline objects for each chromosome, combine them using 
+  #' \code{\link{organize.by.fold}}, and put them all together using 
+  #' \code{list.of.lpipe.input}. 
 
-  # ref.bfile <- NULL; max.ref.bfile.n <- 100; details <- TRUE; destandardize=TRUE
+  ### For testing: 
+  ### ref.bfile <- NULL; max.ref.bfile.n <- 100; details <- TRUE; destandardize=TRUE
   
   ss <- xp.plink.linear # get a shorter name
   is.list <- check.class(ss, "xp.plink.linear", list.of.class=TRUE)

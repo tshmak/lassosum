@@ -1,6 +1,11 @@
 organize.by.fold <- function(list.of.list.of.lp) {
   #' lassosum.pipeline objects, orginally organized by fold then by chromosome, 
   #' are merged across chromosome
+  #' @param list.of.list.of.lp A list of list of \code{lassosum.pipeline} objects
+  #'                           from the output of \code{xp.lassosum}, when
+  #'                           \code{list.of.lpipe.output=TRUE}
+  #' @export
+  
   l <- list.of.list.of.lp
   nfolds <- length(l[[1]])
   ll <- l.folds <- list()
