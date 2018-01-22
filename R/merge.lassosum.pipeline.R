@@ -58,7 +58,7 @@ merge.lassosum.pipeline <- function(...) {
   split.vec <- sapply(l, function(x) nrow(x$beta[[1]]))
   lpipe$beta.split <- rep(1:length(l), split.vec)
   lpipe$split <- function(obj, vec) {
-    # obj should be either lassosum.pipeline or xp.lassosum
+    # obj should be either lassosum.pipeline or cp.lassosum
     s <- obj$beta.split
     return(lapply(1:max(s), function(i) vec[s==i]))
   }

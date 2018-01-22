@@ -5,20 +5,20 @@
 # load_all(attachroot("/WORK/Projects/validation/lassosum/."))
 # ss.list <- result[[1]][[2]][1:2]
 # 
-# test <- xp.lassosum(ss.list, trace=3, s=1, Method2=TRUE)
+# test <- cp.lassosum(ss.list, trace=3, s=1, Method2=TRUE)
 # stop()
 # 
 # trace <- 3
 # l <- list()
 # for(i in 1:length(ss.list)) {
 #   if(trace > 0) cat("Processing list item", i, "of", length(ss.list), "\n")
-#   l[[i]] <- xp.lassosum(ss.list[[i]], trace=trace-1, list.of.lassosum.only=TRUE, s=1)
+#   l[[i]] <- cp.lassosum(ss.list[[i]], trace=trace-1, list.of.lassosum.only=TRUE, s=1)
 # }
 # save(l, file="temp")
 # 
 # # Organize by folds 
-# xp.l <- l[[1]]
-# nfolds <- length(xp.l)
+# cp.l <- l[[1]]
+# nfolds <- length(cp.l)
 # ll <- l.folds <- list()
 # for(f in 1:nfolds) {
 #   l.folds[[f]] <- lapply(l, function(x) x[[f]])

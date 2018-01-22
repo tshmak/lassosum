@@ -1,5 +1,5 @@
-xp.lassosum.validate <- function(list.of.lpipe, # by fold
-                                 xp.plink.linear, 
+cp.lassosum.validate <- function(list.of.lpipe, # by fold
+                                 cp.plink.linear, 
                                  Method2, pseudovalidation, 
                                  scale=TRUE, 
                                  plot, 
@@ -8,7 +8,7 @@ xp.lassosum.validate <- function(list.of.lpipe, # by fold
                                  trace, 
                                  details, 
                                  list.of.bfiles) {
-  #' For a list of xp.plink.linear objects
+  #' For a list of cp.plink.linear objects
   #' @keywords internal
 
   # A function for scaling
@@ -22,11 +22,11 @@ xp.lassosum.validate <- function(list.of.lpipe, # by fold
   
   # Get shorthands  
   l <- list.of.lpipe
-  ss <- xp.plink.linear
+  ss <- cp.plink.linear
   
   # Check
-  if(!is(ss, "xp.plink.linear")) {
-    if(is.list(ss) && all(sapply(ss, class) == "xp.plink.linear")) {
+  if(!is(ss, "cp.plink.linear")) {
+    if(is.list(ss) && all(sapply(ss, class) == "cp.plink.linear")) {
       ss <- ss[[1]]
     } else {
       stop("Unknown type for list.of.lpipe.")

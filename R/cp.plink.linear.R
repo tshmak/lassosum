@@ -1,4 +1,4 @@
-xp.plink.linear <- function(bfile, nfolds=5, fold=NULL, 
+cp.plink.linear <- function(bfile, nfolds=5, fold=NULL, 
                             pheno=NULL, covar=NULL, 
                             keep=NULL, remove=NULL, 
                             extract=NULL, exclude=NULL, 
@@ -113,7 +113,7 @@ xp.plink.linear <- function(bfile, nfolds=5, fold=NULL,
                 keep=parsed$keep, extract=parsed$extract, 
                 n=parsed$n, p=parsed$p, nonmiss=nmiss, 
                 bfile=bfile)
-  class(toreturn) <- "xp.plink.linear"
+  class(toreturn) <- "cp.plink.linear"
   return(toreturn)
 
 }

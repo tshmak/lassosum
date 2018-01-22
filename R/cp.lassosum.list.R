@@ -1,10 +1,10 @@
-xp.lassosum.list <- function(xp.plink.linear, 
+cp.lassosum.list <- function(cp.plink.linear, 
                              trace=0,
                              keep.ref=NULL, ...) {
-  #' For a list of xp.plink.linear objects
+  #' For a list of cp.plink.linear objects
   #' @keywords internal
 
-  ss.list <- xp.plink.linear 
+  ss.list <- cp.plink.linear 
   best.pgs.m2 <- rep(NA, ss.list[[1]]$n)
   
   # Checks 
@@ -24,14 +24,14 @@ xp.lassosum.list <- function(xp.plink.linear,
   stopifnot(all(sapply(ss.list, function(x) 
     identical(x$keep, keep))))
   
-  # Repeatedly call xp.lassosum
+  # Repeatedly call cp.lassosum
   l <- list()
   for(i in 1:length(ss.list)) {
     if(trace > 0) cat("Processing list item", i, "of", length(ss.list), "\n")
     if(is.null(keep.ref) & i > 1) {
       keep.ref <- l[[1]]$keep.ref # Keep the same keep.ref from before
     } 
-    l[[i]] <- xp.lassosum(ss.list[[i]], trace=trace-1,
+    l[[i]] <- cp.lassosum(ss.list[[i]], trace=trace-1,
                           keep.ref=keep.ref, 
                           list.of.lpipe.output=TRUE, ...)
     gc()

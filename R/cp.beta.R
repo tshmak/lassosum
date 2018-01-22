@@ -1,29 +1,29 @@
 #' @title Get the "overall" beta after cross-prediction
-#' @param xp.plink.linear An object returned from xp.plink.linear()
-#' @param xp.lassosum An object returned from xp.lassosum()
+#' @param cp.plink.linear An object returned from cp.plink.linear()
+#' @param cp.lassosum An object returned from cp.lassosum()
 #' @param method Either the Method1 or Method2 Polygenic Score
 #' @param save Save the pseudoinverse (in armadillo binary format)
 #' @param load Load the pseudoinverse
 #' @export
 
-xp.beta <- function(xp.plink.linear, xp.lassosum, 
+cp.beta <- function(cp.plink.linear, cp.lassosum, 
                     method=c("Method1", "Method2"), load="", 
                     save="", 
                     force=FALSE) {
   
-  if(!is(xp.plink.linear, "xp.plink.linear")) 
-    stop("Is this a xp.plink.linear object?")
-  if(!is(xp.lassosum, "xp.lassosum")) 
-    stop("Is this a xp.lassosum object?")
+  if(!is(cp.plink.linear, "cp.plink.linear")) 
+    stop("Is this a cp.plink.linear object?")
+  if(!is(cp.lassosum, "cp.lassosum")) 
+    stop("Is this a cp.lassosum object?")
   
-  ss <- xp.plink.linear
-  l <- xp.lassosum 
+  ss <- cp.plink.linear
+  l <- cp.lassosum 
   method <- match.arg(method)
   
   parsed <- parseselect(ss$bfile, extract=ss$extract, keep=ss$keep)
   
   if(parsed$n > parsed$p) {
-    stop("xp.beta() doesn't work with n > p.")
+    stop("cp.beta() doesn't work with n > p.")
   }
   
   if(load == "") {

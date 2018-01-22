@@ -1,5 +1,5 @@
-xp.lassosum <- function(xp.plink.linear, 
-                        LDblocks=xp.plink.linear$chr, 
+cp.lassosum <- function(cp.plink.linear, 
+                        LDblocks=cp.plink.linear$chr, 
                         pseudovalidation=FALSE,
                         Method2=TRUE, 
                         scale=TRUE, 
@@ -20,12 +20,12 @@ xp.lassosum <- function(xp.plink.linear,
   #' @title lassosum with cross-prediction
   #' @description We assume correlations are pre-calculated for the various 
   #' folds, using PLINK or otherwise (cos PLINK is a lot faster).
-  #' @param xp.plink.linear An object from xp.plink.linear()
+  #' @param cp.plink.linear An object from cp.plink.linear()
   #' @param LDblocks LD blocks. See \code{\link{lassosum.pipeline}}
   #' @param pseudovalidation Should pseudovalidation be performed on each fold?
   #' @param Method2 Should Method 2 cross-prediction performed on each fold?
   #' @param scale Should PGS be standardized before stacking?
-  #' @param ref.bfile bfile of reference panel (if different from that used in \code{xp.plink.linear})
+  #' @param ref.bfile bfile of reference panel (if different from that used in \code{cp.plink.linear})
   #' @param destandardize Should coefficients be destandardized
   #' @param max.ref.bfile.n Maximum number of samples to use in ref.bfile (to improve speed)
   #' @param details Should a detailed output be given?
@@ -48,14 +48,14 @@ xp.lassosum <- function(xp.plink.linear,
   ### For testing: 
   ### ref.bfile <- NULL; max.ref.bfile.n <- 100; details <- TRUE; destandardize=TRUE
   
-  ss <- xp.plink.linear # get a shorter name
-  is.list <- check.class(ss, "xp.plink.linear", list.of.class=TRUE)
+  ss <- cp.plink.linear # get a shorter name
+  is.list <- check.class(ss, "cp.plink.linear", list.of.class=TRUE)
   
   if(is.null(list.of.lpipe.input)) {
 
     if(is.list) {
       call <- match.call()
-      l <- do.call("xp.lassosum.list", as.list(call[-1]))
+      l <- do.call("cp.lassosum.list", as.list(call[-1]))
       ss <- ss[[1]]
     } else {
       if(is.null(keep.ref)) {
@@ -133,7 +133,7 @@ xp.lassosum <- function(xp.plink.linear,
         # included in ss$cor anyway. 
         if(i == 1) LDblocks <- l[[i]]$LDblocks
       }
-      # For use by xp.lassosum.list() only 
+      # For use by cp.lassosum.list() only 
       if(list.of.lpipe.output) {
         return(l)
       } 
@@ -147,7 +147,7 @@ xp.lassosum <- function(xp.plink.linear,
   if(is.list) ss <- ss[[1]]
   
   # Get results 
-  result <- xp.lassosum.validate(l, ss, Method2=Method2, 
+  result <- cp.lassosum.validate(l, ss, Method2=Method2, 
     pseudovalidation=pseudovalidation, scale=scale, plot=plot, 
     validate.function=validate.function, cluster=cluster, 
     trace=trace-1, details=details)
@@ -163,7 +163,7 @@ xp.lassosum <- function(xp.plink.linear,
   result$exclude.ambiguous <- l[[1]]$exclude.ambiguous
   result$time <- sum(unlist(lapply(l, function(x) x$time)))
   
-  class(result) <- "xp.lassosum"
+  class(result) <- "cp.lassosum"
 
   return(result)
 

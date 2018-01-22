@@ -9,14 +9,14 @@
 # set.seed(1000)
 # pheno <- rnorm(n)
 # nfolds <- 3
-# ss <- xp.plink.linear(bfile=.bfile, nfolds=nfolds, pheno=pheno)
+# ss <- cp.plink.linear(bfile=.bfile, nfolds=nfolds, pheno=pheno)
 # 
 # ld <- fread("../tutorial/data/Berisa.2015.EUR.bed")
-# xp <- xp.lassosum(ss, LDblocks=ld, details=TRUE, Method2=TRUE)
-# v <- attr(xp, "validate")
-# beta <- xp.beta(ss, xp, save="cvtests.pinv")
-# beta <- xp.beta(ss, xp, load="cvtests.pinv")
+# cp <- cp.lassosum(ss, LDblocks=ld, details=TRUE, Method2=TRUE)
+# v <- attr(cp, "validate")
+# beta <- cp.beta(ss, cp, save="cvtests.pinv")
+# beta <- cp.beta(ss, cp, load="cvtests.pinv")
 # pred <- pgs(ss$bfile, beta)
-# diff <- xp$best.pgs - pred
+# diff <- cp$best.pgs - pred
 # summary(diff)
 # file.remove("cvtests.pinv")

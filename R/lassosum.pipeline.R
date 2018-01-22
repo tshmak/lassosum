@@ -222,7 +222,7 @@ lassosum.pipeline <- function(cor, chr=NULL, pos=NULL, snp=NULL,
     ### Positions of reference dataset that are common to summary statistics and test dataset ###
     ref.extract <- rep(FALSE, nrow(ref.bim))
     ref.extract[m.ref$ref.extract][m.common$order] <- TRUE
-  } else {   # For use in xp.lassosum only!!!
+  } else {   # For use in cp.lassosum only!!!
     ss2 <- ss
     stopifnot(parsed.ref$p == nrow(ss))
     stopifnot(parsed.test$p == nrow(ss))

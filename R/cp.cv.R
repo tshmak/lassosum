@@ -1,22 +1,22 @@
 #' @title Perform cross-validation based on results from cross-prediction
-#' @param xp.plink.linear An object returned from xp.plink.linear()
-#' @param xp.lassosum An object returned from xp.lassosum()
+#' @param cp.plink.linear An object returned from cp.plink.linear()
+#' @param cp.lassosum An object returned from cp.lassosum()
 #' @param return.lpipe For internal use
 #' @export
 
-xp.cv <- function(xp.plink.linear, xp.lassosum, 
+cp.cv <- function(cp.plink.linear, cp.lassosum, 
                   return.lpipe=FALSE, ...) {
   
-  ss <- xp.plink.linear
-  l <- xp.lassosum 
+  ss <- cp.plink.linear
+  l <- cp.lassosum 
   
-  is.list <- check.class(ss, "xp.plink.linear", list.of.class=TRUE)
+  is.list <- check.class(ss, "cp.plink.linear", list.of.class=TRUE)
 
   if(is.list) {
-    ls <- xp.cv.list(xp.plink.linear, xp.lassosum, ...)
+    ls <- cp.cv.list(cp.plink.linear, cp.lassosum, ...)
   } else {
-    if(class(xp.lassosum) != "xp.lassosum") 
-      stop("Is this a xp.lassosum object?")
+    if(class(cp.lassosum) != "cp.lassosum") 
+      stop("Is this a cp.lassosum object?")
     
     #### Get ss ####
     chr <- ss$chr
