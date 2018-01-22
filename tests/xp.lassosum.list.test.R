@@ -5,7 +5,7 @@
 # load_all(attachroot("/WORK/Projects/validation/lassosum/."))
 # ss.list <- result[[1]][[2]][1:2]
 # 
-# test <- xp.lassosum(ss.list, trace=3, s=1, Type2=TRUE)
+# test <- xp.lassosum(ss.list, trace=3, s=1, Method2=TRUE)
 # stop()
 # 
 # trace <- 3

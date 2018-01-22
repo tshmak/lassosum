@@ -1,6 +1,6 @@
 xp.lassosum.validate <- function(list.of.lpipe, # by fold
                                  xp.plink.linear, 
-                                 Type2, pseudovalidation, 
+                                 Method2, pseudovalidation, 
                                  scale=TRUE, 
                                  plot, 
                                  validate.function,
@@ -40,9 +40,9 @@ xp.lassosum.validate <- function(list.of.lpipe, # by fold
   }
   
   # Initialize 
-  t2.fold <- best.pgs.pv <- best.pgs.t2 <- pheno <- fold <- rep(NA, ss$n)
-  T2 <- pv <- list()
-  T2.beta <- numeric(0)
+  m2.fold <- best.pgs.pv <- best.pgs.m2 <- pheno <- fold <- rep(NA, ss$n)
+  M2 <- pv <- list()
+  M2.beta <- numeric(0)
   
   ### Loop over folds
   nfolds <- length(ss$pheno.by.fold)
@@ -56,8 +56,8 @@ xp.lassosum.validate <- function(list.of.lpipe, # by fold
       best.pgs.pv[ss$fold == i] <- pv[[i]]$best.pgs
     }
     
-    # Type 2
-    if(Type2) {
+    # Method 2
+    if(Method2) {
       split <- sample(as.logical(round(seq(0,1, length=sum(ss$fold == i)))))
       split <- rep(list(split), 2)
       split[[2]] <- !split[[2]]
@@ -65,20 +65,20 @@ xp.lassosum.validate <- function(list.of.lpipe, # by fold
       pheno2[[1]][split[[1]]] <- NA
       pheno2[[2]][split[[2]]] <- NA
       
-      t2 <- list()
-      t2.pgs <- rep(NA, length(ss$pheno.by.fold[[i]]))
+      m2 <- list()
+      m2.pgs <- rep(NA, length(ss$pheno.by.fold[[i]]))
       for(ii in 1:2) {
-        t2[[ii]] <- validate.lassosum.pipeline(l[[i]], pheno=pheno2[[ii]], 
+        m2[[ii]] <- validate.lassosum.pipeline(l[[i]], pheno=pheno2[[ii]], 
                                                trace=trace, plot=plot, 
                                                validate.function=validate.function, 
                                                cluster=cluster)
-        t2.pgs[split[[ii]]] <- Scale(t2[[ii]]$best.pgs[split[[ii]]], scale)
-        T2.beta <- cbind(T2.beta, t2[[ii]]$best.beta)
+        m2.pgs[split[[ii]]] <- Scale(m2[[ii]]$best.pgs[split[[ii]]], scale)
+        M2.beta <- cbind(M2.beta, m2[[ii]]$best.beta)
       }
-      best.pgs.t2[ss$fold == i] <- t2.pgs
-      t2.fold[ss$fold == i] <- 
+      best.pgs.m2[ss$fold == i] <- m2.pgs
+      m2.fold[ss$fold == i] <- 
         as.numeric(paste0(i, ".", as.integer(split[[2]]) + 1))
-      T2[[i]] <- t2
+      M2[[i]] <- m2
     }
     
     # Stacking pgs
@@ -112,10 +112,10 @@ xp.lassosum.validate <- function(list.of.lpipe, # by fold
               best.lambda=v$best.lambda, 
               best.s=v$best.s)
   if(pseudovalidation) tab$best.pgs.pv <- best.pgs.pv
-  if(Type2) {
-    tab$t2.fold <- t2.fold
-    tab$best.pgs.t2 <- best.pgs.t2
-    tab$best.beta.t2 <- T2.beta
+  if(Method2) {
+    tab$m2.fold <- m2.fold
+    tab$best.pgs.m2 <- best.pgs.m2
+    tab$best.beta.m2 <- M2.beta
   }
 
   if(details) {
@@ -127,7 +127,7 @@ xp.lassosum.validate <- function(list.of.lpipe, # by fold
     attr(tab, "lassosum") <- l
     
     if(pseudovalidation) attr(tab, "pseudovalidate") <- pv
-    if(Type2) attr(tab, "Type2") <- T2
+    if(Method2) attr(tab, "Method2") <- M2
   } 
 
   return(tab)

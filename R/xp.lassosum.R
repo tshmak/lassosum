@@ -1,7 +1,7 @@
 xp.lassosum <- function(xp.plink.linear, 
                         LDblocks=xp.plink.linear$chr, 
                         pseudovalidation=FALSE,
-                        Type2=TRUE, 
+                        Method2=TRUE, 
                         scale=TRUE, 
                         ref.bfile=NULL, 
                         destandardize=FALSE, 
@@ -23,7 +23,7 @@ xp.lassosum <- function(xp.plink.linear,
   #' @param xp.plink.linear An object from xp.plink.linear()
   #' @param LDblocks LD blocks. See \code{\link{lassosum.pipeline}}
   #' @param pseudovalidation Should pseudovalidation be performed on each fold?
-  #' @param Type2 Should Type 2 cross-prediction performed on each fold?
+  #' @param Method2 Should Method 2 cross-prediction performed on each fold?
   #' @param scale Should PGS be standardized before stacking?
   #' @param ref.bfile bfile of reference panel (if different from that used in \code{xp.plink.linear})
   #' @param destandardize Should coefficients be destandardized
@@ -96,8 +96,8 @@ xp.lassosum <- function(xp.plink.linear,
       nfolds <- length(ss$cor)
       l <- list()
       pv <- list()
-      t2 <- list()
-      best.pgs.t2 <- rep(NA, ss$n)
+      m2 <- list()
+      best.pgs.m2 <- rep(NA, ss$n)
       test.bfile <- ss$bfile
       for(i in 1:nfolds) {
         # i <- 1
@@ -147,7 +147,7 @@ xp.lassosum <- function(xp.plink.linear,
   if(is.list) ss <- ss[[1]]
   
   # Get results 
-  result <- xp.lassosum.validate(l, ss, Type2=Type2, 
+  result <- xp.lassosum.validate(l, ss, Method2=Method2, 
     pseudovalidation=pseudovalidation, scale=scale, plot=plot, 
     validate.function=validate.function, cluster=cluster, 
     trace=trace-1, details=details)

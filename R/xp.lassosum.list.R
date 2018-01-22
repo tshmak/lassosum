@@ -5,7 +5,7 @@ xp.lassosum.list <- function(xp.plink.linear,
   #' @keywords internal
 
   ss.list <- xp.plink.linear 
-  best.pgs.t2 <- rep(NA, ss.list[[1]]$n)
+  best.pgs.m2 <- rep(NA, ss.list[[1]]$n)
   
   # Checks 
   n <- ss.list[[1]]$n

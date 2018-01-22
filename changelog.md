@@ -26,3 +26,11 @@
 * renames hg19 LD region files
 * adds hg38 LD region files (lifted over from the hg19 ones)
 
+## v0.2.5
+* Bug fix for `lassosum.pipeline()` in parsing LDblocks when given as a vector of factors
+* Bug fix for `pgs()` when `extract` is specified 
+
+## v0.3.0 
+* Adds function for cross-prediction [link]()
+* Allows multiple bfiles in many functions 
+

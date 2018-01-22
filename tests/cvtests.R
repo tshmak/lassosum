@@ -12,7 +12,7 @@
 # ss <- xp.plink.linear(bfile=.bfile, nfolds=nfolds, pheno=pheno)
 # 
 # ld <- fread("../tutorial/data/Berisa.2015.EUR.bed")
-# xp <- xp.lassosum(ss, LDblocks=ld, details=TRUE, Type2=TRUE)
+# xp <- xp.lassosum(ss, LDblocks=ld, details=TRUE, Method2=TRUE)
 # v <- attr(xp, "validate")
 # beta <- xp.beta(ss, xp, save="cvtests.pinv")
 # beta <- xp.beta(ss, xp, load="cvtests.pinv")

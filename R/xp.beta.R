@@ -1,13 +1,13 @@
 #' @title Get the "overall" beta after cross-prediction
 #' @param xp.plink.linear An object returned from xp.plink.linear()
 #' @param xp.lassosum An object returned from xp.lassosum()
-#' @param type Either the Type1 or Type2 Polygenic Score
+#' @param method Either the Method1 or Method2 Polygenic Score
 #' @param save Save the pseudoinverse (in armadillo binary format)
 #' @param load Load the pseudoinverse
 #' @export
 
 xp.beta <- function(xp.plink.linear, xp.lassosum, 
-                    type=c("Type1", "Type2"), load="", 
+                    method=c("Method1", "Method2"), load="", 
                     save="", 
                     force=FALSE) {
   
@@ -18,7 +18,7 @@ xp.beta <- function(xp.plink.linear, xp.lassosum,
   
   ss <- xp.plink.linear
   l <- xp.lassosum 
-  type <- match.arg(type)
+  method <- match.arg(method)
   
   parsed <- parseselect(ss$bfile, extract=ss$extract, keep=ss$keep)
   
@@ -54,10 +54,10 @@ xp.beta <- function(xp.plink.linear, xp.lassosum,
   
   bedfile <- paste0(ss$bfile, ".bed")
   
-  if(type == "Type1") {
+  if(method == "Method1") {
     pred <- l$best.pgs
-  } else if(type == "Type2") {
-    pred <- l$best.pgs.t2
+  } else if(method == "Method2") {
+    pred <- l$best.pgs.m2
   }
   
 
