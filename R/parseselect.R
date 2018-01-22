@@ -14,7 +14,6 @@
 #' @param keep samples to keep
 #' @param remove samples to remove
 #' @param chr a vector of chromosomes
-#' @keywords internal
 #' @export
 parseselect <- function(bfile, extract=NULL, exclude=NULL, 
                         keep=NULL, remove=NULL, chr=NULL, 
@@ -78,7 +77,7 @@ parseselect <- function(bfile, extract=NULL, exclude=NULL,
       }
       if(is.vector(exclude)) {
         exclude <- as.character(exclude)
-        if(!exists("bim")) bim <- read.table2(bimfile)
+        if(is.null(bim)) bim <- read.table2(bimfile)
         exclude <- bim$V2 %in% exclude
       } else {
         stop("I don't know what to do with this type of input for exclude")
@@ -98,7 +97,7 @@ parseselect <- function(bfile, extract=NULL, exclude=NULL,
     stopifnot(is.vector(chr))
     chr <- as.character(chr)
     
-    if(!exists("bim")) bim <- read.table2(bimfile)
+    if(is.null(bim)) bim <- read.table2(bimfile)
     bimchr <- bim$V1
     bimchr[bimchr==""]
     extract.chr <- bim$V1 %in% chr
@@ -144,7 +143,7 @@ parseselect <- function(bfile, extract=NULL, exclude=NULL,
       }
       if(is.data.frame(remove)) {
         stopifnot(ncol(remove)==2)
-        if(!exists("fam")) fam <- read.table2(famfile)
+        if(is.null(fam)) fam <- read.table2(famfile)
         famID <- paste(fam[,1], fam[,2], sep=".")
         removeID <- paste(remove[,1], remove[,2], sep=".")
         remove <- famID %in% removeID
