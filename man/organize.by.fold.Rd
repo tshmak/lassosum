@@ -9,7 +9,7 @@ organize.by.fold(list.of.list.of.lp)
 }
 \arguments{
 \item{list.of.list.of.lp}{A list of list of \code{lassosum.pipeline} objects
-from the output of \code{xp.lassosum}, when
+from the output of \code{cp.lassosum}, when
 \code{list.of.lpipe.output=TRUE}}
 }
 \description{

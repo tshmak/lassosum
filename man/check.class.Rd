@@ -11,3 +11,4 @@ check.class(obj, class, list.of.class = TRUE)
 Function to check whether obj belongs to class or
 is a list of class (if list.of.class==TRUE)
 }
+\keyword{internal}
