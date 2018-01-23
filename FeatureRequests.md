@@ -7,3 +7,4 @@ the dimension of xp.plink.linear
 4. Allow using summary stats not generated from plink. 
 5. Allow xp not using lassosum results.
 6. Fix installation issue with Mac. 
+7. allow "nomatch" when calling lassosum.pipeline if using the same ref.bfile, but !is.null(extract) in cp.lassosum

@@ -124,7 +124,7 @@ cp.lassosum.validate <- function(list.of.lpipe, # by fold
       paste("best.beta represents the best.beta in the first fold, ", 
             "selected using the best lambda and s from validation.")
 
-    attr(tab, "lassosum") <- l
+    attr(tab, "lpipes") <- l
     
     if(pseudovalidation) attr(tab, "pseudovalidate") <- pv
     if(Method2) attr(tab, "Method2") <- M2
