@@ -86,11 +86,14 @@ cp.plink.linear <- function(bfile, nfolds=5, fold=NULL,
   }
   
   cor <- lapply(result, function(x) x$BETA)
+  names(cor) <- paste0("Fold", 1:length(cor))
   chr <- lapply(result, function(x) x$CHR)
   pos <- lapply(result, function(x) x$BP)
   A1 <- lapply(result, function(x) x$A1)
   snp <- lapply(result, function(x) x$SNP)
-  nmiss <- as.data.frame(lapply(result, function(x) x$NMISS))
+  nmiss <- lapply(result, function(x) x$NMISS)
+  names(nmiss) <- paste0("Fold", 1:length(nmiss))
+  # nmiss <- as.data.frame(nmiss)
   
   # Checks 
   stopifnot(all(sapply(chr, function(x) identical(x, chr[[1]]))))
@@ -102,8 +105,12 @@ cp.plink.linear <- function(bfile, nfolds=5, fold=NULL,
   
   if(fast) {
     Cor <- as.data.frame(cor)
+    Nmiss <- as.data.frame(nmiss)
+    weights <- as.matrix(Matrix::Diagonal(x=1/rowSums(Nmiss)) %*% 
+                           as.matrix(Nmiss))
     for(i in 1:nfolds) {
-      cor[[i]] <- rowMeans(Cor[,-i, drop=FALSE])
+      nmiss[[i]] <- rowSums(Nmiss[,-i, drop=FALSE])
+      cor[[i]] <- rowSums(Cor[,-i, drop=FALSE] * weights[,-i,drop=FALSE])
     }
   }
 
