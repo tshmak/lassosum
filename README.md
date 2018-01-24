@@ -14,19 +14,19 @@ Summary statistics are expected to be loaded into memory as a data.frame/data.ta
 ```r
 install.packages(c("RcppArmadillo", "data.table", "Matrix"), dependencies=TRUE)
 ```
-For Windows users, it would be easiest to download the following binary [lassosum_0.3.0.zip](https://github.com/tshmak/lassosum/releases/download/v0.3.0/lassosum_0.3.0.zip) and install using: 
+For Windows users, it would be easiest to download the following binary [lassosum_0.3.1.zip](https://github.com/tshmak/lassosum/releases/download/v0.3.1/lassosum_0.3.1.zip) and install using: 
 ```r
 install.packages("/path/to/downloaded_binary_file.zip", repos=NULL)
 ```
 
-For Mac and Linux users, we recommend downloading the source codes [lassosum_0.3.0.tar.gz](https://github.com/tshmak/lassosum/releases/download/v0.3.0/lassosum_0.3.0.tar.gz) and compiling on your computer. Mac users will need to install [Xcode](https://developer.apple.com/xcode/) to do this. After downloading, type:
+For Mac and Linux users, we recommend downloading the source codes [lassosum_0.3.1.tar.gz](https://github.com/tshmak/lassosum/releases/download/v0.3.1/lassosum_0.3.1.tar.gz) and compiling on your computer. Mac users will need to install [Xcode](https://developer.apple.com/xcode/) to do this. After downloading, type:
 ```r
 install.packages("/path/to/downloaded_source.tar.gz", repos=NULL, type="source")
 ```
 
 If you have `devtools`, you can also type: 
 ```r
-install_github("tshmak/lassosum@v0.3.0")
+install_github("tshmak/lassosum@v0.3.1")
 ```
 or
 ```r

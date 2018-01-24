@@ -5,16 +5,16 @@ cp.meta <- function(xp.plink.linear,
                     exclude.ambiguous=TRUE) {
   #' Function to meta-analyse raw data summary statistics with external
   #' summary statistics
-  #' @param xp.plink.linear An `xp.plink.linear` object
-  #' @param cor,chr,pos,snp,A1,A2 see `lassosumm.pipeline`
+  #' @param xp.plink.linear An \code{xp.plink.linear} object
+  #' @param cor,chr,pos,snp,A1,A2 see \code{lassosumm.pipeline}
   #' @param n Sample size
   #' @param nonmiss A vector of the number of non-missing observations
-  #' @note Either `n` or `nonmiss` must be specified
+  #' @note Either \code{n} or \code{nonmiss} must be specified
   #' @param exclude.ambiguous Should ambiguous SNPs be excluded? 
   #' @details This function performs a meta-analysis of the correlations 
-  #' coefficients as calculated in `xp.plink.linear` and some external 
+  #' coefficients as calculated in \code{xp.plink.linear} and some external 
   #' correlations. If correlation coefficients are not available, these
-  #' can be converted from p-values using `p2cor`. 
+  #' can be converted from p-values using \code{p2cor}. 
   
   pl <- xp.plink.linear
 

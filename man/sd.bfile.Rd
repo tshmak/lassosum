@@ -33,3 +33,4 @@ SNP ids (matching those in the .bim file).
 Missing genotypes are interpreted as having the homozygous A2 alleles in the 
 PLINK files (same as the \code{--fill-missing-a2} option in PLINK).
 }
+\keyword{internal}

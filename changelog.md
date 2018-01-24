@@ -34,3 +34,7 @@
 * Adds function for cross-prediction [link]()
 * Allows multiple bfiles in many functions 
 
+## v0.3.1
+* Adds `cp.meta()` for meta-analysing external summary statistics with results from `cp.plink.linear()`
+* `cp.plink.linear()` will weight correlation by sample size when averaging across folds
+

@@ -10,9 +10,9 @@ cp.meta(xp.plink.linear, cor, chr = NULL, pos = NULL, snp = NULL,
   exclude.ambiguous = TRUE)
 }
 \arguments{
-\item{xp.plink.linear}{An `xp.plink.linear` object}
+\item{xp.plink.linear}{An \code{xp.plink.linear} object}
 
-\item{cor, chr, pos, snp, A1, A2}{see `lassosumm.pipeline`}
+\item{cor, chr, pos, snp, A1, A2}{see \code{lassosumm.pipeline}}
 
 \item{n}{Sample size}
 
@@ -26,10 +26,10 @@ summary statistics
 }
 \details{
 This function performs a meta-analysis of the correlations 
-coefficients as calculated in `xp.plink.linear` and some external 
+coefficients as calculated in \code{xp.plink.linear} and some external 
 correlations. If correlation coefficients are not available, these
-can be converted from p-values using `p2cor`.
+can be converted from p-values using \code{p2cor}.
 }
 \note{
-Either `n` or `nonmiss` must be specified
+Either \code{n} or \code{nonmiss} must be specified
 }

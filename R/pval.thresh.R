@@ -3,8 +3,7 @@ pval.thresh <- function(pvals, p.thresholds, beta, bfile,
                         chr=NULL, 
                         mem.limit=4*10^9, chunks=NULL, cluster=NULL, trace=0) {
   #' Fast way to do p-value thresholding (without looping over the thresholds)
-  #' @export
-  #' 
+  #' @keywords internal
   beta <- as.vector(beta)
   stopifnot(is.vector(pvals) & is.vector(beta))
   stopifnot(length(pvals) == length(beta))

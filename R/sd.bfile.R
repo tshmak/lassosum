@@ -15,7 +15,7 @@
 #' @param chr a vector of chromosomes
 #' @note Missing genotypes are interpreted as having the homozygous A2 alleles in the 
 #' PLINK files (same as the \code{--fill-missing-a2} option in PLINK). 
-#' @export
+#' @keywords internal
 sd.bfile <- function(bfile, keep=NULL, remove=NULL, extract=NULL, exclude=NULL, 
                         chr=NULL,...) {
   

@@ -21,3 +21,4 @@ cp.beta(cp.plink.linear, cp.lassosum, method = c("Method1", "Method2"),
 \value{
 A vector of betas
 }
+\keyword{internal}

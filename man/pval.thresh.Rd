@@ -11,3 +11,4 @@ pval.thresh(pvals, p.thresholds, beta, bfile, keep = NULL, remove = NULL,
 \description{
 Fast way to do p-value thresholding (without looping over the thresholds)
 }
+\keyword{internal}

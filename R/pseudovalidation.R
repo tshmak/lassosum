@@ -20,8 +20,7 @@
 #' \item The number of rows in \code{beta} and the length of \code{cor} should be the same as the number of
 #' SNPs in the bfile after extract/exclude/chr.
 #' }
-
-#' @export
+#' @keywords internal
 pseudovalidation <- function(bfile, beta, cor, sd=NULL, 
                              keep=NULL, extract=NULL, exclude=NULL, remove=NULL, 
                              chr=NULL, cluster=NULL, ...) {

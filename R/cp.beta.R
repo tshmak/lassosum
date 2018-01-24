@@ -4,7 +4,7 @@
 #' @param method Either the Method1 or Method2 Polygenic Score
 #' @param save Save the pseudoinverse (in armadillo binary format)
 #' @param load Load the pseudoinverse
-#' @export
+#' @keywords internal
 
 cp.beta <- function(cp.plink.linear, cp.lassosum, 
                     method=c("Method1", "Method2"), load="", 

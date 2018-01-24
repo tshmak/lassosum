@@ -6,7 +6,7 @@
 #' @param remove samples to remove
 #' @param chr a vector of chromosomes
 #' @param fillmissing Whether to fill missing values with 0
-#' @export
+#' @keywords internal
 
 readbfile <- function(bfile, keep=NULL, extract=NULL, exclude=NULL, remove=NULL, 
                     chr=NULL, fillmissing=F) {

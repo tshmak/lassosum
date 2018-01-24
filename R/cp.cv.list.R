@@ -1,3 +1,4 @@
+#' @title cp.cv for a list of cp.plink.linear objects
 #' @keywords internal
 
 cp.cv.list <- function(list.of.cp.pl, # List of plink.linear
