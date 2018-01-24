@@ -9,6 +9,9 @@
 \arguments{
 \item{...}{\code{lassosum.pipeline} objects, separated by commas}
 }
+\value{
+A \code{lassosum.pipeline} object
+}
 \description{
 Merge a list of lassosum.pipeline objects
 }

@@ -9,3 +9,4 @@ the dimension of xp.plink.linear
 6. Fix installation issue with Mac. 
 7. allow "nomatch" when calling lassosum.pipeline if using the same ref.bfile, but !is.null(extract) in cp.lassosum
 8. Cross-validation currently does unweighted average. What about a weighted average? 
+9. Adds A2 to output from cp.plink.linear

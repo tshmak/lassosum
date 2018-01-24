@@ -23,7 +23,7 @@ cp.lassosum(cp.plink.linear, LDblocks = cp.plink.linear$chr,
 
 \item{scale}{Should PGS be standardized before stacking?}
 
-\item{ref.bfile}{bfile of reference panel (if different from that used in \code{cp.plink.linear})}
+\item{ref.bfile}{bfile of reference panel (if different from that used in \code{\link{cp.plink.linear}})}
 
 \item{destandardize}{Should coefficients be destandardized}
 
@@ -31,7 +31,7 @@ cp.lassosum(cp.plink.linear, LDblocks = cp.plink.linear$chr,
 
 \item{details}{Should a detailed output be given?}
 
-\item{keep.ref}{Participants to keep in the reference panel (see \code{parseselect} for expected input)}
+\item{keep.ref}{Participants to keep in the reference panel (see \code{\link{parseselect}} for expected input)}
 
 \item{exclude.ambiguous}{Should ambiguous SNPs be excluded?}
 
@@ -48,6 +48,19 @@ cp.lassosum(cp.plink.linear, LDblocks = cp.plink.linear$chr,
 \item{list.of.lpipe.input}{A list of lassosum.pipeline organized by fold.}
 
 \item{...}{Other parameters to pass to lassosum.pipeline()}
+}
+\value{
+A \code{cp.lassosum} object with the following elements
+\item{pheno}{The vector of phenotype used for validation}
+\item{fold}{Fold identifier}
+\item{best.pgs}{PGS by Method 1}
+\item{best.beta}{A data.frame of fold-specific beta by Method 1}
+\item{best.lambda}{The best \code{lambda} chosen by Method 1} 
+\item{best.s}{The best \code{s} chosen by Method 1}
+\item{m2.fold}{The fold split used by Method 2}
+\item{best.pgs.m2}{PGS by Method 2}
+\item{best.beta.m2}{A data.frame of fold-specific beta by Method 2}
+\item{split, beta.split}{for internal use}
 }
 \description{
 We assume correlations are pre-calculated for the various 

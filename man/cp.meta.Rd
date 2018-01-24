@@ -5,14 +5,14 @@
 \title{Function to meta-analyse raw data summary statistics with external
 summary statistics}
 \usage{
-cp.meta(xp.plink.linear, cor, chr = NULL, pos = NULL, snp = NULL,
+cp.meta(cp.plink.linear, cor, chr = NULL, pos = NULL, snp = NULL,
   A1 = NULL, A2 = NULL, n = NULL, nonmiss = NULL,
   exclude.ambiguous = TRUE)
 }
 \arguments{
-\item{xp.plink.linear}{An \code{xp.plink.linear} object}
+\item{cp.plink.linear}{An \code{cp.plink.linear} object}
 
-\item{cor, chr, pos, snp, A1, A2}{see \code{lassosumm.pipeline}}
+\item{cor, chr, pos, snp, A1, A2}{see \code{\link{lassosum.pipeline}}}
 
 \item{n}{Sample size}
 
@@ -20,15 +20,18 @@ cp.meta(xp.plink.linear, cor, chr = NULL, pos = NULL, snp = NULL,
 
 \item{exclude.ambiguous}{Should ambiguous SNPs be excluded?}
 }
+\value{
+A \code{\link{cp.plink.linear}} object
+}
 \description{
 Function to meta-analyse raw data summary statistics with external
 summary statistics
 }
 \details{
 This function performs a meta-analysis of the correlations 
-coefficients as calculated in \code{xp.plink.linear} and some external 
+coefficients as calculated in \code{cp.plink.linear} and some external 
 correlations. If correlation coefficients are not available, these
-can be converted from p-values using \code{p2cor}.
+can be converted from p-values using \code{\link{p2cor}}.
 }
 \note{
 Either \code{n} or \code{nonmiss} must be specified

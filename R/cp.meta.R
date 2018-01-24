@@ -1,22 +1,22 @@
-cp.meta <- function(xp.plink.linear, 
+cp.meta <- function(cp.plink.linear, 
                     cor, chr=NULL, pos=NULL, snp=NULL, 
                     A1=NULL, A2=NULL, 
                     n=NULL, nonmiss=NULL,
                     exclude.ambiguous=TRUE) {
   #' Function to meta-analyse raw data summary statistics with external
   #' summary statistics
-  #' @param xp.plink.linear An \code{xp.plink.linear} object
-  #' @param cor,chr,pos,snp,A1,A2 see \code{lassosumm.pipeline}
+  #' @param cp.plink.linear An \code{cp.plink.linear} object
+  #' @param cor,chr,pos,snp,A1,A2 see \code{\link{lassosum.pipeline}}
   #' @param n Sample size
   #' @param nonmiss A vector of the number of non-missing observations
   #' @note Either \code{n} or \code{nonmiss} must be specified
   #' @param exclude.ambiguous Should ambiguous SNPs be excluded? 
   #' @details This function performs a meta-analysis of the correlations 
-  #' coefficients as calculated in \code{xp.plink.linear} and some external 
+  #' coefficients as calculated in \code{cp.plink.linear} and some external 
   #' correlations. If correlation coefficients are not available, these
-  #' can be converted from p-values using \code{p2cor}. 
+  #' can be converted from p-values using \code{\link{p2cor}}. 
   
-  pl <- xp.plink.linear
+  pl <- cp.plink.linear
 
   ref.bim <- read.table2(paste0(pl$bfile, ".bim"))
   ref.bim$V1 <- as.character(sub("^chr", "", ref.bim$V1, ignore.case = T))
@@ -96,5 +96,7 @@ cp.meta <- function(xp.plink.linear,
   # pl$n <- pl$n + n
   pl$p <- sum(ext)
   return(pl)
+  #' @return A \code{\link{cp.plink.linear}} object 
+  
 
 }

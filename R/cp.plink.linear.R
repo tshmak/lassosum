@@ -11,7 +11,7 @@ cp.plink.linear <- function(bfile, nfolds=5, fold=NULL,
   #' @param fold A vector of fold ID
   #' @param pheno A vector of phenotype
   #' @param covar A vector/matrix of covariates
-  #' @param keep,remove,extract,exclude,chr see \code{parseselect}
+  #' @param keep,remove,extract,exclude,chr see \code{\link{parseselect}}
   #' @param force Force
   #' @param fast see details 
   #' @details If fast == TRUE, the summary statistics are calculated for 
@@ -122,5 +122,15 @@ cp.plink.linear <- function(bfile, nfolds=5, fold=NULL,
                 bfile=bfile)
   class(toreturn) <- "cp.plink.linear"
   return(toreturn)
+  #' @return A \code{cp.plink.linear} object with the following elements
+  #' \item{cor}{A list of correlation coefficients by folds}
+  #' \item{chr, pos, A1, snp}{Variant identifier}
+  #' \item{pheno.by.fold}{A list of phenotypes by fold}
+  #' \item{keep}{A logical vector of which sample were included. Alternatively, \code{NULL} means all sample}
+  #' \item{extract}{A logical vector of which variant/SNP were used. Alternatively, \code{NULL} means all variants.} 
+  #' \item{n}{Number of samples used}
+  #' \item{p}{Number of variants included}
+  #' \item{nonmiss}{A list of vectors of number of non-missing samples used by fold}
+  #' \item{bfile}{The bfile used}
 
 }

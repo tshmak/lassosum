@@ -64,4 +64,6 @@ merge.lassosum.pipeline <- function(...) {
   }
   class(lpipe) <- "lassosum.pipeline"
   return(lpipe)
+  #' @return A \code{lassosum.pipeline} object 
+  
 }

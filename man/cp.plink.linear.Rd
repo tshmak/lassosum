@@ -17,11 +17,23 @@ cp.plink.linear(bfile, nfolds = 5, fold = NULL, pheno = NULL,
 
 \item{covar}{A vector/matrix of covariates}
 
-\item{keep, remove, extract, exclude, chr}{see \code{parseselect}}
+\item{keep, remove, extract, exclude, chr}{see \code{\link{parseselect}}}
 
 \item{force}{Force}
 
 \item{fast}{see details}
+}
+\value{
+A \code{cp.plink.linear} object with the following elements
+\item{cor}{A list of correlation coefficients by folds}
+\item{chr, pos, A1, snp}{Variant identifier}
+\item{pheno.by.fold}{A list of phenotypes by fold}
+\item{keep}{A logical vector of which sample were included. Alternatively, \code{NULL} means all sample}
+\item{extract}{A logical vector of which variant/SNP were used. Alternatively, \code{NULL} means all variants.} 
+\item{n}{Number of samples used}
+\item{p}{Number of variants included}
+\item{nonmiss}{A list of vectors of number of non-missing samples used by fold}
+\item{bfile}{The bfile used}
 }
 \details{
 If fast == TRUE, the summary statistics are calculated for 

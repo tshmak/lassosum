@@ -25,11 +25,11 @@ cp.lassosum <- function(cp.plink.linear,
   #' @param pseudovalidation Should pseudovalidation be performed on each fold?
   #' @param Method2 Should Method 2 cross-prediction performed on each fold?
   #' @param scale Should PGS be standardized before stacking?
-  #' @param ref.bfile bfile of reference panel (if different from that used in \code{cp.plink.linear})
+  #' @param ref.bfile bfile of reference panel (if different from that used in \code{\link{cp.plink.linear}})
   #' @param destandardize Should coefficients be destandardized
   #' @param max.ref.bfile.n Maximum number of samples to use in ref.bfile (to improve speed)
   #' @param details Should a detailed output be given?
-  #' @param keep.ref Participants to keep in the reference panel (see \code{parseselect} for expected input) 
+  #' @param keep.ref Participants to keep in the reference panel (see \code{\link{parseselect}} for expected input) 
   #' @param exclude.ambiguous Should ambiguous SNPs be excluded? 
   #' @param validate.function Function for validating polygenic score
   #' @param plot Whether a validation plot should be drawn
@@ -167,5 +167,18 @@ cp.lassosum <- function(cp.plink.linear,
   class(result) <- "cp.lassosum"
 
   return(result)
+  #' @return A \code{cp.lassosum} object with the following elements
+  #' \item{pheno}{The vector of phenotype used for validation}
+  #' \item{fold}{Fold identifier}
+  #' \item{best.pgs}{PGS by Method 1}
+  #' \item{best.beta}{A data.frame of fold-specific beta by Method 1}
+  #' \item{best.lambda}{The best \code{lambda} chosen by Method 1} 
+  #' \item{best.s}{The best \code{s} chosen by Method 1}
+  #' \item{m2.fold}{The fold split used by Method 2}
+  #' \item{best.pgs.m2}{PGS by Method 2}
+  #' \item{best.beta.m2}{A data.frame of fold-specific beta by Method 2}
+  #' \item{split, beta.split}{for internal use}
+
 
 }
+
