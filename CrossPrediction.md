@@ -1,15 +1,15 @@
 Cross prediction using lassosum 
 =======================
   
-Cross prediction is a method for calculating polygenic scores in large cohorts without the use of summary statistics. For details, refer to this [paper](https://www.biorxiv.org/???). 
+Cross prediction is a method for calculating polygenic scores in large cohorts without the use of summary statistics. For details, refer to this [paper](https://www.biorxiv.org/content/early/2018/01/23/252270). 
 
 # Tutorial 
 
-If `lassosum` is not yet installed, refer to the instruction [here](https://github.com/tshmak/lassosum#installation) for installation. If `lassosum` is not already loaded, load it via: 
+If **lassosum** is not yet installed, refer to the instruction [here](https://github.com/tshmak/lassosum#installation) for installation. If **lassosum** is not already loaded, load it via: 
 ```r
 library(lassosum)
 ```
-`lassosum` uses [Plink](https://www.cog-genomics.org/plink2/) to calculate summary statistics. Before the functions that call plink can be used, the link to the plink executable needs to be specified by: 
+**lassosum** uses [Plink](https://www.cog-genomics.org/plink2/) to calculate summary statistics. Before the functions that call plink can be used, the link to the plink executable needs to be specified by: 
 ```r
 options(lassosum.plink='/path/to/plink')
 ```
@@ -51,8 +51,32 @@ lp2 <- cp.lassosum(sumstats2, LDblocks=ld, list.of.lpipe.output=TRUE)
 lp <- organize.by.fold(list(lp1, lp2))
 cp <- cp.lassosum(list.of.lpipe.input=lp)
 ```
+### Running cross-validation using results from cross-prediction
+Method 1 in cross-prediction essentially identifies the best `lambda` and `s` for use with **lassosum**. We can then apply this to the entire dataset. This is the cross-validation procedure in our paper, which can be achieved by running: 
+```r
+cv <- cp.cv(sumstats, cp)
+```
+`sumstats` can be a `list` of `cp.plink.linear` objects if they were obtained separately for different chromosomes. Note that the order of the list should match that given to `cp.lassosum` earlier. Note that `cp.cv` does not calculate summary statistics afresh using the entire data, but simply averages those obtained across the different folds in `cp.lassosum`. This makes it very fast. 
+
 ### Incorporating external summary statistics into cross-prediction 
-Feature under development. Please email me <tshmak@hku.hk> if you want it soon. 
+Suppose external summary statistics are loaded into a `data.frame` called `dat` with the columns `chr`, `pos`, `alt`, `rsid`, `beta`, `p` for chromosomes, position, alternative allele, rsID, beta coefficients, and p-values respectively. We first need to convert the p-values to correlation coefficients using the `p2cor` command: 
+```r
+dat$cor <- p2cor(dat$p, n = 60000, sign=dat$beta)
+```
+where `n = 60000` is the sample size. Assuming `cp.pl` is an object from `cp.plink.linear`, we can then run 
+```r
+merged <- cp.meta(cp.pl, chr=chr, pos=pos, snp=rsid, A1=alt, cor=cor, n=60000)
+```
+to merge it with `cp.pl`. We can then proceed with `merged` as if it were a `cp.plink.linear` object in running, e.g., 
+```r 
+cp <- cp.lassosum(merged, LDblocks=ld)
+```
+Note that not all of the variables `chr`, `pos`, `snp`, `A1`, `A2` need to be specified. At least one of `A1` and `A2` must be specified. Otherwise specify as many of `chr`, `pos`, and `snp` as you need. 
+
+### Using results from PRSice in cross-prediction 
+I will write a function for this if there is demand. 
+
+Please email me <tshmak@hku.hk> for any bug reports, comments, or suggestions. Thanks for using **lassosum**!
 
 
 
