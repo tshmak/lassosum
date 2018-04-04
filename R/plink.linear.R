@@ -58,8 +58,7 @@ plink.linear <- function(bfile, pheno, out=tempfile("lassosum.out"),
   if(!is.null(parsed$keep)) {
     if(is.null(parsed$fam)) parsed$fam <- read.table2(parsed$famfile) 
     tokeep <- tempfile("lassosum")
-    write.table(parsed$fam[parsed$keep,], file=tokeep, 
-                quote=FALSE, row.names = FALSE, col.names=FALSE)
+    write.table2(parsed$fam[parsed$keep,], file=tokeep)
     options$keep <- tokeep
   }
   
@@ -67,8 +66,7 @@ plink.linear <- function(bfile, pheno, out=tempfile("lassosum.out"),
   if(!is.null(parsed$extract)) {
     if(is.null(parsed$bim)) parsed$bim <- read.table2(parsed$bimfile) 
     toextract <- tempfile("lassosum")
-    write.table(parsed$bim[parsed$extract,], file=toextract, 
-                quote=FALSE, row.names = FALSE, col.names=FALSE)
+    write.table2(parsed$bim[parsed$extract,], file=toextract)
     options$extract <- toextract
   }
   
