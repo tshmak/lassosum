@@ -56,7 +56,7 @@ cp.plink.linear <- function(bfile, nfolds=5, fold=NULL,
   } else {
     if(length(pheno) != parsed$n) stop("Length of phenotype vector does not match number of samples")
   }
-
+  
   u <- unique(pheno)
   u.nonNA <- u[!is.na(u)]
   if(all(u %in% c(-9, 0, 1, 2))) {
@@ -64,7 +64,7 @@ cp.plink.linear <- function(bfile, nfolds=5, fold=NULL,
     pheno[pheno==-9] <- NA
     pheno <- pheno - 0.5 # To make it continuous in PLINK
   } else binary <- FALSE
-
+  
   pheno.by.fold <- lapply(1:nfolds, function(i) pheno[fold == i])
   n.phenos <- sapply(pheno.by.fold, function(x) length(unique(x)))
   if(binary) {
@@ -73,7 +73,7 @@ cp.plink.linear <- function(bfile, nfolds=5, fold=NULL,
   }
   
   if(any(n.phenos < 2)) stop("Some of the folds have no variation in the phenotype!")
-
+  
   #### covar ####
   if(!is.null(covar)) {
     if(!is.null(dim(covar))) {
@@ -88,15 +88,20 @@ cp.plink.linear <- function(bfile, nfolds=5, fold=NULL,
   } else {
     covar.by.fold <- NULL
   }
-
+  
   #### Cross-prediction ####
   result <- list()
   for(i in 1:nfolds) {
     if(fast) training <- logical.vector(touse[fold == i], parsed$N) else 
       training <- logical.vector(touse[fold != i], parsed$N)
+    if(!is.null(parsed$keep)) {
+      training2 <- training[parsed$keep]
+    } else {
+      training2 <- training
+    }
     result[[i]] <- plink.linear(bfile=bfile, 
-                                pheno=pheno[training],
-                                covar=covar[training,],
+                                pheno=pheno[training2],
+                                covar=covar[training2,],
                                 keep = training, 
                                 extract= parsed$extract, ...)
   }
@@ -129,14 +134,14 @@ cp.plink.linear <- function(bfile, nfolds=5, fold=NULL,
       cor[[i]] <- rowSums(Cor[,-i, drop=FALSE] * weights[,-i,drop=FALSE])
     }
   }
-
+  
   toreturn <- list(cor=cor, chr=chr, pos=pos, A1=A1, snp=snp, 
-                fold=fold, 
-                pheno.by.fold=pheno.by.fold, 
-                covar=covar.by.fold, 
-                keep=parsed$keep, extract=parsed$extract, 
-                n=parsed$n, p=parsed$p, nonmiss=nmiss, 
-                bfile=bfile)
+                   fold=fold, 
+                   pheno.by.fold=pheno.by.fold, 
+                   covar=covar.by.fold, 
+                   keep=parsed$keep, extract=parsed$extract, 
+                   n=parsed$n, p=parsed$p, nonmiss=nmiss, 
+                   bfile=bfile)
   class(toreturn) <- "cp.plink.linear"
   return(toreturn)
   #' @return A \code{cp.plink.linear} object with the following elements
@@ -150,5 +155,5 @@ cp.plink.linear <- function(bfile, nfolds=5, fold=NULL,
   #' \item{p}{Number of variants included}
   #' \item{nonmiss}{A list of vectors of number of non-missing samples used by fold}
   #' \item{bfile}{The bfile used}
-
+  
 }
