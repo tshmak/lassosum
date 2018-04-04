@@ -39,3 +39,7 @@
 * `cp.plink.linear()` will weight correlation by sample size when averaging across folds
 * A number of unrelated functions are now hidden. 
 * Improved documentation for `cp` functions
+
+## v0.3.2 (in progress)
+* fixes bug in cp.plink.linear covar option
+
