@@ -73,7 +73,22 @@ cp.plink.linear <- function(bfile, nfolds=5, fold=NULL,
   }
   
   if(any(n.phenos < 2)) stop("Some of the folds have no variation in the phenotype!")
-  
+
+  #### covar ####
+  if(!is.null(covar)) {
+    if(!is.null(dim(covar))) {
+      # Matrix or data.frame
+      if(nrow(covar) != parsed$n) stop("Number of rows in covar does not match number of samples")
+      covar <- as.matrix(covar)
+    } else {
+      if(length(covar) != parsed$n) stop("Length of covar does not match number of samples")  
+      covar <- matrix(covar, ncol=1)
+    }
+    covar.by.fold <- lapply(1:nfolds, function(i) covar[fold == i, ])
+  } else {
+    covar.by.fold <- NULL
+  }
+
   #### Cross-prediction ####
   result <- list()
   for(i in 1:nfolds) {
@@ -81,6 +96,7 @@ cp.plink.linear <- function(bfile, nfolds=5, fold=NULL,
       training <- logical.vector(touse[fold != i], parsed$N)
     result[[i]] <- plink.linear(bfile=bfile, 
                                 pheno=pheno[training],
+                                covar=covar[training,],
                                 keep = training, 
                                 extract= parsed$extract, ...)
   }
@@ -117,6 +133,7 @@ cp.plink.linear <- function(bfile, nfolds=5, fold=NULL,
   toreturn <- list(cor=cor, chr=chr, pos=pos, A1=A1, snp=snp, 
                 fold=fold, 
                 pheno.by.fold=pheno.by.fold, 
+                covar=covar.by.fold, 
                 keep=parsed$keep, extract=parsed$extract, 
                 n=parsed$n, p=parsed$p, nonmiss=nmiss, 
                 bfile=bfile)
@@ -126,6 +143,7 @@ cp.plink.linear <- function(bfile, nfolds=5, fold=NULL,
   #' \item{cor}{A list of correlation coefficients by folds}
   #' \item{chr, pos, A1, snp}{Variant identifier}
   #' \item{pheno.by.fold}{A list of phenotypes by fold}
+  #' \item{covar.by.fold}{A list of covariates by fold}
   #' \item{keep}{A logical vector of which sample were included. Alternatively, \code{NULL} means all sample}
   #' \item{extract}{A logical vector of which variant/SNP were used. Alternatively, \code{NULL} means all variants.} 
   #' \item{n}{Number of samples used}
