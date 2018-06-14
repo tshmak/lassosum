@@ -36,6 +36,10 @@ parseselect <- function(bfile, extract=NULL, exclude=NULL,
   stopifnot(file.exists(bimfile))
   stopifnot(file.exists(famfile))
   
+  if(grepl("^~", bfile)) {
+    stop("Don't use '~' as a shortcut for the home directory.")
+  }
+  
   p <- P <- ncol.bfile(bfile)
   n <- N <- nrow.bfile(bfile)
   bim <- NULL
@@ -46,11 +50,15 @@ parseselect <- function(bfile, extract=NULL, exclude=NULL,
     if(is.logical(extract)) {
       stopifnot(length(extract) == P)
     } else {
-      if(is.character(extract) && length(extract) == 1) {
-        ### I'm interpreting this as a filename
-        SNPs <- read.table2(extract)
-        stopifnot(ncol(SNPs)==1)
-        extract <- SNPs[[1]]
+      if(is.null(attr(extract, "not.a.file", exact=T))) {
+        if(is.character(extract) && length(extract) == 1) {
+          ### I'm interpreting this as a filename
+          SNPs <- read.table2(extract)
+          stopifnot(ncol(SNPs)==1)
+          extract <- SNPs[[1]]
+        }
+      } else {
+        attr(extract, "not.a.file") <- NULL
       }
       if(is.vector(extract)) {
         extract <- as.character(extract)
@@ -69,11 +77,15 @@ parseselect <- function(bfile, extract=NULL, exclude=NULL,
     if(is.logical(exclude)) {
       stopifnot(length(exclude) == P)
     } else {
-      if(is.character(exclude) && length(exclude) == 1) {
-        ### I'm interpreting this as a filename
-        SNPs <- read.table2(exclude)
-        stopifnot(ncol(SNPs)==1)
-        exclude <- SNPs[[1]]
+      if(is.null(attr(exclude, "not.a.file", exact=T))) {
+        if(is.character(exclude) && length(exclude) == 1) {
+          ### I'm interpreting this as a filename
+          SNPs <- read.table2(exclude)
+          stopifnot(ncol(SNPs)==1)
+          exclude <- SNPs[[1]]
+        }
+      } else {
+        attr(exclude, "not.a.file") <- NULL
       }
       if(is.vector(exclude)) {
         exclude <- as.character(exclude)
