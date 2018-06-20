@@ -9,6 +9,7 @@
 #' @param chr a vector of chromosomes
 #' @param cluster A \code{cluster} object from the \code{parallel} package. 
 #' For parallel processing. 
+#' @param pbin p-value bins (for \code{\link{pval.thresh}}) 
 #' @note \itemize{
 #' \item Missing genotypes are interpreted as having the homozygous A2 alleles in the 
 #' PLINK files (same as the \code{--fill-missing-a2} option in PLINK). 
@@ -21,7 +22,7 @@
 
 #' @export
 pgs <- function(bfile, weights, keep=NULL, extract=NULL, exclude=NULL, remove=NULL, 
-                   chr=NULL, cluster=NULL) {
+                   chr=NULL, cluster=NULL, pbin=NULL) {
 
   if(length(bfile) > 1) {
     call <- match.call()
@@ -50,7 +51,7 @@ pgs <- function(bfile, weights, keep=NULL, extract=NULL, exclude=NULL, remove=NU
         f <- 1e8 / compute.size
         recommended <- min(ceiling(nclusters / f), nclusters - 1)
         return(pgs(bfile, weights, keep=parsed$keep, extract=parsed$extract, 
-                   cluster=cluster[1:recommended]))
+                   cluster=cluster[1:recommended], pbin=pbin))
       }
       Bfile <- bfile # Define this within the function so that it is copied
                       # to the child processes
@@ -59,7 +60,8 @@ pgs <- function(bfile, weights, keep=NULL, extract=NULL, exclude=NULL, remove=NU
           rep(TRUE, parsed$P)
         touse <- split == i
         toextract[toextract] <- touse
-        return(pgs(Bfile, weights[touse, ], keep=parsed$keep, extract=toextract))
+        return(pgs(Bfile, weights[touse, ], keep=parsed$keep, extract=toextract, 
+                   pbin=pbin))
       })
       result <- l[[1]]
       if(nclusters > 1) for(i in 2:nclusters) result <- result + l[[i]]
@@ -84,9 +86,26 @@ pgs <- function(bfile, weights, keep=NULL, extract=NULL, exclude=NULL, remove=NU
   }
   
   bfile <- paste0(bfile, ".bed")
-  return(multiBed3(bfile, parsed$N, parsed$P, weights,
-                   extract2[[1]], extract2[[2]], 
-                   keepbytes, keepoffset))
+  
+  if(is.null(pbin)) {
+    return(multiBed3(bfile, parsed$N, parsed$P, weights,
+                     extract2[[1]], extract2[[2]], 
+                     keepbytes, keepoffset))
+  } else {
+    if(length(weights) != length(pbin)) {
+      stop("Length of pbin doesn't match length of weights")
+    }
+    nbin <- attr(pbin, "nbin")
+    if(is.null(nbin)) {
+      stop("Perhaps call pval.thresh instead of directly calling pgs()?")
+    }
+    stopifnot(max(pbin) < nbin)
+    return(multiBed4(bfile, parsed$N, parsed$P, 
+                     weights, pbin, nbin, 
+                     extract2[[1]], extract2[[2]], 
+                     keepbytes, keepoffset))
+    
+  }
   #' @return A matrix of Polygenic Scores
   
 }

@@ -151,7 +151,7 @@ lassosum.pipeline <- function(cor, chr=NULL, pos=NULL, snp=NULL,
       stop("keep.test and remove.test should not be specified without test.bfile.")
   }
   parsed.ref <- parseselect(ref.bfile, keep=keep.ref, remove=remove.ref)
-  if(parsed.ref$n > max.ref.bfile.n) {
+  if(parsed.ref$n > max.ref.bfile.n & min(s) < 1) {
     stop(paste("We don't recommend using such a large sample size",
                paste0("(", parsed.ref$n, ")"), 
                "for the reference panel as it can be slow.", 
@@ -249,7 +249,7 @@ lassosum.pipeline <- function(cor, chr=NULL, pos=NULL, snp=NULL,
       # Assumes base 1 for the 3rd column of LDblocks (like normal bed files)
     }
   } else {
-    # split <- ref.bim$V1[ref.extract]
+    split <- ref.bim$V1[ref.extract]
   }
 
   ### Number of different s values to try ###

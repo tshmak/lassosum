@@ -27,6 +27,10 @@ multiBed3 <- function(fileName, N, P, input, col_skip_pos, col_skip, keepbytes, 
     .Call('_lassosum_multiBed3', PACKAGE = 'lassosum', fileName, N, P, input, col_skip_pos, col_skip, keepbytes, keepoffset)
 }
 
+multiBed4 <- function(fileName, N, P, weights, pbin, nbin, col_skip_pos, col_skip, keepbytes, keepoffset) {
+    .Call('_lassosum_multiBed4', PACKAGE = 'lassosum', fileName, N, P, weights, pbin, nbin, col_skip_pos, col_skip, keepbytes, keepoffset)
+}
+
 #' Performs elnet
 #'
 #' @param lambda1 lambda

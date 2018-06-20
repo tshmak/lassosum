@@ -76,6 +76,45 @@ RcppExport SEXP _lassosum_multiBed3(SEXP fileNameSEXP, SEXP NSEXP, SEXP PSEXP, S
     UNPROTECT(1);
     return rcpp_result_gen;
 }
+// multiBed4
+arma::mat multiBed4(const std::string fileName, int N, int P, const arma::vec weights, arma::Col<int> pbin, int nbin, const arma::Col<int> col_skip_pos, const arma::Col<int> col_skip, const arma::Col<int> keepbytes, const arma::Col<int> keepoffset);
+static SEXP _lassosum_multiBed4_try(SEXP fileNameSEXP, SEXP NSEXP, SEXP PSEXP, SEXP weightsSEXP, SEXP pbinSEXP, SEXP nbinSEXP, SEXP col_skip_posSEXP, SEXP col_skipSEXP, SEXP keepbytesSEXP, SEXP keepoffsetSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::traits::input_parameter< const std::string >::type fileName(fileNameSEXP);
+    Rcpp::traits::input_parameter< int >::type N(NSEXP);
+    Rcpp::traits::input_parameter< int >::type P(PSEXP);
+    Rcpp::traits::input_parameter< const arma::vec >::type weights(weightsSEXP);
+    Rcpp::traits::input_parameter< arma::Col<int> >::type pbin(pbinSEXP);
+    Rcpp::traits::input_parameter< int >::type nbin(nbinSEXP);
+    Rcpp::traits::input_parameter< const arma::Col<int> >::type col_skip_pos(col_skip_posSEXP);
+    Rcpp::traits::input_parameter< const arma::Col<int> >::type col_skip(col_skipSEXP);
+    Rcpp::traits::input_parameter< const arma::Col<int> >::type keepbytes(keepbytesSEXP);
+    Rcpp::traits::input_parameter< const arma::Col<int> >::type keepoffset(keepoffsetSEXP);
+    rcpp_result_gen = Rcpp::wrap(multiBed4(fileName, N, P, weights, pbin, nbin, col_skip_pos, col_skip, keepbytes, keepoffset));
+    return rcpp_result_gen;
+END_RCPP_RETURN_ERROR
+}
+RcppExport SEXP _lassosum_multiBed4(SEXP fileNameSEXP, SEXP NSEXP, SEXP PSEXP, SEXP weightsSEXP, SEXP pbinSEXP, SEXP nbinSEXP, SEXP col_skip_posSEXP, SEXP col_skipSEXP, SEXP keepbytesSEXP, SEXP keepoffsetSEXP) {
+    SEXP rcpp_result_gen;
+    {
+        Rcpp::RNGScope rcpp_rngScope_gen;
+        rcpp_result_gen = PROTECT(_lassosum_multiBed4_try(fileNameSEXP, NSEXP, PSEXP, weightsSEXP, pbinSEXP, nbinSEXP, col_skip_posSEXP, col_skipSEXP, keepbytesSEXP, keepoffsetSEXP));
+    }
+    Rboolean rcpp_isInterrupt_gen = Rf_inherits(rcpp_result_gen, "interrupted-error");
+    if (rcpp_isInterrupt_gen) {
+        UNPROTECT(1);
+        Rf_onintr();
+    }
+    Rboolean rcpp_isError_gen = Rf_inherits(rcpp_result_gen, "try-error");
+    if (rcpp_isError_gen) {
+        SEXP rcpp_msgSEXP_gen = Rf_asChar(rcpp_result_gen);
+        UNPROTECT(1);
+        Rf_error(CHAR(rcpp_msgSEXP_gen));
+    }
+    UNPROTECT(1);
+    return rcpp_result_gen;
+}
 // elnet
 int elnet(double lambda1, double lambda2, const arma::vec& diag, const arma::mat& X, const arma::vec& r, double thr, arma::vec& x, arma::vec& yhat, int trace, int maxiter);
 static SEXP _lassosum_elnet_try(SEXP lambda1SEXP, SEXP lambda2SEXP, SEXP diagSEXP, SEXP XSEXP, SEXP rSEXP, SEXP thrSEXP, SEXP xSEXP, SEXP yhatSEXP, SEXP traceSEXP, SEXP maxiterSEXP) {
@@ -315,6 +354,7 @@ static int _lassosum_RcppExport_validate(const char* sig) {
     if (signatures.empty()) {
         signatures.insert("int(*countlines)(const char*)");
         signatures.insert("arma::mat(*multiBed3)(const std::string,int,int,const arma::mat,arma::Col<int>,arma::Col<int>,arma::Col<int>,arma::Col<int>)");
+        signatures.insert("arma::mat(*multiBed4)(const std::string,int,int,const arma::vec,arma::Col<int>,int,const arma::Col<int>,const arma::Col<int>,const arma::Col<int>,const arma::Col<int>)");
         signatures.insert("int(*elnet)(double,double,const arma::vec&,const arma::mat&,const arma::vec&,double,arma::vec&,arma::vec&,int,int)");
         signatures.insert("int(*repelnet)(double,double,arma::vec&,arma::mat&,arma::vec&,double,arma::vec&,arma::vec&,int,int,arma::Col<int>&,arma::Col<int>&)");
         signatures.insert("arma::mat(*genotypeMatrix)(const std::string,int,int,arma::Col<int>,arma::Col<int>,arma::Col<int>,arma::Col<int>,const int)");
@@ -329,6 +369,7 @@ static int _lassosum_RcppExport_validate(const char* sig) {
 RcppExport SEXP _lassosum_RcppExport_registerCCallable() { 
     R_RegisterCCallable("lassosum", "_lassosum_countlines", (DL_FUNC)_lassosum_countlines_try);
     R_RegisterCCallable("lassosum", "_lassosum_multiBed3", (DL_FUNC)_lassosum_multiBed3_try);
+    R_RegisterCCallable("lassosum", "_lassosum_multiBed4", (DL_FUNC)_lassosum_multiBed4_try);
     R_RegisterCCallable("lassosum", "_lassosum_elnet", (DL_FUNC)_lassosum_elnet_try);
     R_RegisterCCallable("lassosum", "_lassosum_repelnet", (DL_FUNC)_lassosum_repelnet_try);
     R_RegisterCCallable("lassosum", "_lassosum_genotypeMatrix", (DL_FUNC)_lassosum_genotypeMatrix_try);
@@ -342,6 +383,7 @@ RcppExport SEXP _lassosum_RcppExport_registerCCallable() {
 static const R_CallMethodDef CallEntries[] = {
     {"_lassosum_countlines", (DL_FUNC) &_lassosum_countlines, 1},
     {"_lassosum_multiBed3", (DL_FUNC) &_lassosum_multiBed3, 8},
+    {"_lassosum_multiBed4", (DL_FUNC) &_lassosum_multiBed4, 10},
     {"_lassosum_elnet", (DL_FUNC) &_lassosum_elnet, 10},
     {"_lassosum_repelnet", (DL_FUNC) &_lassosum_repelnet, 12},
     {"_lassosum_genotypeMatrix", (DL_FUNC) &_lassosum_genotypeMatrix, 8},

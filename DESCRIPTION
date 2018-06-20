@@ -19,6 +19,7 @@ Imports:
 Suggests:
     glmnet, 
     testthat,
+    devtools, 
     fdrtool,
     knitr,
     rmarkdown
