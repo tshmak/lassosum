@@ -113,6 +113,10 @@ if(exists("attachroot")) {
   if(Sys.info()["sysname"] == "Windows") {
     options(lassosum.plink="D:/PLINK/plink.exe")
   } else {
-    options(lassosum.plink="/home/tshmak/software/plink/v1.90b3.44/plink")
+    if(Sys.info()['nodename'] == "GRC170") {
+      options(lassosum.plink="/home/tshmak/software/plink/v1.90b5.2/plink")
+    } else {
+      options(lassosum.plink="/home/tshmak/software/plink/v1.90b3.44/plink")
+    }
   }
 }
