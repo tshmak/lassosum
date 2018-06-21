@@ -1,0 +1,3 @@
+pgs <- function(...) {
+  UseMethod("pgs")
+}

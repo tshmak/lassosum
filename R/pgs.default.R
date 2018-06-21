@@ -21,7 +21,7 @@
 #' 
 
 #' @export
-pgs <- function(bfile, weights, keep=NULL, extract=NULL, exclude=NULL, remove=NULL, 
+pgs.default <- function(bfile, weights, keep=NULL, extract=NULL, exclude=NULL, remove=NULL, 
                    chr=NULL, cluster=NULL, pbin=NULL) {
 
   if(length(bfile) > 1) {
