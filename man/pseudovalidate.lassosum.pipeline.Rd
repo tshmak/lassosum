@@ -4,7 +4,7 @@
 \alias{pseudovalidate.lassosum.pipeline}
 \title{Function to perform pseudovalidation from a lassosum.pipeline object}
 \usage{
-pseudovalidate.lassosum.pipeline(ls.pipeline, test.bfile = NULL,
+\method{pseudovalidate}{lassosum.pipeline}(ls.pipeline, test.bfile = NULL,
   keep = NULL, remove = NULL, trace = 1, destandardize = F, plot = T,
   exclude.ambiguous = T, cluster = NULL, ...)
 }

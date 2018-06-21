@@ -4,10 +4,11 @@
 \alias{validate.lassosum.pipeline}
 \title{Function to validate output from lassosum.pipeline with external phenotype}
 \usage{
-validate.lassosum.pipeline(ls.pipeline, test.bfile = NULL, keep = NULL,
-  remove = NULL, pheno = NULL, validate.function = function(x, y) cor(x,
-  y, use = "complete"), trace = 1, destandardize = F, plot = T,
-  exclude.ambiguous = T, cluster = NULL, ...)
+\method{validate}{lassosum.pipeline}(ls.pipeline, test.bfile = NULL,
+  keep = NULL, remove = NULL, pheno = NULL,
+  validate.function = function(x, y) cor(x, y, use = "complete"), trace = 1,
+  destandardize = F, plot = T, exclude.ambiguous = T, cluster = NULL,
+  ...)
 }
 \arguments{
 \item{ls.pipeline}{A lassosum.pipeline object}

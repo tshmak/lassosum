@@ -5,8 +5,8 @@
 \title{Fast way to do p-value thresholding (without looping over the thresholds)}
 \usage{
 pval.thresh(pvals, p.thresholds, beta, bfile, keep = NULL, remove = NULL,
-  extract = NULL, exclude = NULL, chr = NULL, mem.limit = 4 * 10^9,
-  chunks = NULL, cluster = NULL, trace = 0)
+  extract = NULL, exclude = NULL, chr = NULL, cluster = NULL,
+  trace = 0)
 }
 \description{
 Fast way to do p-value thresholding (without looping over the thresholds)

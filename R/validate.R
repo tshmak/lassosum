@@ -1,3 +1,4 @@
-pgs <- function(...) {
-  UseMethod("pgs")
+validate <- function(...) {
+  #' @exportMethod 
+  UseMethod("validate")
 }
