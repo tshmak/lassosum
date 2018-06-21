@@ -60,8 +60,11 @@ pgs <- function(bfile, weights, keep=NULL, extract=NULL, exclude=NULL, remove=NU
           rep(TRUE, parsed$P)
         touse <- split == i
         toextract[toextract] <- touse
+        
+        pbin.touse <- pbin[touse]
+        attr(pbin.touse, "nbin") <- attr(pbin, "nbin")
         return(pgs(Bfile, weights[touse, ], keep=parsed$keep, extract=toextract, 
-                   pbin=pbin))
+                   pbin=pbin.touse))
       })
       result <- l[[1]]
       if(nclusters > 1) for(i in 2:nclusters) result <- result + l[[i]]
