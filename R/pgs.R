@@ -1,4 +1,5 @@
 pgs <- function(...) {
-  #' @exportMethod 
+  #' @rdname pgs
+  #' @export 
   UseMethod("pgs")
 }

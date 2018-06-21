@@ -1,4 +1,5 @@
 pseudovalidate <- function(...) {
-  #' @exportMethod 
+  #' @rdname pseudovalidate
+  #' @export
   UseMethod("pseudovalidate")
 }
