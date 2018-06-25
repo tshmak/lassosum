@@ -274,6 +274,7 @@ lassosum.pipeline <- function(cor, chr=NULL, pos=NULL, snp=NULL,
   ss3$cor <- ss3$cor * m.test$rev
   ss3$A1 <- test.bim$V5[m.test$ref.extract]
   ss3$A2 <- test.bim$V6[m.test$ref.extract]
+  ss3$order <- m.test$order
   
   if(any(s == 1)) {
     if(trace) cat("Running lassosum with s=1...\n")
