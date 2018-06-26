@@ -151,7 +151,7 @@ lassosum.pipeline <- function(cor, chr=NULL, pos=NULL, snp=NULL,
       stop("keep.test and remove.test should not be specified without test.bfile.")
   }
   parsed.ref <- parseselect(ref.bfile, keep=keep.ref, remove=remove.ref)
-  if(parsed.ref$n > max.ref.bfile.n & min(s) < 1) {
+  if(parsed.ref$n > max.ref.bfile.n & any(s < 1)) {
     stop(paste("We don't recommend using such a large sample size",
                paste0("(", parsed.ref$n, ")"), 
                "for the reference panel as it can be slow.", 
@@ -257,9 +257,9 @@ lassosum.pipeline <- function(cor, chr=NULL, pos=NULL, snp=NULL,
   
   ### Get beta estimates from lassosum ###
   cor2 <- ss2$cor[sort(m.common$order)]
-  if(trace) cat("Running lassosum ...\n")
   ls <- list()
   if(length(s.minus.1) > 0) {
+    if(trace) cat("Running lassosum ...\n")
     ls <- lapply(s.minus.1, function(s) {
       if(trace) cat("s = ", s, "\n")
       lassosum(cor=cor2, bfile=ref.bfile, 
