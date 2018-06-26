@@ -2,8 +2,8 @@
 % Please edit documentation in R/read.table2.R
 \name{read.table2}
 \alias{read.table2}
-\title{Function to read a text file depending on whether data.table is installed}
+\title{Function to read a text file}
 \usage{
-read.table2(file, header = F)
+read.table2(file, header = F, data.table = F, check.names = TRUE, ...)
 }
 \keyword{internal}
