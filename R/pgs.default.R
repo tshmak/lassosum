@@ -10,6 +10,7 @@
 #' @param cluster A \code{cluster} object from the \code{parallel} package. 
 #' For parallel processing. 
 #' @param trace Level of output
+#' @param sparse Assumes sparse weights matrix
 #' @note \itemize{
 #' \item Missing genotypes are interpreted as having the homozygous A2 alleles in the 
 #' PLINK files (same as the \code{--fill-missing-a2} option in PLINK). 
@@ -22,7 +23,7 @@
 #' @rdname pgs
 #' @export
 pgs.default <- function(bfile, weights, keep=NULL, extract=NULL, exclude=NULL, remove=NULL, 
-                   chr=NULL, cluster=NULL, trace=0) {
+                   chr=NULL, cluster=NULL, trace=0, sparse=TRUE) {
 
   if(length(bfile) > 1) {
     call <- match.call()
@@ -51,7 +52,7 @@ pgs.default <- function(bfile, weights, keep=NULL, extract=NULL, exclude=NULL, r
         f <- 1e8 / compute.size
         recommended <- min(ceiling(nclusters / f), nclusters - 1)
         return(pgs(bfile, weights, keep=parsed$keep, extract=parsed$extract, 
-                   cluster=cluster[1:recommended], trace=trace))
+                   cluster=cluster[1:recommended], trace=trace, sparse=sparse))
       }
       Bfile <- bfile # Define this within the function so that it is copied
                       # to the child processes
@@ -62,7 +63,7 @@ pgs.default <- function(bfile, weights, keep=NULL, extract=NULL, exclude=NULL, r
         toextract[toextract] <- touse
         
         return(pgs(Bfile, weights[touse, ], keep=parsed$keep, extract=toextract, 
-                   trace=trace))
+                   trace=trace, sparse=sparse))
       })
       result <- l[[1]]
       if(nclusters > 1) for(i in 2:nclusters) result <- result + l[[i]]
@@ -87,10 +88,21 @@ pgs.default <- function(bfile, weights, keep=NULL, extract=NULL, exclude=NULL, r
   }
   
   bfile <- paste0(bfile, ".bed")
-  
-  return(multiBed3(bfile, parsed$N, parsed$P, weights,
+
+  if(!sparse) {
+    return(multiBed3(bfile, parsed$N, parsed$P, weights,
                      extract2[[1]], extract2[[2]], 
                      keepbytes, keepoffset, trace=trace))
+  } else {
+    ss <- Matrix::summary(Matrix::Matrix(t(weights), sparse = TRUE))
+    nonzeros <- as.integer(table(factor(ss$j, levels=1:nrow(weights))))
+    colpos <- ss$i - 1
+    
+    return(multiBed3sp(bfile, parsed$N, parsed$P, 
+                       beta=ss$x, nonzeros=nonzeros, colpos=colpos, ncol=ncol(weights), 
+                       extract2[[1]], extract2[[2]], 
+                       keepbytes, keepoffset, trace=trace))
+  }
   #' @return A matrix of Polygenic Scores
   
 }

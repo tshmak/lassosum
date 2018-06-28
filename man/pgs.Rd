@@ -9,7 +9,7 @@ pgs(...)
 
 \method{pgs}{default}(bfile, weights, keep = NULL, extract = NULL,
   exclude = NULL, remove = NULL, chr = NULL, cluster = NULL,
-  trace = 0)
+  trace = 0, sparse = TRUE)
 }
 \arguments{
 \item{bfile}{A plink bfile stem}
@@ -30,6 +30,8 @@ pgs(...)
 For parallel processing.}
 
 \item{trace}{Level of output}
+
+\item{sparse}{Assumes sparse weights matrix}
 }
 \value{
 A matrix of Polygenic Scores

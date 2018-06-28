@@ -134,12 +134,12 @@ int countlines(const char* fileName) {
     return number_of_lines;
 }
 
-//' Multiply genotypeMatrix by a constant
+//' Multiply genotypeMatrix by a matrix
 //' 
 //' @param fileName location of bam file
 //' @param N number of subjects 
 //' @param P number of positions 
-//' @param input the constant
+//' @param input the matrix
 //' @param col_skip_pos which variants should we skip
 //' @param col_skip which variants should we skip
 //' @param keepbytes which bytes to keep
@@ -151,7 +151,7 @@ int countlines(const char* fileName) {
 arma::mat multiBed3(const std::string fileName, int N, int P, const arma::mat input, 
 					arma::Col<int> col_skip_pos, arma::Col<int> col_skip, 
 					arma::Col<int> keepbytes, arma::Col<int> keepoffset, 
-					const bool trace) {
+					const int trace) {
 
   std::ifstream bedFile;
   bool snpMajor = openPlinkBinaryFile(fileName, bedFile);
@@ -181,8 +181,8 @@ arma::mat multiBed3(const std::string fileName, int N, int P, const arma::mat in
   double step;
   double Step = 0; 
   if(trace > 0) {
-    chunk = input.n_cols / 10^trace; 
-    step = 100 / (10^trace); 
+    chunk = input.n_rows / pow(10, trace); 
+    step = 100 / pow(10, trace); 
     // Rcout << "Started C++ program \n"; 
   }
   
@@ -201,8 +201,8 @@ arma::mat multiBed3(const std::string fileName, int N, int P, const arma::mat in
 
     if(trace > 0) {
       if (iii % chunk == 0) {
-        Rcout << Step << "% done";
-        double Step = Step + step; 
+        Rcout << Step << "% done\n";
+        Step = Step + step; 
       }
     }
     
@@ -254,6 +254,140 @@ arma::mat multiBed3(const std::string fileName, int N, int P, const arma::mat in
 
   return result;
 }
+
+
+//' Multiply genotypeMatrix by a matrix (sparse)
+//' 
+//' @param fileName location of bam file
+//' @param N number of subjects 
+//' @param P number of positions 
+//' @param input the matrix
+//' @param col_skip_pos which variants should we skip
+//' @param col_skip which variants should we skip
+//' @param keepbytes which bytes to keep
+//' @param keepoffset what is the offset
+//' @return an armadillo genotype matrix 
+//' @keywords internal
+//' 
+// [[Rcpp::export]]
+arma::mat multiBed3sp(const std::string fileName, int N, int P, 
+                      const arma::vec beta, 
+                      const arma::Col<int> nonzeros, 
+                      const arma::Col<int> colpos,
+                      const int ncol, 
+                      arma::Col<int> col_skip_pos, arma::Col<int> col_skip, 
+                      arma::Col<int> keepbytes, arma::Col<int> keepoffset, 
+                      const int trace) {
+  
+  std::ifstream bedFile;
+  bool snpMajor = openPlinkBinaryFile(fileName, bedFile);
+  if (!snpMajor)
+    throw std::runtime_error("We currently have no plans of implementing the "
+                               "individual-major mode. Please use the snp-major "
+                               "format");
+  
+  int i = 0;
+  int ii = 0;
+  int iii = 0;
+  int k = 0;
+  const bool colskip = (col_skip_pos.n_elem > 0);
+  unsigned long long int Nbytes = ceil(N / 4.0);
+  const bool selectrow = (keepbytes.n_elem > 0);
+  int n;
+  if (selectrow)
+    n = keepbytes.n_elem;
+  else
+    n = N;
+  int jj;
+  
+  arma::mat result = arma::mat(n, ncol, arma::fill::zeros);
+  std::bitset<8> b; // Initiate the bit array
+  char ch[Nbytes];
+  
+  int chunk;
+  double step;
+  double Step = 0; 
+  if(trace > 0) {
+    chunk = nonzeros.n_elem / pow(10, trace); 
+    step = 100 / pow(10, trace); 
+    // Rcout << "Started C++ program \n"; 
+  }
+  
+  while (i < P) {
+    Rcpp::checkUserInterrupt();
+    if (colskip) {
+      if (ii < col_skip.n_elem) {
+        if (i == col_skip_pos[ii]) {
+          bedFile.seekg(col_skip[ii] * Nbytes, bedFile.cur);
+          i = i + col_skip[ii];
+          ii++;
+          continue;
+        }
+      }
+    }
+    
+    if(trace > 0) {
+      if (iii % chunk == 0) {
+        Rcout << Step << "% done\n";
+        Step = Step + step; 
+      }
+    }
+    
+    bedFile.read(ch, Nbytes); // Read the information
+    if (!bedFile)
+      throw std::runtime_error(
+          "Problem with the BED file...has the FAM/BIM file been changed?");
+    
+    int j = 0;
+    if (!selectrow) {
+      for (jj = 0; jj < Nbytes; jj++) {
+        b = ch[jj];
+        
+        int c = 0;
+        while (c < 7 && j < N) { // from the original PLINK: 7 because of 8 bits
+          int first = b[c++];
+          int second = b[c++];
+          if(nonzeros[iii] > 0) {
+            if (first == 0) {
+              for (int kk = 0; kk < nonzeros[iii]; kk++) {
+                result(j, colpos[k]) += (2 - second) * beta[k];
+                k++;
+              }
+              k -= nonzeros[iii];
+            }
+          }
+          j++;
+        }
+      }
+    } else {
+      for (jj = 0; jj < keepbytes.n_elem; jj++) {
+        b = ch[keepbytes[jj]];
+        
+        int c = keepoffset[jj];
+        int first = b[c++];
+        int second = b[c];
+        if(nonzeros[iii] > 0) {
+          if (first == 0) {
+            for (int kk = 0; kk < nonzeros[iii]; kk++) {
+              result(j, colpos[k]) += (2 - second) * beta[k];
+              k++;
+            }
+            k -= nonzeros[iii];
+          }
+        }
+        j++;
+      }
+    }
+    
+    k += nonzeros[iii];
+    i++;
+    iii++;
+  }
+  
+  return result;
+}
+
+
 
 //' Performs elnet
 //'

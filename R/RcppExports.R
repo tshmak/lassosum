@@ -10,12 +10,12 @@ countlines <- function(fileName) {
     .Call('_lassosum_countlines', PACKAGE = 'lassosum', fileName)
 }
 
-#' Multiply genotypeMatrix by a constant
+#' Multiply genotypeMatrix by a matrix
 #' 
 #' @param fileName location of bam file
 #' @param N number of subjects 
 #' @param P number of positions 
-#' @param input the constant
+#' @param input the matrix
 #' @param col_skip_pos which variants should we skip
 #' @param col_skip which variants should we skip
 #' @param keepbytes which bytes to keep
@@ -25,6 +25,23 @@ countlines <- function(fileName) {
 #' 
 multiBed3 <- function(fileName, N, P, input, col_skip_pos, col_skip, keepbytes, keepoffset, trace) {
     .Call('_lassosum_multiBed3', PACKAGE = 'lassosum', fileName, N, P, input, col_skip_pos, col_skip, keepbytes, keepoffset, trace)
+}
+
+#' Multiply genotypeMatrix by a matrix (sparse)
+#' 
+#' @param fileName location of bam file
+#' @param N number of subjects 
+#' @param P number of positions 
+#' @param input the matrix
+#' @param col_skip_pos which variants should we skip
+#' @param col_skip which variants should we skip
+#' @param keepbytes which bytes to keep
+#' @param keepoffset what is the offset
+#' @return an armadillo genotype matrix 
+#' @keywords internal
+#' 
+multiBed3sp <- function(fileName, N, P, beta, nonzeros, colpos, ncol, col_skip_pos, col_skip, keepbytes, keepoffset, trace) {
+    .Call('_lassosum_multiBed3sp', PACKAGE = 'lassosum', fileName, N, P, beta, nonzeros, colpos, ncol, col_skip_pos, col_skip, keepbytes, keepoffset, trace)
 }
 
 #' Performs elnet
