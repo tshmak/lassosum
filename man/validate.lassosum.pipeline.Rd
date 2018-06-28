@@ -5,7 +5,7 @@
 \title{Function to validate output from lassosum.pipeline with external phenotype}
 \usage{
 \method{validate}{lassosum.pipeline}(ls.pipeline, test.bfile = NULL,
-  keep = NULL, remove = NULL, pheno = NULL,
+  keep = NULL, remove = NULL, pheno = NULL, covar = NULL,
   validate.function = function(x, y) cor(x, y, use = "complete"), trace = 1,
   destandardize = F, plot = T, exclude.ambiguous = T, cluster = NULL,
   ...)
@@ -20,6 +20,8 @@
 \item{remove}{Participants to remove}
 
 \item{pheno}{A vector of phenotype}
+
+\item{covar}{A matrix of covariates}
 
 \item{validate.function}{Function with which to perform validation}
 

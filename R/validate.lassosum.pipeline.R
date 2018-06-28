@@ -1,5 +1,6 @@
 validate.lassosum.pipeline <- function(ls.pipeline, test.bfile=NULL, 
-                              keep=NULL, remove=NULL, pheno=NULL, 
+                              keep=NULL, remove=NULL, 
+                              pheno=NULL, covar=NULL, 
                               validate.function=function(x, y) 
                                 cor(x, y, use="complete"),
                               trace=1, 
@@ -13,6 +14,7 @@ validate.lassosum.pipeline <- function(ls.pipeline, test.bfile=NULL,
   #' @param keep Participants to keep (see \code{\link{lassosum}} for more details)
   #' @param remove Participants to remove
   #' @param pheno A vector of phenotype
+  #' @param covar A matrix of covariates
   #' @param validate.function Function with which to perform validation
   #' @param trace Controls amount of output
   #' @param destandardize Should coefficients from \code{\link{lassosum}} be 
@@ -113,6 +115,16 @@ validate.lassosum.pipeline <- function(ls.pipeline, test.bfile=NULL,
   ss <- rep(ls.pipeline$s, rep(length(ls.pipeline$lambda), length(ls.pipeline$s)))
   PGS <- do.call("cbind", results$pgs)
 
+  ### covar ### 
+  if(!is.null(covar)) {
+    if(is.vector(covar)) covar <- matrix(covar, ncol=1)
+    stopifnot(nrow(covar) == parsed.test$n) 
+    for(i in ncol(PGS)) {
+      PGS[,i] <- residuals(lm(PGS[,i] ~ ., data=covar))
+    }
+  }
+  
+  ### Validate (cont) ###
   suppressWarnings(cors <- as.vector(
     apply(PGS, MARGIN = 2, FUN=validate.function, pheno)))
   if(is.function(validate.function)) {
