@@ -9,6 +9,7 @@
 #' @param chr a vector of chromosomes
 #' @param cluster A \code{cluster} object from the \code{parallel} package. 
 #' For parallel processing. 
+#' @param trace Level of output
 #' @note \itemize{
 #' \item Missing genotypes are interpreted as having the homozygous A2 alleles in the 
 #' PLINK files (same as the \code{--fill-missing-a2} option in PLINK). 
@@ -21,7 +22,7 @@
 #' @rdname pgs
 #' @export
 pgs.default <- function(bfile, weights, keep=NULL, extract=NULL, exclude=NULL, remove=NULL, 
-                   chr=NULL, cluster=NULL) {
+                   chr=NULL, cluster=NULL, trace=0) {
 
   if(length(bfile) > 1) {
     call <- match.call()
@@ -50,7 +51,7 @@ pgs.default <- function(bfile, weights, keep=NULL, extract=NULL, exclude=NULL, r
         f <- 1e8 / compute.size
         recommended <- min(ceiling(nclusters / f), nclusters - 1)
         return(pgs(bfile, weights, keep=parsed$keep, extract=parsed$extract, 
-                   cluster=cluster[1:recommended]))
+                   cluster=cluster[1:recommended], trace=trace))
       }
       Bfile <- bfile # Define this within the function so that it is copied
                       # to the child processes
@@ -60,7 +61,8 @@ pgs.default <- function(bfile, weights, keep=NULL, extract=NULL, exclude=NULL, r
         touse <- split == i
         toextract[toextract] <- touse
         
-        return(pgs(Bfile, weights[touse, ], keep=parsed$keep, extract=toextract))
+        return(pgs(Bfile, weights[touse, ], keep=parsed$keep, extract=toextract, 
+                   trace=trace))
       })
       result <- l[[1]]
       if(nclusters > 1) for(i in 2:nclusters) result <- result + l[[i]]
@@ -88,7 +90,7 @@ pgs.default <- function(bfile, weights, keep=NULL, extract=NULL, exclude=NULL, r
   
   return(multiBed3(bfile, parsed$N, parsed$P, weights,
                      extract2[[1]], extract2[[2]], 
-                     keepbytes, keepoffset))
+                     keepbytes, keepoffset, trace=trace > 0))
   #' @return A matrix of Polygenic Scores
   
 }

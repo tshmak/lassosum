@@ -8,7 +8,8 @@
 pgs(...)
 
 \method{pgs}{default}(bfile, weights, keep = NULL, extract = NULL,
-  exclude = NULL, remove = NULL, chr = NULL, cluster = NULL)
+  exclude = NULL, remove = NULL, chr = NULL, cluster = NULL,
+  trace = 0)
 }
 \arguments{
 \item{bfile}{A plink bfile stem}
@@ -27,6 +28,8 @@ pgs(...)
 
 \item{cluster}{A \code{cluster} object from the \code{parallel} package. 
 For parallel processing.}
+
+\item{trace}{Level of output}
 }
 \value{
 A matrix of Polygenic Scores

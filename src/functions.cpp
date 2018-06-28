@@ -150,7 +150,8 @@ int countlines(const char* fileName) {
 // [[Rcpp::export]]
 arma::mat multiBed3(const std::string fileName, int N, int P, const arma::mat input, 
 					arma::Col<int> col_skip_pos, arma::Col<int> col_skip, 
-					arma::Col<int> keepbytes, arma::Col<int> keepoffset) {
+					arma::Col<int> keepbytes, arma::Col<int> keepoffset, 
+					const bool trace) {
 
   std::ifstream bedFile;
   bool snpMajor = openPlinkBinaryFile(fileName, bedFile);
@@ -175,6 +176,10 @@ arma::mat multiBed3(const std::string fileName, int N, int P, const arma::mat in
   arma::mat result = arma::mat(n, input.n_cols, arma::fill::zeros);
   std::bitset<8> b; // Initiate the bit array
   char ch[Nbytes];
+  
+  if(trace) {
+    Rcout << "Started C++ program\n"; 
+  }
 
   while (i < P) {
     Rcpp::checkUserInterrupt();
