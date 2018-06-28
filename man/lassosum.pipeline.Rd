@@ -9,8 +9,8 @@ lassosum.pipeline(cor, chr = NULL, pos = NULL, snp = NULL, A1 = NULL,
   lambda = exp(seq(log(0.001), log(0.1), length.out = 20)), s = c(0.2, 0.5,
   0.9, 1), destandardize = F, trace = 1, exclude.ambiguous = TRUE,
   keep.ref = NULL, remove.ref = NULL, keep.test = NULL,
-  remove.test = NULL, cluster = NULL, max.ref.bfile.n = 20000,
-  nomatch = FALSE, ...)
+  remove.test = NULL, sample = NULL, cluster = NULL,
+  max.ref.bfile.n = 20000, nomatch = FALSE, ...)
 }
 \arguments{
 \item{cor}{A vector of SNP-wise correlations with phenotype
@@ -49,6 +49,8 @@ destandardized using test dataset standard deviations before being returned?}
 \item{keep.test}{Participants to keep from the testing dataset (see \code{\link{parseselect}})}
 
 \item{remove.test}{Participants to remove from the testing dataset (see \code{\link{parseselect}})}
+
+\item{sample}{Sample size of the random sample taken of ref.bfile}
 
 \item{cluster}{A \code{cluster} object from the \code{parallel} package for parallel computing}
 

@@ -9,6 +9,7 @@ lassosum.pipeline <- function(cor, chr=NULL, pos=NULL, snp=NULL,
                               exclude.ambiguous=TRUE, 
                               keep.ref=NULL, remove.ref=NULL, 
                               keep.test=NULL, remove.test=NULL, 
+                              sample=NULL, 
                               cluster=NULL, 
                               max.ref.bfile.n=20000, 
                               nomatch=FALSE, 
@@ -34,6 +35,7 @@ lassosum.pipeline <- function(cor, chr=NULL, pos=NULL, snp=NULL,
   #' @param keep.ref Participants to keep from the reference panel (see \code{\link{parseselect}})
   #' @param remove.ref Participants to remove from the reference panel(see \code{\link{parseselect}})
   #' @param keep.test Participants to keep from the testing dataset (see \code{\link{parseselect}})
+  #' @param sample Sample size of the random sample taken of ref.bfile 
   #' @param remove.test Participants to remove from the testing dataset (see \code{\link{parseselect}})
   #' @param cluster A \code{cluster} object from the \code{parallel} package for parallel computing
   #' @param max.ref.bfile.n The maximum sample size allowed in the reference panel
@@ -145,20 +147,34 @@ lassosum.pipeline <- function(cor, chr=NULL, pos=NULL, snp=NULL,
   s <- sort(unique(s))
   stopifnot(all(s > 0 & s <= 1))
   if(length(s) > 10) stop("I wouldn't try that many values of s.")
-  ### Parse keep and remove ###
+  
+  #### Parse keep and remove ####
   if(notest) {
     if(!is.null(keep.test) || !is.null(remove.test)) 
       stop("keep.test and remove.test should not be specified without test.bfile.")
   }
   parsed.ref <- parseselect(ref.bfile, keep=keep.ref, remove=remove.ref)
+
+  #### sample ref.bfile ####
+  if(!is.null(sample)) {
+    if(!(is.numeric(sample) && length(sample) == 1)) {
+      stop("sample should just be the number of samples taken. Use keep.ref/keep.test to select samples. ")
+    }
+    selected <- logical.vector(sample(parsed.ref$n, sample), parsed.ref$n)
+    if(is.null(parsed.ref$keep)) {
+      parsed.ref$keep <- selected
+    } else {
+      parsed.ref$keep[parsed.ref$keep] <- selected
+    }
+    parsed.ref$n <- sample
+  }
+  
   if(parsed.ref$n > max.ref.bfile.n & any(s < 1)) {
     stop(paste("We don't recommend using such a large sample size",
                paste0("(", parsed.ref$n, ")"), 
                "for the reference panel as it can be slow.", 
                "Alter max.ref.bfile.n to proceed anyway (it will be more accurate).",
-               "Alternatively use", 
-               "'keep.ref=logical.vector(sample(nrow.bfile(...), 5000), nrow.bfile(...))'", 
-               "where ... is your reference panel bfile, ",
+               "Alternatively use the sample(5000) option",
                "to take a random sample of 5000."))
   }
   parsed.test <- parseselect(test.bfile, keep=keep.test, remove=remove.test)
