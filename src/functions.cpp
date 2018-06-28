@@ -177,10 +177,15 @@ arma::mat multiBed3(const std::string fileName, int N, int P, const arma::mat in
   std::bitset<8> b; // Initiate the bit array
   char ch[Nbytes];
   
-  if(trace) {
-    Rcout << "Started C++ program\n"; 
+  int chunk;
+  double step;
+  double Step = 0; 
+  if(trace > 0) {
+    chunk = input.n_cols / 10^trace; 
+    step = 100 / (10^trace); 
+    // Rcout << "Started C++ program \n"; 
   }
-
+  
   while (i < P) {
     Rcpp::checkUserInterrupt();
     if (colskip) {
@@ -194,6 +199,13 @@ arma::mat multiBed3(const std::string fileName, int N, int P, const arma::mat in
       }
     }
 
+    if(trace > 0) {
+      if (iii % chunk == 0) {
+        Rcout << Step << "% done";
+        double Step = Step + step; 
+      }
+    }
+    
     bedFile.read(ch, Nbytes); // Read the information
     if (!bedFile)
       throw std::runtime_error(

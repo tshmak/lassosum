@@ -4,7 +4,8 @@
 \alias{multiBed3}
 \title{Multiply genotypeMatrix by a constant}
 \usage{
-multiBed3(fileName, N, P, input, col_skip_pos, col_skip, keepbytes, keepoffset)
+multiBed3(fileName, N, P, input, col_skip_pos, col_skip, keepbytes, keepoffset,
+  trace)
 }
 \arguments{
 \item{fileName}{location of bam file}

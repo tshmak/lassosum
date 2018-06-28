@@ -90,7 +90,7 @@ pgs.default <- function(bfile, weights, keep=NULL, extract=NULL, exclude=NULL, r
   
   return(multiBed3(bfile, parsed$N, parsed$P, weights,
                      extract2[[1]], extract2[[2]], 
-                     keepbytes, keepoffset, trace=trace > 0))
+                     keepbytes, keepoffset, trace=trace))
   #' @return A matrix of Polygenic Scores
   
 }

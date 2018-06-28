@@ -23,8 +23,8 @@ countlines <- function(fileName) {
 #' @return an armadillo genotype matrix 
 #' @keywords internal
 #' 
-multiBed3 <- function(fileName, N, P, input, col_skip_pos, col_skip, keepbytes, keepoffset) {
-    .Call('_lassosum_multiBed3', PACKAGE = 'lassosum', fileName, N, P, input, col_skip_pos, col_skip, keepbytes, keepoffset)
+multiBed3 <- function(fileName, N, P, input, col_skip_pos, col_skip, keepbytes, keepoffset, trace) {
+    .Call('_lassosum_multiBed3', PACKAGE = 'lassosum', fileName, N, P, input, col_skip_pos, col_skip, keepbytes, keepoffset, trace)
 }
 
 #' Performs elnet
