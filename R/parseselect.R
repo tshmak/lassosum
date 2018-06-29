@@ -175,10 +175,12 @@ parseselect <- function(bfile, extract=NULL, exclude=NULL,
   
   if(!export) {
     return(list(keep=keep, extract=extract, 
-                N=N, P=P, n=n, p=p))
+                N=N, P=P, n=n, p=p, bfile=bfile, 
+                bimfile=bimfile, famfile=famfile, 
+                bim=NULL, fam=NULL))
   } else {
     return(list(keep=keep, extract=extract, 
-                N=N, P=P, n=n, p=p, 
+                N=N, P=P, n=n, p=p, bfile=bfile, 
                 bimfile=bimfile, famfile=famfile, 
                 bim=bim, fam=fam))
   }
