@@ -136,9 +136,9 @@ matchpos <- function(tomatch, ref.df,
   merged <- as.data.frame(merged)
 
   alt.col2 <- alt.col + ncol(ref.df) - sum(match.cols < alt.col)
-  ref.col2 <- ref.col + ncol(ref.df) - sum(match.cols < alt.col)
-  ref.alt.col2 <- ref.alt.col
-  ref.ref.col2 <- ref.ref.col
+  ref.col2 <- ref.col + ncol(ref.df) - sum(match.cols < ref.col)
+  ref.alt.col2 <- sum(match.cols > ref.alt.col) + ref.alt.col
+  ref.ref.col2 <- sum(match.cols > ref.ref.col) + ref.ref.col
   
   #### Change everything to capital letters ####
   if(tomatch.alt) merged[,alt.col2] <- toupper(merged[,alt.col2])
