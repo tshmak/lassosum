@@ -44,7 +44,10 @@ pgs.default <- function(bfile, weights, keep=NULL, extract=NULL, exclude=NULL, r
   if(!is.null(cluster)) {
     nclusters <- length(cluster)
     if(nclusters > 1) {
-      split <- ceiling(seq(1/parsed$p, nclusters, length=parsed$p))
+      CW <- cumsum(rowSums(weights != 0))
+      split <- ceiling(CW / max(CW) * nclusters)
+      split[split == 0] <- 1
+      # split <- ceiling(seq(1/parsed$p, nclusters, length=parsed$p))
       t <- table(split)
       compute.size <- as.double(min(t)) * parsed$N * ncol(weights)
       if(compute.size < 1e8) {
