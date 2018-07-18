@@ -4,7 +4,7 @@
 \alias{p2cor}
 \title{Function to convert p-values to correlation via the t-statistic}
 \usage{
-p2cor(p, n, sign = rep(1, length(p)))
+p2cor(p, n, sign = rep(1, length(p)), min.n = max(n, 30)/10)
 }
 \arguments{
 \item{p}{Vector of p-values}
@@ -12,6 +12,8 @@ p2cor(p, n, sign = rep(1, length(p)))
 \item{n}{Sample size}
 
 \item{sign}{A vector giving the sign of the correlations (e.g. the log odds ratios)}
+
+\item{min.n}{The minimum sample size to be considered a valid p-value}
 }
 \value{
 A vector of correlations
