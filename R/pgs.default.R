@@ -50,12 +50,17 @@ pgs.default <- function(bfile, weights, keep=NULL, extract=NULL, exclude=NULL, r
       # split <- ceiling(seq(1/parsed$p, nclusters, length=parsed$p))
       t <- table(split)
       compute.size <- as.double(min(t)) * parsed$N * ncol(weights)
-      if(compute.size < 1e8) {
+      if(compute.size < 1e8 || sum(t > 0) < nclusters) {
         # Too many clusters
-        f <- 1e8 / compute.size
-        recommended <- min(ceiling(nclusters / f), nclusters - 1)
-        return(pgs(bfile, weights, keep=parsed$keep, extract=parsed$extract, 
-                   cluster=cluster[1:recommended], trace=trace, sparse=sparse))
+        if(sum(t > 0) < nclusters) {
+          return(pgs(bfile, weights, keep=parsed$keep, extract=parsed$extract, 
+                     trace=trace, sparse=sparse))
+        } else {
+          f <- 1e8 / compute.size
+          recommended <- min(ceiling(nclusters / f), nclusters - 1)
+          return(pgs(bfile, weights, keep=parsed$keep, extract=parsed$extract, 
+                     cluster=cluster[1:recommended], trace=trace, sparse=sparse))
+        }
       }
       Bfile <- bfile # Define this within the function so that it is copied
                       # to the child processes
