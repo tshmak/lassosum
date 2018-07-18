@@ -40,7 +40,7 @@ Most functions in `lassosum` impute missing genotypes in PLINK bfiles with a hom
 
 ### Tutorial
 
-_If you are using lassosum for __cross prediction__, please refer to the manual [here](https://github.com/tshmak/crosspred/blob/master/CrossPrediction.md)_
+_If you are using lassosum for __cross prediction__, please refer to the manual [here](https://github.com/tshmak/crosspred)_
 
 Otherwise, run the following: 
 ```r
@@ -83,6 +83,9 @@ out <- lassosum.pipeline(cor=cor, chr=ss$Chr, pos=ss$Position,
 
 ### Validation with phenotype ### 
 v <- validate.lassosum.pipeline(out) # Use the 6th column in .fam file in test dataset for test phenotype
+v <- validate.lassosum.pipeline(out, pheno=pheno) # Alternatively, specify the phenotype in the argument
+
+# pheno <- rnorm(nrow.bfile(out$test.bfile)) # If you need a dummy for testing
 
 ### pseudovalidation ###
 # install.packages("fdrtool")
@@ -100,23 +103,11 @@ out <- lassosum.pipeline(cor=cor, chr=ss$Chr, pos=ss$Position,
                          LDblocks = ld, cluster=cl)
 ```
 #### Including covariates in validation
-It is possible to include covariates in validation (though not in pseudovalidation). To do so, you need to define an alternative `validate.function` to pass to `validate.lassosum.pipeline`. For example, suppose you have a matrix of covariates in `covar`. Define, e.g.: 
-```r
-FUN <- function(X, y) {
-  res <- residuals(lm(X ~ covar))
-	return(cor(res, y))
-}
+It is possible to include covariates in validation (though not in pseudovalidation). Simply pass the covariate matrix as an argument to `validate.lassosum.pipeline`. 
+```r 
+v <- validate.lassosum.pipeline(out, covar=covar)
 # covar <- rnorm(nrow.bfile(out$test.bfile)) # If you need a dummy for testing
 ```
-Then run:
-```r
-v <- validate.lassosum.pipeline(out, validate.function=FUN)
-```
-Note that `X` and `y` are not variables in the R environment, but simply arguments in the function. Only `covar` must be defined. Moreover, it must have the same number of rows as the number of participants included in the analysis. 
-
-##### A more technical note
-`validate.lassosum.pipeline` performs `apply(PGS, MARGIN = 2, FUN=validate.function, pheno)))` to create a vector to assess the best PGS in predicting the phenotype. 
-
 
 ### Support
 If there are any questions or problems with running or installing `lassosum`, please do email me at <tshmak@hku.hk>. 

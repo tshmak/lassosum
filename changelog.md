@@ -40,6 +40,19 @@
 * A number of unrelated functions are now hidden. 
 * Improved documentation for `cp` functions
 
-## v0.3.2 (in progress)
+## v0.3.2 
 * fixes bug in cp.plink.linear covar option
+* fixes bug when specifying keep
+* adds `write.table2()` 
+
+## v0.4.0 
+* Removes support for cross-prediction. 
+* Cross-prediction moved to a separate package
+* recast `validate.lassosum.pipeline()`, `pseudovalidate.lassosum.pipeline()`, and `pgs` as S3 methods
+* Adds option for including covariates in `validate.lassosum.pipelin()`
+* bug fix in `matchpos()`
+* Introduces c++ function for `pgs()` with sparse matrix. Used as default. 
+* `p2cor()` will automatically code to NA those correlations with relatively small n.
+* Always uses `data.table::fread()` for reading files
+
 
