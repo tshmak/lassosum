@@ -69,7 +69,7 @@ validate.lassosum.pipeline <- function(ls.pipeline, test.bfile=NULL,
     bim$V1 <- as.character(sub("^chr", "", bim$V1, ignore.case = T))
     
     m <- matchpos(ls.pipeline$sumstats, bim, auto.detect.ref = F, 
-                       ref.chr = "V1", ref.pos="V4", ref.alt="V5", ref.ref="V6", 
+                       ref.chr = "V1", ref.snp="V2", ref.pos="V4", ref.alt="V5", ref.ref="V6", 
                        rm.duplicates = T, exclude.ambiguous = exclude.ambiguous, 
                        silent=T)
     
@@ -81,7 +81,8 @@ validate.lassosum.pipeline <- function(ls.pipeline, test.bfile=NULL,
     pgs <- lapply(beta, function(x) pgs(bfile=test.bfile, weights = x, 
                                         extract=m$ref.extract, 
                                         keep=keep, remove=remove, 
-                                        cluster=cluster))
+                                        cluster=cluster, 
+                                        trace=trace-1))
     names(pgs) <- as.character(ls.pipeline$s)
     results <- c(results, list(pgs=pgs))
 
@@ -91,7 +92,8 @@ validate.lassosum.pipeline <- function(ls.pipeline, test.bfile=NULL,
       pgs <- lapply(ls.pipeline$beta, function(x) pgs(bfile=test.bfile, 
                                           weights = x, 
                                           keep=keep, 
-                                          cluster=cluster))
+                                          cluster=cluster, 
+                                          trace=trace-1))
       names(pgs) <- as.character(ls.pipeline$s)
       results <- c(results, list(pgs=pgs))
     } else {
@@ -118,10 +120,12 @@ validate.lassosum.pipeline <- function(ls.pipeline, test.bfile=NULL,
   ### covar ### 
   if(!is.null(covar)) {
     if(is.vector(covar)) covar <- matrix(covar, ncol=1)
+    if(is.matrix(covar)) covar <- as.data.frame(covar)
     stopifnot(nrow(covar) == parsed.test$n) 
     for(i in ncol(PGS)) {
       PGS[,i] <- residuals(lm(PGS[,i] ~ ., data=covar))
     }
+    pheno <- resid(lm(pheno ~ ., data=covar, na.action = na.exclude))
   }
   
   ### Validate (cont) ###

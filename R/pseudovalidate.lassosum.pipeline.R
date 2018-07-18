@@ -65,7 +65,7 @@ pseudovalidate.lassosum.pipeline <- function(ls.pipeline, test.bfile=NULL,
     bim$V1 <- as.character(sub("^chr", "", bim$V1, ignore.case = T))
     
     m <- matchpos(ls.pipeline$sumstats, bim, auto.detect.ref = F, 
-                  ref.chr = "V1", ref.pos="V4", ref.alt="V5", ref.ref="V6", 
+                  ref.chr = "V1", ref.snp="V2", ref.pos="V4", ref.alt="V5", ref.ref="V6", 
                   rm.duplicates = T, exclude.ambiguous = exclude.ambiguous, 
                   silent=T)
     
@@ -76,7 +76,8 @@ pseudovalidate.lassosum.pipeline <- function(ls.pipeline, test.bfile=NULL,
     pgs <- lapply(beta, function(x) pgs(bfile=test.bfile, weights = x, 
                                         extract=toextract, 
                                         keep=keep, remove=remove, 
-                                        cluster=cluster))
+                                        cluster=cluster,
+                                        trace=trace-1))
     names(pgs) <- as.character(ls.pipeline$s)
     results <- c(results, list(pgs=pgs))
     
@@ -87,7 +88,8 @@ pseudovalidate.lassosum.pipeline <- function(ls.pipeline, test.bfile=NULL,
       pgs <- lapply(ls.pipeline$beta, function(x) pgs(bfile=test.bfile, 
                                                       weights = x, 
                                                       keep=keep, 
-                                                      cluster=cluster))
+                                                      cluster=cluster, 
+                                                      trace=trace-1))
       names(pgs) <- as.character(ls.pipeline$s)
       results <- c(results, list(pgs=pgs))
     } else {
