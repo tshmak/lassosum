@@ -48,7 +48,7 @@ library(lassosum)
 setwd(system.file("data", package="lassosum")) # Directory where data and LD region files are stored
 ```
 
-First we read the summary statistics into R, and provide the `bfile` names of the reference panel and the test data. If only the reference panel is provided then only the beta coefficients (no polygenic scores) are calculated. You can then apply these subsequently to a test dataset using `validate.lassosum.pipeline` or `pseudovalidate.lassosum.pipeline`. If no reference panel is provided, then the test data is taken as the reference panel. If no ld region file is provided, then `lassosum` is performed by chromosomes. We recommend you use the appropriate LD regions as defined in [Berisa and Pickrell (2015)](https://academic.oup.com/bioinformatics/article/32/2/283/1743626/Approximately-independent-linkage-disequilibrium) which are also included in our package. 
+First we read the summary statistics into R, and provide the `bfile` names of the reference panel and the test data. If only the reference panel is provided then only the beta coefficients (no polygenic scores) are calculated. You can then apply these subsequently to a test dataset using `validate` or `pseudovalidate`. If no reference panel is provided, then the test data is taken as the reference panel. If no ld region file is provided, then `lassosum` is performed by chromosomes. We recommend you use the appropriate LD regions as defined in [Berisa and Pickrell (2015)](https://academic.oup.com/bioinformatics/article/32/2/283/1743626/Approximately-independent-linkage-disequilibrium) which are also included in our package. 
 
 ```r
 library(data.table)
@@ -82,14 +82,14 @@ out <- lassosum.pipeline(cor=cor, chr=ss$Chr, pos=ss$Position,
                          LDblocks = ld)
 
 ### Validation with phenotype ### 
-v <- validate.lassosum.pipeline(out) # Use the 6th column in .fam file in test dataset for test phenotype
-v <- validate.lassosum.pipeline(out, pheno=pheno) # Alternatively, specify the phenotype in the argument
+v <- validate(out) # Use the 6th column in .fam file in test dataset for test phenotype
+v <- validate(out, pheno=pheno) # Alternatively, specify the phenotype in the argument
 
 # pheno <- rnorm(nrow.bfile(out$test.bfile)) # If you need a dummy for testing
 
 ### pseudovalidation ###
 # install.packages("fdrtool")
-v <- pseudovalidate.lassosum.pipeline(out)
+v <- pseudovalidate(out)
 
 ```
 
@@ -103,9 +103,9 @@ out <- lassosum.pipeline(cor=cor, chr=ss$Chr, pos=ss$Position,
                          LDblocks = ld, cluster=cl)
 ```
 #### Including covariates in validation
-It is possible to include covariates in validation (though not in pseudovalidation). Simply pass the covariate matrix as an argument to `validate.lassosum.pipeline`. 
+It is possible to include covariates in validation (though not in pseudovalidation). Simply pass the covariate matrix as an argument to `validate`. 
 ```r 
-v <- validate.lassosum.pipeline(out, covar=covar)
+v <- validate(out, covar=covar)
 # covar <- rnorm(nrow.bfile(out$test.bfile)) # If you need a dummy for testing
 ```
 
