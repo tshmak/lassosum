@@ -37,7 +37,7 @@ pgs.default <- function(bfile, weights, keep=NULL, extract=NULL, exclude=NULL, r
   
   parsed <- parseselect(bfile, extract=extract, exclude = exclude, 
                         keep=keep, remove=remove, 
-                        chr=chr)
+                        chr=chr, order.important=TRUE)
   if(nrow(weights) != parsed$p) stop("Number of rows in (or vector length of) weights does not match number of selected columns in bfile")
   # stopifnot(length(cor) == parsed$p)
   

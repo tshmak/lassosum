@@ -17,7 +17,7 @@
 #' @export
 parseselect <- function(bfile, extract=NULL, exclude=NULL, 
                         keep=NULL, remove=NULL, chr=NULL, 
-                        export=FALSE) {
+                        export=FALSE, order.important=FALSE) {
 
   #### Introduced for parsing multiple bfiles ####  
   if(length(bfile) > 1) {
@@ -61,9 +61,14 @@ parseselect <- function(bfile, extract=NULL, exclude=NULL,
         attr(extract, "not.a.file") <- NULL
       }
       if(is.vector(extract)) {
-        extract <- as.character(extract)
+        Extract <- as.character(extract)
         bim <- read.table2(bimfile)
-        extract <- bim$V2 %in% extract
+        extract <- bim$V2 %in% Extract
+        if(order.important) {
+          if(!all(bim$V2[extract] == Extract)) {
+            stop("Order of extract SNPs does not match that in .bim file.")
+          }
+        }
       } else {
         stop("I don't know what to do with this type of input for extract")
       }
@@ -136,6 +141,11 @@ parseselect <- function(bfile, extract=NULL, exclude=NULL,
         famID <- paste(fam[,1], fam[,2], sep=".")
         keepID <- paste(keep[,1], keep[,2], sep=".")
         keep <- famID %in% keepID
+        if(order.important) {
+          if(!all(famID[keep] == keepID)) {
+            stop("Order of keep doesn't match that in .fam file")
+          }
+        }
       } else {
         stop("I don't know what to do with this type of input for keep")
       }
