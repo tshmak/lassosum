@@ -55,4 +55,8 @@
 * `p2cor()` will automatically code to NA those correlations with relatively small n.
 * Always uses `data.table::fread()` for reading files
 
+## v0.4.1
+* Bug fix for `matchpos()`
+* `pgs()` stops if keep or extract not in the same order as in .bim/.fam file
+
 
