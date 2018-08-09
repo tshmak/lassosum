@@ -39,9 +39,11 @@ validate.lassosum.pipeline <- function(ls.pipeline, test.bfile=NULL,
   redo <- T
   if(is.null(test.bfile)) {
     test.bfile <- ls.pipeline$test.bfile
-    if(is.null(keep)) keep <- ls.pipeline$keep.test
     redo <- F
   }
+  
+  if(is.null(keep) && test.bfile == ls.pipeline$test.bfile) 
+    keep <- ls.pipeline$keep.test
   
   ### Pheno & covar ### 
   parsed.test <- parseselect(test.bfile, keep=keep, remove=remove)

@@ -24,9 +24,9 @@ validate(...)
 
 \item{remove}{Participants to remove}
 
-\item{pheno}{A vector of phenotype}
+\item{pheno}{A vector of phenotype or a \code{data.frame} with 3 columns, the first 2 columns being headed "FID" and "IID"}
 
-\item{covar}{A matrix of covariates}
+\item{covar}{A matrix of covariates or a \code{data.frame} with 3 or more columns, the first 2 columns being headed "FID" and "IID"}
 
 \item{validate.function}{Function with which to perform validation}
 
