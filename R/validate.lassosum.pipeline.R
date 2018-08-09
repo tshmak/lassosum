@@ -13,8 +13,8 @@ validate.lassosum.pipeline <- function(ls.pipeline, test.bfile=NULL,
   #' @param test.bfile The (\href{https://www.cog-genomics.org/plink2/formats#bed}{PLINK bfile} for the test dataset 
   #' @param keep Participants to keep (see \code{\link{lassosum}} for more details)
   #' @param remove Participants to remove
-  #' @param pheno A vector of phenotype
-  #' @param covar A matrix of covariates
+  #' @param pheno A vector of phenotype or a \code{data.frame} with 3 columns, the first 2 columns being headed "FID" and "IID"
+  #' @param covar A matrix of covariates or a \code{data.frame} with 3 or more columns, the first 2 columns being headed "FID" and "IID"
   #' @param validate.function Function with which to perform validation
   #' @param trace Controls amount of output
   #' @param destandardize Should coefficients from \code{\link{lassosum}} be 
@@ -33,27 +33,35 @@ validate.lassosum.pipeline <- function(ls.pipeline, test.bfile=NULL,
   
   results <- list(lambda=ls.pipeline$lambda, s=ls.pipeline$s)
   
-  if(!is.null(keep) || !is.null(remove)) if(is.null(test.bfile)) 
-    stop("Please specify test.bfile if you specify keep or remove")
+  # if(!is.null(keep) || !is.null(remove)) if(is.null(test.bfile)) 
+  #   stop("Please specify test.bfile if you specify keep or remove")
   
   redo <- T
   if(is.null(test.bfile)) {
     test.bfile <- ls.pipeline$test.bfile
-    keep <- ls.pipeline$keep.test
-    remove <- NULL
+    if(is.null(keep)) keep <- ls.pipeline$keep.test
     redo <- F
   }
   
+  ### Pheno & covar ### 
+  parsed.test <- parseselect(test.bfile, keep=keep, remove=remove)
+  phcovar <- parse.pheno.covar(pheno=pheno, covar=covar, parsed=parsed.test, 
+                               trace=trace)
+  parsed.test <- phcovar$parsed
+  pheno <- phcovar$pheno
+  covar <- phcovar$covar
+  
+  ### Destandardize ### 
   if(destandardize) {
     if(ls.pipeline$destandardized) stop("beta in ls.pipeline already destandardized.")
     sd <- sd.bfile(test.bfile, extract=ls.pipeline$test.extract, 
-                   keep=keep, remove=remove, ...)
+                   keep=parsed.test$keep, ...)
     sd[sd <= 0] <- Inf # Do not want infinite beta's!
     ls.pipeline$beta <- lapply(ls.pipeline$beta, 
                                function(x) as.matrix(Matrix::Diagonal(x=1/sd) %*% x))
     redo <- T
   }
-  
+
   if(redo) {
     ### Input Validation ### 
     extensions <- c(".bed", ".bim", ".fam")
@@ -81,7 +89,7 @@ validate.lassosum.pipeline <- function(ls.pipeline, test.bfile=NULL,
     
     pgs <- lapply(beta, function(x) pgs(bfile=test.bfile, weights = x, 
                                         extract=m$ref.extract, 
-                                        keep=keep, remove=remove, 
+                                        keep=parsed.test$keep, 
                                         cluster=cluster, 
                                         trace=trace-1))
     names(pgs) <- as.character(ls.pipeline$s)
@@ -92,52 +100,48 @@ validate.lassosum.pipeline <- function(ls.pipeline, test.bfile=NULL,
       if(trace) cat("Calculating PGS...\n")
       pgs <- lapply(ls.pipeline$beta, function(x) pgs(bfile=test.bfile, 
                                           weights = x, 
-                                          keep=keep, 
+                                          keep=parsed.test$keep, 
                                           cluster=cluster, 
                                           trace=trace-1))
       names(pgs) <- as.character(ls.pipeline$s)
       results <- c(results, list(pgs=pgs))
-    } else {
+    } else if(is.null(parsed.test$keep)) {
       results <- c(results, list(pgs=ls.pipeline$pgs))
+    } else {
+      pgs <- ls.pipeline$pgs
+      for(i in 1:length(pgs)) {
+        pgs[[i]] <- pgs[[i]][parsed.test$keep, ]
+      }
+      results <- c(results, list(pgs=pgs))
     }
     beta <- ls.pipeline$beta
   } 
 
-  ### Pheno ### 
-  parsed.test <- parseselect(test.bfile, keep=keep, remove=remove)
-  
-  if(!is.null(pheno)) stopifnot(length(pheno) == parsed.test$n) else {
-    fam <- fread(paste0(test.bfile, ".fam"))
-    if(is.null(parsed.test$keep)) pheno <- fam$V6 else 
-      pheno <- fam$V6[parsed.test$keep]
-  }
-  if(sd(pheno, na.rm = TRUE) == 0) stop("There's no variation in phenotype")
-  
-  ### Validate ###
+  ### Prepare PGS ###
   lambdas <- rep(ls.pipeline$lambda, length(ls.pipeline$s))
   ss <- rep(ls.pipeline$s, rep(length(ls.pipeline$lambda), length(ls.pipeline$s)))
   PGS <- do.call("cbind", results$pgs)
 
   ### covar ### 
   if(!is.null(covar)) {
-    if(is.vector(covar)) covar <- matrix(covar, ncol=1)
-    if(is.matrix(covar)) covar <- as.data.frame(covar)
-    stopifnot(nrow(covar) == parsed.test$n) 
     for(i in ncol(PGS)) {
       PGS[,i] <- residuals(lm(PGS[,i] ~ ., data=covar))
     }
-    pheno <- resid(lm(pheno ~ ., data=covar, na.action = na.exclude))
+    stopifnot(nrow(covar) == parsed.test$n) 
+    adj.pheno <- resid(lm(pheno ~ ., data=covar, na.action = na.exclude))
+  } else {
+    adj.pheno <- pheno
   }
   
-  ### Validate (cont) ###
+  ### Validate ###
   suppressWarnings(cors <- as.vector(
-    apply(PGS, MARGIN = 2, FUN=validate.function, pheno)))
+    apply(PGS, MARGIN = 2, FUN=validate.function, adj.pheno)))
   if(is.function(validate.function)) {
     funcname <- deparse(substitute(validate.function))
   } else if(is.character(validate.function)) {
     funcname <- validate.function
   } else {
-    stop("What is validate.function? I can't figure out.")
+    stop("What is being passed to validate.function? I can't figure out.")
   }
 
   cors[is.na(cors)] <- -Inf
