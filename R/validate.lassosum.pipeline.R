@@ -51,8 +51,6 @@ validate.lassosum.pipeline <- function(ls.pipeline, test.bfile=NULL,
   parsed.test <- phcovar$parsed
   pheno <- phcovar$pheno
   covar <- phcovar$covar
-  recal <- !identical(ls.pipeline$test.bfile, test.bfile) || 
-    !identical(parsed.test$keep, ls.pipeline$keep.test)
   
   ### Destandardize ### 
   if(destandardize) {
@@ -90,23 +88,27 @@ validate.lassosum.pipeline <- function(ls.pipeline, test.bfile=NULL,
     results <- c(results, list(pgs=pgs))
 
   } else {
+    recal <- !identical(ls.pipeline$test.bfile, test.bfile) || 
+      !identical(parsed.test$keep, ls.pipeline$keep.test)
     if(is.null(ls.pipeline$pgs) || recal) {
       if(trace) cat("Calculating PGS...\n")
       pgs <- lapply(ls.pipeline$beta, function(x) pgs(bfile=test.bfile, 
                                           weights = x, 
+                                          extract=ls.pipeline$test.extract, 
                                           keep=parsed.test$keep, 
                                           cluster=cluster, 
                                           trace=trace-1))
       names(pgs) <- as.character(ls.pipeline$s)
       results <- c(results, list(pgs=pgs))
-    } else if(is.null(parsed.test$keep)) {
-      results <- c(results, list(pgs=ls.pipeline$pgs))
     } else {
-      pgs <- ls.pipeline$pgs
-      for(i in 1:length(pgs)) {
-        pgs[[i]] <- pgs[[i]][parsed.test$keep, ]
-      }
-      results <- c(results, list(pgs=pgs))
+    # } else if(is.null(parsed.test$keep)) {
+      results <- c(results, list(pgs=ls.pipeline$pgs))
+    # } else {
+    #   pgs <- ls.pipeline$pgs
+    #   for(i in 1:length(pgs)) {
+    #     pgs[[i]] <- pgs[[i]][parsed.test$keep, ]
+    #   }
+    #   results <- c(results, list(pgs=pgs))
     }
     beta <- ls.pipeline$beta
   } 

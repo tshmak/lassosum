@@ -88,14 +88,15 @@ pseudovalidate.lassosum.pipeline <- function(ls.pipeline, test.bfile=NULL,
                                                       trace=trace-1))
       names(pgs) <- as.character(ls.pipeline$s)
       results <- c(results, list(pgs=pgs))
-    } else if(is.null(parsed.test$keep)) {
+    # } else if(is.null(parsed.test$keep)) {
+    } else  {
       results <- c(results, list(pgs=ls.pipeline$pgs))
-    } else {
-      pgs <- ls.pipeline$pgs
-      for(i in 1:length(pgs)) {
-        pgs[[i]] <- pgs[[i]][parsed.test$keep, ]
-      }
-      results <- c(results, list(pgs=pgs))
+    # } else {
+    #   pgs <- ls.pipeline$pgs
+    #   for(i in 1:length(pgs)) {
+    #     pgs[[i]] <- pgs[[i]][parsed.test$keep, ]
+    #   }
+    #   results <- c(results, list(pgs=pgs))
     }
     beta <- ls.pipeline$beta
   } 
