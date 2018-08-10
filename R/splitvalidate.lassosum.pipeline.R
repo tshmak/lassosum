@@ -24,11 +24,12 @@ splitvalidate.lassosum.pipeline <- function(ls.pipeline, test.bfile=NULL,
   if(!is.null(keep) || !is.null(remove)) if(is.null(test.bfile))
     stop("Please specify test.bfile if you specify keep or remove")
   
+  
   redo <- T
   if(is.null(test.bfile)) {
     test.bfile <- ls.pipeline$test.bfile
-    keep <- ls.pipeline$keep.test
-    remove <- NULL
+    if(is.null(keep) && is.null(remove)) 
+      keep <- ls.pipeline$keep.test
     redo <- F
   }
   
@@ -39,7 +40,9 @@ splitvalidate.lassosum.pipeline <- function(ls.pipeline, test.bfile=NULL,
   parsed.test <- phcovar$parsed
   pheno <- phcovar$pheno
   covar <- phcovar$covar
-
+  recal <- !identical(ls.pipeline$test.bfile, test.bfile) || 
+    !identical(parsed.test$keep, ls.pipeline$keep.test)
+  
   ### Split ###
   if(is.null(split)) {
     split <- sample(1:parsed.test$n %% 2 + 1)
