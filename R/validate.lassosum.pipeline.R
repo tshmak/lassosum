@@ -33,17 +33,19 @@ validate.lassosum.pipeline <- function(ls.pipeline, test.bfile=NULL,
   
   results <- list(lambda=ls.pipeline$lambda, s=ls.pipeline$s)
   
-  # if(!is.null(keep) || !is.null(remove)) if(is.null(test.bfile)) 
-  #   stop("Please specify test.bfile if you specify keep or remove")
+  if(!is.null(keep) || !is.null(remove)) if(is.null(test.bfile))
+    stop("Please specify test.bfile if you specify keep or remove")
+  # We actually cannot implement it otherwise, cos the pgs is only calculated in 
+  # ls.pipeline for those in keep.test. So if we now change keep to some other subsets, 
+  # not everyone is available, and so need to be recalculated. 
   
   redo <- T
   if(is.null(test.bfile)) {
     test.bfile <- ls.pipeline$test.bfile
+    keep <- ls.pipeline$keep.test
+    remove <- NULL
     redo <- F
   }
-  
-  if(is.null(keep) && test.bfile == ls.pipeline$test.bfile) 
-    keep <- ls.pipeline$keep.test
   
   ### Pheno & covar ### 
   parsed.test <- parseselect(test.bfile, keep=keep, remove=remove, export=TRUE)
@@ -98,15 +100,9 @@ validate.lassosum.pipeline <- function(ls.pipeline, test.bfile=NULL,
                                           trace=trace-1))
       names(pgs) <- as.character(ls.pipeline$s)
       results <- c(results, list(pgs=pgs))
-    } else if(is.null(parsed.test$keep)) {
-      results <- c(results, list(pgs=ls.pipeline$pgs))
     } else {
-      pgs <- ls.pipeline$pgs
-      for(i in 1:length(pgs)) {
-        pgs[[i]] <- pgs[[i]][parsed.test$keep, ]
-      }
-      results <- c(results, list(pgs=pgs))
-    }
+      results <- c(results, list(pgs=ls.pipeline$pgs))
+    } 
     beta <- ls.pipeline$beta
   } 
 

@@ -21,17 +21,16 @@ splitvalidate.lassosum.pipeline <- function(ls.pipeline, test.bfile=NULL,
   
   results <- list(lambda=ls.pipeline$lambda, s=ls.pipeline$s)
   
-  # if(!is.null(keep) || !is.null(remove)) if(is.null(test.bfile)) 
-  #   stop("Please specify test.bfile if you specify keep or remove")
+  if(!is.null(keep) || !is.null(remove)) if(is.null(test.bfile))
+    stop("Please specify test.bfile if you specify keep or remove")
   
   redo <- T
   if(is.null(test.bfile)) {
     test.bfile <- ls.pipeline$test.bfile
+    keep <- ls.pipeline$keep.test
+    remove <- NULL
     redo <- F
   }
-  
-  if(is.null(keep) && test.bfile == ls.pipeline$test.bfile) 
-    keep <- ls.pipeline$keep.test
   
   ### Pheno & covar ### 
   parsed.test <- parseselect(test.bfile, keep=keep, remove=remove, export=TRUE)
