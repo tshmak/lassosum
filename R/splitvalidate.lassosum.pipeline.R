@@ -46,7 +46,7 @@ splitvalidate.lassosum.pipeline <- function(ls.pipeline, test.bfile=NULL,
     split <- sample(1:parsed.test$n %% 2 + 1)
   } else {
     stopifnot(length(split) == parsed.test$n)
-    stopifnot(all(sort(unique(split)) == 1:max(split)))
+    stopifnot(all(sort(unique(split)) == 1:2))
   }
 
   ### Split-validation ###
@@ -55,7 +55,8 @@ splitvalidate.lassosum.pipeline <- function(ls.pipeline, test.bfile=NULL,
   best.pgs <- pheno * NA
   best.beta <- numeric(0)
   validation.table <- data.frame()
-  for(s in 1:max(split)) {
+  PGS <- list()
+  for(s in 1:2) {
     if(is.null(parsed.test$keep)) {
       keep <- split == s
       pheno2 <- pheno[keep]
@@ -72,10 +73,14 @@ splitvalidate.lassosum.pipeline <- function(ls.pipeline, test.bfile=NULL,
                   test.bfile=test.bfile, trace=trace, ...)
     best.s <- c(best.s, v$best.s)
     best.lambda <- c(best.lambda, v$best.lambda)
-    best.pgs[keep] <- scale(v$best.pgs)
+    PGS[[s]] <- v$pgs
     best.beta <- cbind(best.beta, v$best.beta)
     validation.table <- rbind(validation.table, v$validation.table)
-    best.validation.result <- c(best.validation.result, v$best.validation.result)
+    # best.validation.result <- c(best.validation.result, v$best.validation.result)
+  }
+  S <- v$s; L <- v$lambda
+  for(s in 1:2) {
+    best.pgs[split == 3-s] <- PGS[[3-s]][[which(S == best.s[s])]][,L == best.lambda[s]]
   }
 
   #### Results table ####
