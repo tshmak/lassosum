@@ -41,7 +41,7 @@ validate.lassosum.pipeline <- function(ls.pipeline, test.bfile=NULL,
     test.bfile <- ls.pipeline$test.bfile
     if(is.null(keep) && is.null(remove)) 
       keep <- ls.pipeline$keep.test
-    if(is.null(ls.pipeline$keep.test)) redo <- F # otherwise pgs will not have been calculated for everyone
+    redo <- F 
   }
 
   ### Pheno & covar ### 
@@ -51,6 +51,8 @@ validate.lassosum.pipeline <- function(ls.pipeline, test.bfile=NULL,
   parsed.test <- phcovar$parsed
   pheno <- phcovar$pheno
   covar <- phcovar$covar
+  recal <- !identical(ls.pipeline$test.bfile, test.bfile) || 
+    !identical(parsed.test$keep, ls.pipeline$keep.test)
   
   ### Destandardize ### 
   if(destandardize) {
@@ -88,7 +90,7 @@ validate.lassosum.pipeline <- function(ls.pipeline, test.bfile=NULL,
     results <- c(results, list(pgs=pgs))
 
   } else {
-    if(is.null(ls.pipeline$pgs)) {
+    if(is.null(ls.pipeline$pgs) || recal) {
       if(trace) cat("Calculating PGS...\n")
       pgs <- lapply(ls.pipeline$beta, function(x) pgs(bfile=test.bfile, 
                                           weights = x, 

@@ -37,7 +37,7 @@ pseudovalidate.lassosum.pipeline <- function(ls.pipeline, test.bfile=NULL,
     test.bfile <- ls.pipeline$test.bfile
     if(is.null(keep) && is.null(remove)) 
       keep <- ls.pipeline$keep.test
-    if(is.null(ls.pipeline$keep.test)) redo <- F # otherwise pgs will not have been calculated for everyone
+    redo <- F
   }
   
   if(destandardize) {
@@ -51,6 +51,8 @@ pseudovalidate.lassosum.pipeline <- function(ls.pipeline, test.bfile=NULL,
   }
   
   parsed.test <- parseselect(test.bfile, keep=keep, remove=remove)
+  recal <- !identical(ls.pipeline$test.bfile, test.bfile) || 
+    !identical(parsed.test$keep, ls.pipeline$keep.test)
   
   if(redo) {
     if(trace) cat("Coordinating lassosum output with test data...\n")

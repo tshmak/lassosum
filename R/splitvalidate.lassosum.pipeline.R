@@ -30,7 +30,7 @@ splitvalidate.lassosum.pipeline <- function(ls.pipeline, test.bfile=NULL,
     test.bfile <- ls.pipeline$test.bfile
     if(is.null(keep) && is.null(remove)) 
       keep <- ls.pipeline$keep.test
-    if(is.null(ls.pipeline$keep.test)) redo <- F # otherwise pgs will not have been calculated for everyone
+    redo <- F
   }
   
   ### Pheno & covar ### 
@@ -40,7 +40,9 @@ splitvalidate.lassosum.pipeline <- function(ls.pipeline, test.bfile=NULL,
   parsed.test <- phcovar$parsed
   pheno <- phcovar$pheno
   covar <- phcovar$covar
-
+  recal <- !identical(ls.pipeline$test.bfile, test.bfile) || 
+    !identical(parsed.test$keep, ls.pipeline$keep.test)
+  
   ### Split ###
   if(is.null(split)) {
     split <- sample(1:parsed.test$n %% 2 + 1)
