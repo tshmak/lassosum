@@ -29,16 +29,17 @@ pseudovalidate.lassosum.pipeline <- function(ls.pipeline, test.bfile=NULL,
 
   results <- list(lambda=ls.pipeline$lambda, s=ls.pipeline$s)
   
-  if(!is.null(keep) || !is.null(remove)) if(is.null(test.bfile)) 
-    stop("Please specify test.bfile if you specify keep or remove")
+  # if(!is.null(keep) || !is.null(remove)) if(is.null(test.bfile)) 
+  #   stop("Please specify test.bfile if you specify keep or remove")
   
   redo <- T
   if(is.null(test.bfile)) {
     test.bfile <- ls.pipeline$test.bfile
-    keep <- ls.pipeline$keep.test
-    remove <- NULL
     redo <- F
   }
+
+  if(is.null(keep) && test.bfile == ls.pipeline$test.bfile) 
+    keep <- ls.pipeline$keep.test
   
   if(destandardize) {
     if(ls.pipeline$destandardized) stop("beta in ls.pipeline already destandardized.")
@@ -50,16 +51,9 @@ pseudovalidate.lassosum.pipeline <- function(ls.pipeline, test.bfile=NULL,
     redo <- T
   }
   
+  parsed.test <- parseselect(test.bfile, keep=keep, remove=remove)
+  
   if(redo) {
-    ### Input Validation ### 
-    extensions <- c(".bed", ".bim", ".fam")
-    for(i in 1:length(extensions)) {
-      if(!file.exists(paste0(test.bfile, extensions[i]))) {
-        stop(paste0("File ", test.bfile, extensions[i], " not found."))
-      }
-    }
-    ### Input Validation (end) ### 
-    
     if(trace) cat("Coordinating lassosum output with test data...\n")
     
     bim <- fread(paste0(test.bfile, ".bim"))
@@ -76,7 +70,7 @@ pseudovalidate.lassosum.pipeline <- function(ls.pipeline, test.bfile=NULL,
     toextract <- m$ref.extract
     pgs <- lapply(beta, function(x) pgs(bfile=test.bfile, weights = x, 
                                         extract=toextract, 
-                                        keep=keep, remove=remove, 
+                                        keep=parsed.test$keep, 
                                         cluster=cluster,
                                         trace=trace-1))
     names(pgs) <- as.character(ls.pipeline$s)
@@ -88,13 +82,19 @@ pseudovalidate.lassosum.pipeline <- function(ls.pipeline, test.bfile=NULL,
       if(trace) cat("Calculating PGS...\n")
       pgs <- lapply(ls.pipeline$beta, function(x) pgs(bfile=test.bfile, 
                                                       weights = x, 
-                                                      keep=keep, 
+                                                      keep=parsed.test$keep, 
                                                       cluster=cluster, 
                                                       trace=trace-1))
       names(pgs) <- as.character(ls.pipeline$s)
       results <- c(results, list(pgs=pgs))
-    } else {
+    } else if(is.null(parsed.test$keep)) {
       results <- c(results, list(pgs=ls.pipeline$pgs))
+    } else {
+      pgs <- ls.pipeline$pgs
+      for(i in 1:length(pgs)) {
+        pgs[[i]] <- pgs[[i]][parsed.test$keep, ]
+      }
+      results <- c(results, list(pgs=pgs))
     }
     beta <- ls.pipeline$beta
   } 

@@ -65,15 +65,6 @@ validate.lassosum.pipeline <- function(ls.pipeline, test.bfile=NULL,
   }
 
   if(redo) {
-    ### Input Validation ### 
-    extensions <- c(".bed", ".bim", ".fam")
-    for(i in 1:length(extensions)) {
-      if(!file.exists(paste0(test.bfile, extensions[i]))) {
-        stop(paste0("File ", test.bfile, extensions[i], " not found."))
-      }
-    }
-    ### Input Validation (end) ### 
-    
     if(trace) cat("Coordinating lassosum output with test data...\n")
     
     bim <- fread(paste0(test.bfile, ".bim"))
