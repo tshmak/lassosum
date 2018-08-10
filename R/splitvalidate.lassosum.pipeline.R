@@ -34,7 +34,7 @@ splitvalidate.lassosum.pipeline <- function(ls.pipeline, test.bfile=NULL,
     keep <- ls.pipeline$keep.test
   
   ### Pheno & covar ### 
-  parsed.test <- parseselect(test.bfile, keep=keep, remove=remove)
+  parsed.test <- parseselect(test.bfile, keep=keep, remove=remove, export=TRUE)
   phcovar <- parse.pheno.covar(pheno=pheno, covar=covar, parsed=parsed.test, 
                                trace=trace)
   parsed.test <- phcovar$parsed
@@ -51,32 +51,57 @@ splitvalidate.lassosum.pipeline <- function(ls.pipeline, test.bfile=NULL,
 
   ### Split-validation ###
   results <- list(lambda=ls.pipeline$lambda, s=ls.pipeline$s)
-  best.s <- best.lambda <- numeric(0)
+  best.s <- best.lambda <- best.validation.result <- numeric(0)
   best.pgs <- pheno * NA
   best.beta <- numeric(0)
   validation.table <- data.frame()
   for(s in 1:max(split)) {
-    if(is.null(parsed$keep)) {
+    if(is.null(parsed.test$keep)) {
       keep <- split == s
-      pheno <- pheno[keep]
-      if(!is.null(covar)) covar <- covar[keep,]
+      pheno2 <- pheno[keep]
+      covar2 <- if(!is.null(covar)) covar[keep,] else NULL
+    } else {
+      keep <- parsed.test$keep
+      keeps <- split == s
+      keep[keep] <- keeps
+      pheno2 <- pheno[keeps]
+      covar2 <- if(!is.null(covar)) covar[keeps,] else NULL
     }
-    v <- validate(ls.pipeline, keep=keep, pheno=pheno, covar=covar, 
+    if(trace) cat(paste0("Split ", s, ":\n")) 
+    v <- validate(ls.pipeline, keep=keep, pheno=pheno2, covar=covar2, 
                   test.bfile=test.bfile, trace=trace, ...)
     best.s <- c(best.s, v$best.s)
     best.lambda <- c(best.lambda, v$best.lambda)
     best.pgs[keep] <- scale(v$best.pgs)
     best.beta <- cbind(best.beta, v$best.beta)
     validation.table <- rbind(validation.table, v$validation.table)
+    best.validation.result <- c(best.validation.result, v$best.validation.result)
+  }
+
+  #### Results table ####
+  if(is.null(phcovar$table)) {
+    results.table <- (if(is.null(parsed.test$fam)) read.table2(parsed.test$famfile) else
+      parsed.test$fam)[,1:2]
+    if(!is.null(parsed.test$keep)) results.table <- results.table[parsed.test$keep,]
+    colnames(results.table) <- c("FID", "IID")
+    results.table$pheno <- pheno
+    results.table$best.pgs <- best.pgs
+  } else {
+    results.table <- phcovar$table
+    results.table$best.pgs <- best.pgs[results.table$order]
   }
   
+    
   results <- c(results, list(split=split,
                              best.s=best.s, 
                              best.lambda=best.lambda,
                              best.pgs=best.pgs, 
                              best.beta=best.beta, 
                              validation.table=validation.table, 
-                             validation.type=v$validation.type))
+                             validation.type=v$validation.type, 
+                             pheno=pheno, 
+                             best.validation.result=best.validation.result, 
+                             results.table=results.table))
   class(results) <- "validate.lassosum"
   return(results)
   

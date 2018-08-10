@@ -46,7 +46,7 @@ validate.lassosum.pipeline <- function(ls.pipeline, test.bfile=NULL,
     keep <- ls.pipeline$keep.test
   
   ### Pheno & covar ### 
-  parsed.test <- parseselect(test.bfile, keep=keep, remove=remove)
+  parsed.test <- parseselect(test.bfile, keep=keep, remove=remove, export=TRUE)
   phcovar <- parse.pheno.covar(pheno=pheno, covar=covar, parsed=parsed.test, 
                                trace=trace)
   parsed.test <- phcovar$parsed
@@ -158,12 +158,29 @@ validate.lassosum.pipeline <- function(ls.pipeline, test.bfile=NULL,
   best.beta <- beta[[best.beta.s]][,best.beta.lambda]
   
   validation.table <- data.frame(lambda=lambdas, s=ss, value=cors)
+  
+  #### Results table ####
+  if(is.null(phcovar$table)) {
+    if(is.null(parsed.test[['fam']])) parsed.test[['fam']] <- read.table2(parsed.test$famfile)
+    results.table <- parsed.test[['fam']][,1:2]
+    colnames(results.table) <- c("FID", "IID")
+    if(!is.null(parsed.test$keep)) results.table <- results.table[parsed.test$keep,]
+    results.table$pheno <- pheno
+    results.table$best.pgs <- best.pgs
+  } else {
+    results.table <- phcovar$table
+    results.table$best.pgs <- best.pgs[results.table$order]
+  }
+  
   results <- c(results, list(best.s=best.s, 
                              best.lambda=best.lambda,
                              best.pgs=best.pgs, 
                              best.beta=best.beta, 
                              validation.table=validation.table, 
-                             validation.type=funcname))
+                             validation.type=funcname, 
+                             pheno=pheno, 
+                             best.validation.result=max(cors), 
+                             results.table=results.table))
   class(results) <- "validate.lassosum"
   if(plot) plot(results)
   return(results)
