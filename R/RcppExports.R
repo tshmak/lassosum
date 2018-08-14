@@ -35,13 +35,12 @@ multiBed3 <- function(fileName, N, P, input, col_skip_pos, col_skip, keepbytes, 
 #' @param input the matrix
 #' @param col_skip_pos which variants should we skip
 #' @param col_skip which variants should we skip
-#' @param keepbytes which bytes to keep
-#' @param keepoffset what is the offset
+#' @param keepbytes boolean vector to indicate if sample should be included
 #' @return an armadillo genotype matrix 
 #' @keywords internal
 #' 
-multiBed3sp <- function(fileName, N, P, beta, nonzeros, colpos, ncol, col_skip_pos, col_skip, keepbytes, keepoffset, trace) {
-    .Call('_lassosum_multiBed3sp', PACKAGE = 'lassosum', fileName, N, P, beta, nonzeros, colpos, ncol, col_skip_pos, col_skip, keepbytes, keepoffset, trace)
+multiBed3sp <- function(fileName, N, P, beta, nonzeros, colpos, ncol, col_skip_pos, col_skip, keepbytes, trace) {
+    .Call('_lassosum_multiBed3sp', PACKAGE = 'lassosum', fileName, N, P, beta, nonzeros, colpos, ncol, col_skip_pos, col_skip, keepbytes, trace)
 }
 
 #' Performs elnet
