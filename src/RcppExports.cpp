@@ -385,7 +385,7 @@ RcppExport SEXP _lassosum_RcppExport_registerCCallable() {
 static const R_CallMethodDef CallEntries[] = {
     {"_lassosum_countlines", (DL_FUNC) &_lassosum_countlines, 1},
     {"_lassosum_multiBed3", (DL_FUNC) &_lassosum_multiBed3, 9},
-    {"_lassosum_multiBed3sp", (DL_FUNC) &_lassosum_multiBed3sp, 12},
+    {"_lassosum_multiBed3sp", (DL_FUNC) &_lassosum_multiBed3sp, 11},
     {"_lassosum_elnet", (DL_FUNC) &_lassosum_elnet, 10},
     {"_lassosum_repelnet", (DL_FUNC) &_lassosum_repelnet, 12},
     {"_lassosum_genotypeMatrix", (DL_FUNC) &_lassosum_genotypeMatrix, 8},
