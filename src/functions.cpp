@@ -264,20 +264,18 @@ arma::mat multiBed3(const std::string fileName, int N, int P, const arma::mat in
 //' @param input the matrix
 //' @param col_skip_pos which variants should we skip
 //' @param col_skip which variants should we skip
-//' @param keepbytes which bytes to keep
-//' @param keepoffset what is the offset
+//' @param keepbytes should be a boolean vector indicating if the sample should be retained 
 //' @return an armadillo genotype matrix 
 //' @keywords internal
 //' 
 // [[Rcpp::export]]
-arma::mat multiBed3sp(const std::string fileName, int N, int P, 
-                      const arma::vec beta, 
-                      const arma::Col<int> nonzeros, 
-                      const arma::Col<int> colpos,
+arma::mat multiBed3sp(const std::string &fileName, int N, int P, 
+                      const arma::vec &beta, 
+                      const arma::Col<int> &nonzeros, 
+                      const arma::Col<int> &colpos,
                       const int ncol, 
-                      arma::Col<int> col_skip_pos, arma::Col<int> col_skip, 
-                      arma::Col<int> keepbytes, arma::Col<int> keepoffset, 
-                      const int trace) {
+                      arma::Col<int> &col_skip_pos, arma::Col<int> &col_skip, 
+                      const arma::Col<bool> &keepbytes, const int trace) {
   
   std::ifstream bedFile;
   bool snpMajor = openPlinkBinaryFile(fileName, bedFile);
@@ -290,95 +288,105 @@ arma::mat multiBed3sp(const std::string fileName, int N, int P,
   int ii = 0;
   int iii = 0;
   int k = 0;
+  int jj;
   const bool colskip = (col_skip_pos.n_elem > 0);
-  unsigned long long int Nbytes = ceil(N / 4.0);
+  const unsigned long long int Nbytes = ceil(N / 4.0);
   const bool selectrow = (keepbytes.n_elem > 0);
+  const uint32_t unfiltered_sample_ct4 = (N + 3) / 4;
+  // need to define the corresponding BIT size. 64 for 64 bit and 32 for 32 Bit
+  // if define doesn't work, then just use 32 bit such that it fits all machine
+  #ifdef __LP64__
+    #define ONELU 1LLU
+    #define BITCT = 64;
+  #else
+    #define ONELU 1LU
+    #define BITCT = 32;
+  #endif
+  uint32_t BITCT2 = BITCT/2;
+  const uint32_t unfiltered_sample_ctl = (N+(BITCT-1))/ BITCT;
+  uintptr_t ulii;
+  uint32_t uii;
+  uint32_t ujj;
+  uint32_t geno;
+  uint32_t sample_index = 0;
+  // a vector to temporarily store all the input
+  std::vector<uintptr_t> m_genotype;
+  m_genotype.resize(unfiltered_sample_ctl * 2, 0);
+  // iterator for genotype
+  uintptr_t* lbptr;
   int n;
   if (selectrow)
     n = keepbytes.n_elem;
   else
     n = N;
-  int jj;
   
   arma::mat result = arma::mat(n, ncol, arma::fill::zeros);
   std::bitset<8> b; // Initiate the bit array
   char ch[Nbytes];
-  
   int chunk;
-  double step;
-  double Step = 0; 
+  double i_step;
+  double Step = 0;
+  
   if(trace > 0) {
     chunk = nonzeros.n_elem / pow(10, trace); 
-    step = 100 / pow(10, trace); 
+    i_step = 100 / pow(10, trace); 
     // Rcout << "Started C++ program \n"; 
   }
   
   while (i < P) {
     Rcpp::checkUserInterrupt();
-    if (colskip) {
-      if (ii < col_skip.n_elem) {
-        if (i == col_skip_pos[ii]) {
-          bedFile.seekg(col_skip[ii] * Nbytes, bedFile.cur);
-          i = i + col_skip[ii];
-          ii++;
-          continue;
-        }
-      }
+    // minimize number of if to avoid branching. 
+    if (colskip && ii < col_skip.n_elem)  && i == col_skip_pos[ii]) {
+      bedFile.seekg(col_skip[ii] * Nbytes, bedFile.cur);
+      i = i + col_skip[ii];
+      ii++;
+      continue;
     }
     
-    if(trace > 0) {
-      if (iii % chunk == 0) {
+    if(trace > 0 && iii % chunk == 0) {
         Rcout << Step << "% done\n";
-        Step = Step + step; 
-      }
+        Step += i_step; 
     }
-    
-    bedFile.read(ch, Nbytes); // Read the information
-    if (!bedFile)
+    if(!bedFile.read((char*) genotype.data(), unfiltered_sample_ct4)){
       throw std::runtime_error(
           "Problem with the BED file...has the FAM/BIM file been changed?");
-    
-    int j = 0;
-    if (!selectrow) {
-      for (jj = 0; jj < Nbytes; jj++) {
-        b = ch[jj];
-        
-        int c = 0;
-        while (c < 7 && j < N) { // from the original PLINK: 7 because of 8 bits
-          int first = b[c++];
-          int second = b[c++];
-          if(nonzeros[iii] > 0) {
-            if (first == 0) {
-              for (int kk = 0; kk < nonzeros[iii]; kk++) {
-                result(j, colpos[k]) += (2 - second) * beta[k];
-                k++;
-              }
-              k -= nonzeros[iii];
-            }
-          }
-          j++;
-        }
-      }
-    } else {
-      for (jj = 0; jj < keepbytes.n_elem; jj++) {
-        b = ch[keepbytes[jj]];
-        
-        int c = keepoffset[jj];
-        int first = b[c++];
-        int second = b[c];
-        if(nonzeros[iii] > 0) {
-          if (first == 0) {
-            for (int kk = 0; kk < nonzeros[iii]; kk++) {
-              result(j, colpos[k]) += (2 - second) * beta[k];
-              k++;
-            }
-            k -= nonzeros[iii];
-          }
-        }
-        j++;
-      }
     }
+    // now you've got all the genotype stored in the genotype.data()
     
+    lbptr = genotype.data();
+    // naming of the variable doesn't make much sense here, I just modified the plink code
+    uii = 0;
+    ulii = 0;
+    sample_index = 0;
+    do
+    {
+      ulii = ~(*lbptr++);
+      if (uii + BITCT2 > N) {
+        ulii &= (ONELU << ((N & (BITCT2 - 1)) * 2))- ONELU;
+      }
+      ujj = 0;
+      while (ujj < BITCT) {
+        geno = (ulii >> ujj) & 3;
+        // unfiltered sample index is uii + (ujj / 2)
+        // if geno == 2 (missing), this will convert geno to 0
+        // if geno == 3 (hom alt), this will convert geno to 2
+        geno = geno-2*(geno==2)-(geno==3);
+        // TODO: No idea what this is about
+        for(int kk= 0; kk < nonzeros[iii]; kk++){
+          // what we do here is that, if keepbytes is true, then it will be 1, and the 
+          // prs will be non-zero. Whereas if it is false, the value will be 0 and the 
+          // prs will be zero. This also avoid the increment of sample_index, helping us
+          // to "exclude" the sample so to speak
+          result(sample_index, colpos[k]) += geno*beta[k] * keepbytes[uii + (ujj / 2)];
+          sample_index+=keepbytes[uii + (ujj / 2)];
+          k++;
+        }
+        k-=nonzeros[iii];
+        ulii &= ~((3 * ONELU) << ujj);
+        ujj += 2;
+      }
+      uii += BITCT2;
+    } while (uii < n);
     k += nonzeros[iii];
     i++;
     iii++;
