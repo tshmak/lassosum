@@ -107,7 +107,6 @@ pgs.default <- function(bfile, weights, keep=NULL, extract=NULL, exclude=NULL, r
     ss <- Matrix::summary(Matrix::Matrix(t(weights), sparse = TRUE))
     nonzeros <- as.integer(table(factor(ss$j, levels=1:nrow(weights))))
     colpos <- ss$i - 1
-    print("Running new function")
     return(multiBed3sp(bfile, parsed$N, parsed$P, 
                        beta=ss$x, nonzeros=nonzeros, colpos=colpos, ncol=ncol(weights), 
                        extract2[[1]], extract2[[2]], 
