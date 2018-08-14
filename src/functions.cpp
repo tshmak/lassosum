@@ -274,8 +274,8 @@ arma::mat multiBed3sp(const std::string &fileName, int N, int P,
                       const arma::Col<int> &nonzeros, 
                       const arma::Col<int> &colpos,
                       const int ncol, 
-                      arma::Col<int> &col_skip_pos, arma::Col<int> &col_skip, 
-                      const arma::Col<bool> &keepbytes, const int trace) {
+                      const arma::Col<int> &col_skip_pos, const arma::Col<int> &col_skip, 
+                      const arma::uvec &keepbytes, const int trace) {
   
   std::ifstream bedFile;
   bool snpMajor = openPlinkBinaryFile(fileName, bedFile);
@@ -288,30 +288,32 @@ arma::mat multiBed3sp(const std::string &fileName, int N, int P,
   int ii = 0;
   int iii = 0;
   int k = 0;
-  int jj;
   const bool colskip = (col_skip_pos.n_elem > 0);
   const unsigned long long int Nbytes = ceil(N / 4.0);
   const bool selectrow = (keepbytes.n_elem > 0);
   const uint32_t unfiltered_sample_ct4 = (N + 3) / 4;
   // need to define the corresponding BIT size. 64 for 64 bit and 32 for 32 Bit
   // if define doesn't work, then just use 32 bit such that it fits all machine
+
+  #define BITCT_TO_WORDCT(val) (((val) + (BITCT - 1)) / BITCT)
   #ifdef __LP64__
     #define ONELU 1LLU
-    #define BITCT = 64;
+    #define BITCT 64
   #else
     #define ONELU 1LU
-    #define BITCT = 32;
+    #define BITCT 32
   #endif
-  uint32_t BITCT2 = BITCT/2;
-  const uint32_t unfiltered_sample_ctl = (N+(BITCT-1))/ BITCT;
+  #define BITCT2 BITCT/2
+  const uint32_t unfiltered_sample_ctl = BITCT_TO_WORDCT(N);
+
   uintptr_t ulii;
   uint32_t uii;
   uint32_t ujj;
   uint32_t geno;
   uint32_t sample_index = 0;
   // a vector to temporarily store all the input
-  std::vector<uintptr_t> m_genotype;
-  m_genotype.resize(unfiltered_sample_ctl * 2, 0);
+  std::vector<uintptr_t> genotype;
+  genotype.resize(unfiltered_sample_ctl * 2, 0);
   // iterator for genotype
   uintptr_t* lbptr;
   int n;
@@ -321,8 +323,7 @@ arma::mat multiBed3sp(const std::string &fileName, int N, int P,
     n = N;
   
   arma::mat result = arma::mat(n, ncol, arma::fill::zeros);
-  std::bitset<8> b; // Initiate the bit array
-  char ch[Nbytes];
+  
   int chunk;
   double i_step;
   double Step = 0;
@@ -336,7 +337,7 @@ arma::mat multiBed3sp(const std::string &fileName, int N, int P,
   while (i < P) {
     Rcpp::checkUserInterrupt();
     // minimize number of if to avoid branching. 
-    if (colskip && ii < col_skip.n_elem)  && i == col_skip_pos[ii]) {
+    if (colskip && ii < col_skip.n_elem && i == col_skip_pos[ii]) {
       bedFile.seekg(col_skip[ii] * Nbytes, bedFile.cur);
       i = i + col_skip[ii];
       ii++;

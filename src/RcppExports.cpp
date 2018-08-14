@@ -78,8 +78,8 @@ RcppExport SEXP _lassosum_multiBed3(SEXP fileNameSEXP, SEXP NSEXP, SEXP PSEXP, S
     return rcpp_result_gen;
 }
 // multiBed3sp
-arma::mat multiBed3sp(const std::string fileName, int N, int P, const arma::vec beta, const arma::Col<int> nonzeros, const arma::Col<int> colpos, const int ncol, arma::Col<int> col_skip_pos, arma::Col<int> col_skip, arma::Col<int> keepbytes, arma::Col<int> keepoffset, const int trace);
-static SEXP _lassosum_multiBed3sp_try(SEXP fileNameSEXP, SEXP NSEXP, SEXP PSEXP, SEXP betaSEXP, SEXP nonzerosSEXP, SEXP colposSEXP, SEXP ncolSEXP, SEXP col_skip_posSEXP, SEXP col_skipSEXP, SEXP keepbytesSEXP, SEXP keepoffsetSEXP, SEXP traceSEXP) {
+arma::mat multiBed3sp(const std::string &fileName, int N, int P, const arma::vec &beta, const arma::Col<int> &nonzeros, const arma::Col<int> &colpos, const int ncol, const arma::Col<int> &col_skip_pos, const  arma::Col<int> &col_skip, const arma::uvec &keepbytes, const int trace);
+static SEXP _lassosum_multiBed3sp_try(SEXP fileNameSEXP, SEXP NSEXP, SEXP PSEXP, SEXP betaSEXP, SEXP nonzerosSEXP, SEXP colposSEXP, SEXP ncolSEXP, SEXP col_skip_posSEXP, SEXP col_skipSEXP, SEXP keepbytesSEXP, SEXP traceSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::traits::input_parameter< const std::string >::type fileName(fileNameSEXP);
@@ -89,20 +89,19 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< const arma::Col<int> >::type nonzeros(nonzerosSEXP);
     Rcpp::traits::input_parameter< const arma::Col<int> >::type colpos(colposSEXP);
     Rcpp::traits::input_parameter< const int >::type ncol(ncolSEXP);
-    Rcpp::traits::input_parameter< arma::Col<int> >::type col_skip_pos(col_skip_posSEXP);
-    Rcpp::traits::input_parameter< arma::Col<int> >::type col_skip(col_skipSEXP);
-    Rcpp::traits::input_parameter< arma::Col<int> >::type keepbytes(keepbytesSEXP);
-    Rcpp::traits::input_parameter< arma::Col<int> >::type keepoffset(keepoffsetSEXP);
+    Rcpp::traits::input_parameter< const arma::Col<int> >::type col_skip_pos(col_skip_posSEXP);
+    Rcpp::traits::input_parameter< const arma::Col<int> >::type col_skip(col_skipSEXP);
+    Rcpp::traits::input_parameter< const arma::uvec >::type keepbytes(keepbytesSEXP);
     Rcpp::traits::input_parameter< const int >::type trace(traceSEXP);
-    rcpp_result_gen = Rcpp::wrap(multiBed3sp(fileName, N, P, beta, nonzeros, colpos, ncol, col_skip_pos, col_skip, keepbytes, keepoffset, trace));
+    rcpp_result_gen = Rcpp::wrap(multiBed3sp(fileName, N, P, beta, nonzeros, colpos, ncol, col_skip_pos, col_skip, keepbytes, trace));
     return rcpp_result_gen;
 END_RCPP_RETURN_ERROR
 }
-RcppExport SEXP _lassosum_multiBed3sp(SEXP fileNameSEXP, SEXP NSEXP, SEXP PSEXP, SEXP betaSEXP, SEXP nonzerosSEXP, SEXP colposSEXP, SEXP ncolSEXP, SEXP col_skip_posSEXP, SEXP col_skipSEXP, SEXP keepbytesSEXP, SEXP keepoffsetSEXP, SEXP traceSEXP) {
+RcppExport SEXP _lassosum_multiBed3sp(SEXP fileNameSEXP, SEXP NSEXP, SEXP PSEXP, SEXP betaSEXP, SEXP nonzerosSEXP, SEXP colposSEXP, SEXP ncolSEXP, SEXP col_skip_posSEXP, SEXP col_skipSEXP, SEXP keepbytesSEXP, SEXP traceSEXP) {
     SEXP rcpp_result_gen;
     {
         Rcpp::RNGScope rcpp_rngScope_gen;
-        rcpp_result_gen = PROTECT(_lassosum_multiBed3sp_try(fileNameSEXP, NSEXP, PSEXP, betaSEXP, nonzerosSEXP, colposSEXP, ncolSEXP, col_skip_posSEXP, col_skipSEXP, keepbytesSEXP, keepoffsetSEXP, traceSEXP));
+        rcpp_result_gen = PROTECT(_lassosum_multiBed3sp_try(fileNameSEXP, NSEXP, PSEXP, betaSEXP, nonzerosSEXP, colposSEXP, ncolSEXP, col_skip_posSEXP, col_skipSEXP, keepbytesSEXP, traceSEXP));
     }
     Rboolean rcpp_isInterrupt_gen = Rf_inherits(rcpp_result_gen, "interrupted-error");
     if (rcpp_isInterrupt_gen) {
