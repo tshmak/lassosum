@@ -89,10 +89,12 @@ pgs.default <- function(bfile, weights, keep=NULL, extract=NULL, exclude=NULL, r
   if(is.null(parsed$keep)) {
     keepbytes <- integer(0)
     keepoffset <- integer(0)
+    keepvector <- rep(T, parsed$N)
   } else {
     pos <- which(parsed$keep) - 1
     keepbytes <- floor(pos/4)
     keepoffset <- pos %% 4 * 2
+    keepvector <- parsed$keep
   }
   
   bfile <- paste0(bfile, ".bed")
@@ -105,11 +107,10 @@ pgs.default <- function(bfile, weights, keep=NULL, extract=NULL, exclude=NULL, r
     ss <- Matrix::summary(Matrix::Matrix(t(weights), sparse = TRUE))
     nonzeros <- as.integer(table(factor(ss$j, levels=1:nrow(weights))))
     colpos <- ss$i - 1
-    
     return(multiBed3sp(bfile, parsed$N, parsed$P, 
                        beta=ss$x, nonzeros=nonzeros, colpos=colpos, ncol=ncol(weights), 
                        extract2[[1]], extract2[[2]], 
-                       keepbytes, keepoffset, trace=trace))
+                       keepvector, trace=trace))
   }
   #' @return A matrix of Polygenic Scores
   

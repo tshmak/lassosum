@@ -5,7 +5,7 @@
 \title{Multiply genotypeMatrix by a matrix (sparse)}
 \usage{
 multiBed3sp(fileName, N, P, beta, nonzeros, colpos, ncol, col_skip_pos,
-  col_skip, keepbytes, keepoffset, trace)
+  col_skip, keepbytes, trace)
 }
 \arguments{
 \item{fileName}{location of bam file}
@@ -18,9 +18,7 @@ multiBed3sp(fileName, N, P, beta, nonzeros, colpos, ncol, col_skip_pos,
 
 \item{col_skip}{which variants should we skip}
 
-\item{keepbytes}{which bytes to keep}
-
-\item{keepoffset}{what is the offset}
+\item{keepbytes}{Boolean vector indicate which sample to keep}
 
 \item{input}{the matrix}
 }
