@@ -93,7 +93,7 @@ v <- pseudovalidate(out)
 ```
 Since v0.4.2, the `pheno` argument in `validate` can also take a `data.frame` with the first 2 columns headed by FID and IID, and the third column being the phenotype. Moreover, a `v$results.table` object is also returned in `validate` and `pseudovalidate`, giving a table with the best PGS and the phenotype tabulated with the FID and IID (family and individual ID). 
 
-### Parallel processing with the `parallel` package. 
+#### Parallel processing with the `parallel` package
 Note that parallel processing is done by `LDblocks`. 
 ```r
 library(parallel)
