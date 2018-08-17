@@ -91,7 +91,7 @@ v <- validate(out, pheno=pheno) # Alternatively, specify the phenotype in the ar
 # install.packages("fdrtool")
 v <- pseudovalidate(out)
 ```
-Since v0.4.2, it is possible to pass to `pheno` a `data.frame` with the first 2 columns headed by FID and IID, and the third column being the phenotype. You can also examine the results in `v$results.table`, assuming `v` is the returned object from `validate` or `pseudovalidate`. 
+Since v0.4.2, the `pheno` argument in `validate` can also take a `data.frame` with the first 2 columns headed by FID and IID, and the third column being the phenotype. Moreover, a `v$results.table` object is also returned in `validate` and `pseudovalidate`, giving a table with the best PGS and the phenotype tabulated with the FID and IID (family and individual ID). 
 
 ### Parallel processing with the `parallel` package. 
 Note that parallel processing is done by `LDblocks`. 
@@ -109,7 +109,7 @@ It is possible to include covariates in validation (though not in pseudovalidati
 v <- validate(out, covar=covar)
 # covar <- rnorm(nrow.bfile(out$test.bfile)) # If you need a dummy for testing
 ```
-Since v0.4.2, it is possible to pass to `covar` a `data.frame` with the first 2 columns headed by FID and IID, and the other columns being covariates (any headers). 
+Since v0.4.2, the `covar` argument in `validate` can also take a `data.frame` with the first 2 columns headed by FID and IID, and the other columns being covariates (any headers). 
 
 #### Apply validated betas to new data 
 To apply the best lassosum predictor (indexed by `s` and `lambda`) to a new dataset, first subset the `lassosum.pipeline` object. Then `validate` again: 
