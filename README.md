@@ -86,15 +86,15 @@ v <- validate(out) # Use the 6th column in .fam file in test dataset for test ph
 v <- validate(out, pheno=pheno) # Alternatively, specify the phenotype in the argument
 
 # pheno <- rnorm(nrow.bfile(out$test.bfile)) # If you need a dummy for testing
-# Since v0.4.2, it is possible to pass to `pheno` a `data.frame` with the first 2 columns headed by FID and IID, and the third column being the phenotype. 
 
 ### pseudovalidation ###
 # install.packages("fdrtool")
 v <- pseudovalidate(out)
-
 ```
+Since v0.4.2, it is possible to pass to `pheno` a `data.frame` with the first 2 columns headed by FID and IID, and the third column being the phenotype. You can also examine the results in `v$results.table`, assuming `v` is the returned object from `validate` or `pseudovalidate`. 
 
-Parallel processing with the `parallel` package. Note that parallel processing is done by `LDblocks`. 
+### Parallel processing with the `parallel` package. 
+Note that parallel processing is done by `LDblocks`. 
 ```r
 library(parallel)
 cl <- makeCluster(2, type="FORK")
