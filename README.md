@@ -86,6 +86,7 @@ v <- validate(out) # Use the 6th column in .fam file in test dataset for test ph
 v <- validate(out, pheno=pheno) # Alternatively, specify the phenotype in the argument
 
 # pheno <- rnorm(nrow.bfile(out$test.bfile)) # If you need a dummy for testing
+# Since v0.4.2, it is possible to pass to `pheno` a `data.frame` with the first 2 columns headed by FID and IID, and the third column being the phenotype. 
 
 ### pseudovalidation ###
 # install.packages("fdrtool")
@@ -107,6 +108,14 @@ It is possible to include covariates in validation (though not in pseudovalidati
 ```r 
 v <- validate(out, covar=covar)
 # covar <- rnorm(nrow.bfile(out$test.bfile)) # If you need a dummy for testing
+```
+Since v0.4.2, it is possible to pass to `covar` a `data.frame` with the first 2 columns headed by FID and IID, and the other columns being covariates (any headers). 
+
+#### Apply validated betas to new data 
+To apply the best lassosum predictor (indexed by `s` and `lambda`) to a new dataset, first subset the `lassosum.pipeline` object. Then `validate` again: 
+```r 
+out2 <- subset(out, s=v$best.s, lambda=v$best.lambda)
+v2 <- validate(out2, covar=covar, test.bfile="Some_new_bfile")
 ```
 
 ### Support
