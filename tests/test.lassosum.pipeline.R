@@ -1,14 +1,14 @@
-# clear()
+# Tmisc()
 # Tim.load(Rplink)
 # setwd(attachroot("~/WORK/myRpackages/lassosum/tests/"))
-# load_all()
+# Tim.load(lassosum)
 # 
 # library(data.table)
 # bfile <- "../inst/data/testsample"
 # n <- nrow.bfile(bfile)
 # ss <- read.table2("../inst/data/summarystats.txt", header=T)
 # cor <- p2cor(ss$P_val, n=60000)
-# lp <- lassosum.pipeline(cor=cor, chr=ss$Chr, pos=ss$Position, A1 = ss$A1, A2=ss$A2, 
+# lp <- lassosum.pipeline(cor=cor, chr=ss$Chr, pos=ss$Position, A1 = ss$A1, A2=ss$A2,
 #                         test.bfile = bfile)
 # pheno <- rnorm(n)
 # v <- validate(lp, pheno=pheno)
@@ -30,3 +30,6 @@
 # 
 # sv <- splitvalidate(lp, pheno=pheno3, covar=covar3)
 # 
+# #### Testing subsetting ####
+# lp2 <- subset(lp, lambda=v$best.lambda, s=v$best.s)
+# vv <- validate(lp2)

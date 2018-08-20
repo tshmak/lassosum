@@ -310,46 +310,6 @@ RcppExport SEXP _lassosum_runElnet(SEXP lambdaSEXP, SEXP shrinkSEXP, SEXP fileNa
     UNPROTECT(1);
     return rcpp_result_gen;
 }
-// overallbeta
-arma::vec overallbeta(const std::string fileName, int N, int P, arma::Col<int> col_skip_pos, arma::Col<int> col_skip, arma::Col<int> keepbytes, arma::Col<int> keepoffset, arma::vec pred, arma::vec meanbeta, const std::string save, const std::string load);
-static SEXP _lassosum_overallbeta_try(SEXP fileNameSEXP, SEXP NSEXP, SEXP PSEXP, SEXP col_skip_posSEXP, SEXP col_skipSEXP, SEXP keepbytesSEXP, SEXP keepoffsetSEXP, SEXP predSEXP, SEXP meanbetaSEXP, SEXP saveSEXP, SEXP loadSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::traits::input_parameter< const std::string >::type fileName(fileNameSEXP);
-    Rcpp::traits::input_parameter< int >::type N(NSEXP);
-    Rcpp::traits::input_parameter< int >::type P(PSEXP);
-    Rcpp::traits::input_parameter< arma::Col<int> >::type col_skip_pos(col_skip_posSEXP);
-    Rcpp::traits::input_parameter< arma::Col<int> >::type col_skip(col_skipSEXP);
-    Rcpp::traits::input_parameter< arma::Col<int> >::type keepbytes(keepbytesSEXP);
-    Rcpp::traits::input_parameter< arma::Col<int> >::type keepoffset(keepoffsetSEXP);
-    Rcpp::traits::input_parameter< arma::vec >::type pred(predSEXP);
-    Rcpp::traits::input_parameter< arma::vec >::type meanbeta(meanbetaSEXP);
-    Rcpp::traits::input_parameter< const std::string >::type save(saveSEXP);
-    Rcpp::traits::input_parameter< const std::string >::type load(loadSEXP);
-    rcpp_result_gen = Rcpp::wrap(overallbeta(fileName, N, P, col_skip_pos, col_skip, keepbytes, keepoffset, pred, meanbeta, save, load));
-    return rcpp_result_gen;
-END_RCPP_RETURN_ERROR
-}
-RcppExport SEXP _lassosum_overallbeta(SEXP fileNameSEXP, SEXP NSEXP, SEXP PSEXP, SEXP col_skip_posSEXP, SEXP col_skipSEXP, SEXP keepbytesSEXP, SEXP keepoffsetSEXP, SEXP predSEXP, SEXP meanbetaSEXP, SEXP saveSEXP, SEXP loadSEXP) {
-    SEXP rcpp_result_gen;
-    {
-        Rcpp::RNGScope rcpp_rngScope_gen;
-        rcpp_result_gen = PROTECT(_lassosum_overallbeta_try(fileNameSEXP, NSEXP, PSEXP, col_skip_posSEXP, col_skipSEXP, keepbytesSEXP, keepoffsetSEXP, predSEXP, meanbetaSEXP, saveSEXP, loadSEXP));
-    }
-    Rboolean rcpp_isInterrupt_gen = Rf_inherits(rcpp_result_gen, "interrupted-error");
-    if (rcpp_isInterrupt_gen) {
-        UNPROTECT(1);
-        Rf_onintr();
-    }
-    Rboolean rcpp_isError_gen = Rf_inherits(rcpp_result_gen, "try-error");
-    if (rcpp_isError_gen) {
-        SEXP rcpp_msgSEXP_gen = Rf_asChar(rcpp_result_gen);
-        UNPROTECT(1);
-        Rf_error(CHAR(rcpp_msgSEXP_gen));
-    }
-    UNPROTECT(1);
-    return rcpp_result_gen;
-}
 
 // validate (ensure exported C++ functions exist before calling them)
 static int _lassosum_RcppExport_validate(const char* sig) { 
@@ -363,7 +323,6 @@ static int _lassosum_RcppExport_validate(const char* sig) {
         signatures.insert("arma::mat(*genotypeMatrix)(const std::string,int,int,arma::Col<int>,arma::Col<int>,arma::Col<int>,arma::Col<int>,const int)");
         signatures.insert("arma::vec(*normalize)(arma::mat&)");
         signatures.insert("List(*runElnet)(arma::vec&,double,const std::string,arma::vec&,int,int,arma::Col<int>&,arma::Col<int>&,arma::Col<int>&,arma::Col<int>&,double,arma::vec&,int,int,arma::Col<int>&,arma::Col<int>&)");
-        signatures.insert("arma::vec(*overallbeta)(const std::string,int,int,arma::Col<int>,arma::Col<int>,arma::Col<int>,arma::Col<int>,arma::vec,arma::vec,const std::string,const std::string)");
     }
     return signatures.find(sig) != signatures.end();
 }
@@ -378,7 +337,6 @@ RcppExport SEXP _lassosum_RcppExport_registerCCallable() {
     R_RegisterCCallable("lassosum", "_lassosum_genotypeMatrix", (DL_FUNC)_lassosum_genotypeMatrix_try);
     R_RegisterCCallable("lassosum", "_lassosum_normalize", (DL_FUNC)_lassosum_normalize_try);
     R_RegisterCCallable("lassosum", "_lassosum_runElnet", (DL_FUNC)_lassosum_runElnet_try);
-    R_RegisterCCallable("lassosum", "_lassosum_overallbeta", (DL_FUNC)_lassosum_overallbeta_try);
     R_RegisterCCallable("lassosum", "_lassosum_RcppExport_validate", (DL_FUNC)_lassosum_RcppExport_validate);
     return R_NilValue;
 }
@@ -392,7 +350,6 @@ static const R_CallMethodDef CallEntries[] = {
     {"_lassosum_genotypeMatrix", (DL_FUNC) &_lassosum_genotypeMatrix, 8},
     {"_lassosum_normalize", (DL_FUNC) &_lassosum_normalize, 1},
     {"_lassosum_runElnet", (DL_FUNC) &_lassosum_runElnet, 16},
-    {"_lassosum_overallbeta", (DL_FUNC) &_lassosum_overallbeta, 11},
     {"_lassosum_RcppExport_registerCCallable", (DL_FUNC) &_lassosum_RcppExport_registerCCallable, 0},
     {NULL, NULL, 0}
 };

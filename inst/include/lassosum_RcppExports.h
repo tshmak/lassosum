@@ -177,25 +177,6 @@ namespace lassosum {
         return Rcpp::as<List >(rcpp_result_gen);
     }
 
-    inline arma::vec overallbeta(const std::string fileName, int N, int P, arma::Col<int> col_skip_pos, arma::Col<int> col_skip, arma::Col<int> keepbytes, arma::Col<int> keepoffset, arma::vec pred, arma::vec meanbeta, const std::string save = "", const std::string load = "") {
-        typedef SEXP(*Ptr_overallbeta)(SEXP,SEXP,SEXP,SEXP,SEXP,SEXP,SEXP,SEXP,SEXP,SEXP,SEXP);
-        static Ptr_overallbeta p_overallbeta = NULL;
-        if (p_overallbeta == NULL) {
-            validateSignature("arma::vec(*overallbeta)(const std::string,int,int,arma::Col<int>,arma::Col<int>,arma::Col<int>,arma::Col<int>,arma::vec,arma::vec,const std::string,const std::string)");
-            p_overallbeta = (Ptr_overallbeta)R_GetCCallable("lassosum", "_lassosum_overallbeta");
-        }
-        RObject rcpp_result_gen;
-        {
-            RNGScope RCPP_rngScope_gen;
-            rcpp_result_gen = p_overallbeta(Shield<SEXP>(Rcpp::wrap(fileName)), Shield<SEXP>(Rcpp::wrap(N)), Shield<SEXP>(Rcpp::wrap(P)), Shield<SEXP>(Rcpp::wrap(col_skip_pos)), Shield<SEXP>(Rcpp::wrap(col_skip)), Shield<SEXP>(Rcpp::wrap(keepbytes)), Shield<SEXP>(Rcpp::wrap(keepoffset)), Shield<SEXP>(Rcpp::wrap(pred)), Shield<SEXP>(Rcpp::wrap(meanbeta)), Shield<SEXP>(Rcpp::wrap(save)), Shield<SEXP>(Rcpp::wrap(load)));
-        }
-        if (rcpp_result_gen.inherits("interrupted-error"))
-            throw Rcpp::internal::InterruptedException();
-        if (rcpp_result_gen.inherits("try-error"))
-            throw Rcpp::exception(as<std::string>(rcpp_result_gen).c_str());
-        return Rcpp::as<arma::vec >(rcpp_result_gen);
-    }
-
 }
 
 #endif // RCPP_lassosum_RCPPEXPORTS_H_GEN_
