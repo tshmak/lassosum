@@ -1,7 +1,7 @@
 lassosum.pipeline <- function(cor, chr=NULL, pos=NULL, snp=NULL, 
                               A1=NULL, A2=NULL, 
                               ref.bfile=NULL, test.bfile=NULL, 
-                              LDblocks=chr, 
+                              LDblocks=NULL, 
                               lambda=exp(seq(log(0.001), log(0.1), length.out=20)),
                               s=c(0.2, 0.5, 0.9, 1), 
                               destandardize=F, 
@@ -25,7 +25,10 @@ lassosum.pipeline <- function(cor, chr=NULL, pos=NULL, snp=NULL,
   #' @param ref.bfile \code{bfile} (\href{https://www.cog-genomics.org/plink2/formats#bed}{PLINK binary format}, without .bed) for 
   #'                  reference panel
   #' @param test.bfile \code{bfile} for test dataset
-  #' @param LDblocks A vector to define LD blocks or alternatively a data.frame of regions in \href{https://www.ensembl.org/info/website/upload/bed.html}{bed format}
+  #' @param LDblocks Either (1) one of "EUR.hg19", "AFR.hg19", "ASN.hg19", 
+  #' "EUR.hg38", "AFR.hg38", "ASN.hg38", to use blocks defined by Berisa and Pickrell (2015)
+  #' based on the 1000 Genome data, or (2) a vector to define LD blocks, 
+  #' or (3) a data.frame of regions in \href{https://www.ensembl.org/info/website/upload/bed.html}{bed format}
   #' @param lambda to pass on to \code{\link{lassosum}}
   #' @param s A vector of s
   #' @param destandardize Should coefficients from \code{\link{lassosum}} be 
@@ -63,7 +66,7 @@ lassosum.pipeline <- function(cor, chr=NULL, pos=NULL, snp=NULL,
   #' common to all of \code{ref.bfile}, \code{test.bfile} and the 
   #' summary statistics. \bold{The lassosum coefficients for \code{s} < 1 are imputed with 
   #' results from \code{lassosum} with s = 1 (soft-thresholding) 
-  #' run on SNPs that are common to \code{test.bfile} and the sumamry stats 
+  #' run on SNPs that are common to \code{test.bfile} and the summary stats 
   #' but not to \code{ref.bfile}.} To select only SNPs that are common to all 
   #' three datasets, one can use the \code{also.in.refpanel} logical vector in the
   #' output. 
@@ -134,7 +137,19 @@ lassosum.pipeline <- function(cor, chr=NULL, pos=NULL, snp=NULL,
   stopifnot(is.null(A1) || length(A1) == length(cor))
   stopifnot(is.null(A2) || length(A2) == length(cor))
 
+  possible.LDblocks <- c("EUR.hg19", "AFR.hg19", "ASN.hg19", 
+                         "EUR.hg38", "AFR.hg38", "ASN.hg38") 
   if(!is.null(LDblocks)) {
+    if(is.character(LDblocks) && length(LDblocks) == 1) {
+      if(LDblocks %in% possible.LDblocks) {
+        LDblocks <- read.table2(system.file(paste0("data/Berisa.", 
+                                                   LDblocks, ".bed"), 
+                                            package="lassosum"), header=T)
+      } else {
+        stop(paste("I cannot recognize this LDblock. Specify one of", 
+                   paste(possible.LDblocks, collapse=", ")))
+      }
+    }
     if(is.factor(LDblocks)) LDblocks <- as.integer(LDblocks)
     if(is.vector(LDblocks)) stopifnot(length(LDblocks) == length(cor)) else 
       if(is.data.frame(LDblocks) || is.data.table(LDblocks)) {
@@ -143,6 +158,11 @@ lassosum.pipeline <- function(cor, chr=NULL, pos=NULL, snp=NULL,
         stopifnot(all(LDblocks[,3] >= LDblocks[,2]))
         LDblocks[,1] <- as.character(sub("^chr", "", LDblocks[,1], ignore.case = T))
       }
+  } else {
+    stop(paste0("LDblocks must be specified. Specify one of ", 
+               paste(possible.LDblocks, collapse=", "), 
+               ". Alternatively, give an integer vector defining the blocks, ", 
+               "or a .bed file with three columns read as a data.frame."))
   }
   s <- sort(unique(s))
   stopifnot(all(s > 0 & s <= 1))
@@ -265,7 +285,7 @@ lassosum.pipeline <- function(cor, chr=NULL, pos=NULL, snp=NULL,
       # Assumes base 1 for the 3rd column of LDblocks (like normal bed files)
     }
   } else {
-    split <- ref.bim$V1[ref.extract]
+    stop("LDblocks must now be specified.")
   }
 
   ### Number of different s values to try ###
@@ -399,9 +419,6 @@ lassosum.pipeline <- function(cor, chr=NULL, pos=NULL, snp=NULL,
  
   #' @examples 
   #' \dontrun{
-  #'  ### Read ld region file ###
-  #'  ld <- fread("./data/Berisa.2015.EUR.bed")
-  #'  
   #'  ### Read summary statistics file ###
   #'  ss <- fread("./data/summarystats.txt")
   #'  head(ss)
@@ -413,7 +430,10 @@ lassosum.pipeline <- function(cor, chr=NULL, pos=NULL, snp=NULL,
   #'  out <- lassosum.pipeline(cor=cor, chr=ss$Chr, pos=ss$Position, 
   #'                           A1=ss$A1, A2=ss$A2,
   #'                           ref.bfile=ref.bfile, test.bfile=test.bfile, 
-  #'                           LDblocks = ld)
+  #'                           LDblocks = "EUR.hg19")
   #' }
+  #' @note Berisa, T. & Pickrell, J. K. 
+  #' Approximately independent linkage disequilibrium blocks in human populations. 
+  #' Bioinformatics 32, 283–285 (2015).
 
 }
