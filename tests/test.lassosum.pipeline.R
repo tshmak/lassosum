@@ -9,7 +9,7 @@
 # ss <- read.table2("../inst/data/summarystats.txt", header=T)
 # cor <- p2cor(ss$P_val, n=60000)
 # lp <- lassosum.pipeline(cor=cor, chr=ss$Chr, pos=ss$Position, A1 = ss$A1, A2=ss$A2,
-#                         test.bfile = bfile)
+#                         test.bfile = bfile, LDblocks="EUR.hg19")
 # pheno <- rnorm(n)
 # v <- validate(lp, pheno=pheno)
 # fam <- read.fam(bfile)
