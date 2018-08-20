@@ -3,6 +3,7 @@ parse.pheno.covar <- function(pheno, covar, parsed, trace=0) {
 
   fam <- parsed[['fam']]
   keep <- parsed$keep
+  # keep <- NULL
   pheno.df <- NULL
   
   update.keep <- function(old, new) {
@@ -63,7 +64,7 @@ parse.pheno.covar <- function(pheno, covar, parsed, trace=0) {
   }
   
   #### updates ####
-  parsed$keep <- update.keep(parsed$keep, keep)
+  # parsed$keep <- update.keep(parsed$keep, keep)
   if(!is.null(parsed$keep)) parsed$n <- sum(parsed$keep)
   if(is.data.frame(pheno)) {
     if(!is.null(parsed$keep)) {

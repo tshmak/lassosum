@@ -21,15 +21,11 @@ splitvalidate.lassosum.pipeline <- function(ls.pipeline, test.bfile=NULL,
   
   results <- list(lambda=ls.pipeline$lambda, s=ls.pipeline$s)
   
-  if(!is.null(keep) || !is.null(remove)) if(is.null(test.bfile))
-    stop("Please specify test.bfile if you specify keep or remove")
-  
-  
   redo <- T
   if(is.null(test.bfile)) {
     test.bfile <- ls.pipeline$test.bfile
-    if(is.null(keep) && is.null(remove)) 
-      keep <- ls.pipeline$keep.test
+    # if(is.null(keep) && is.null(remove)) 
+    #   keep <- ls.pipeline$keep.test
     redo <- F
   }
   

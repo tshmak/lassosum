@@ -35,8 +35,8 @@ pseudovalidate.lassosum.pipeline <- function(ls.pipeline, test.bfile=NULL,
   redo <- T
   if(is.null(test.bfile)) {
     test.bfile <- ls.pipeline$test.bfile
-    if(is.null(keep) && is.null(remove)) 
-      keep <- ls.pipeline$keep.test
+    # if(is.null(keep) && is.null(remove)) 
+    #   keep <- ls.pipeline$keep.test
     redo <- F
   }
   
@@ -79,7 +79,7 @@ pseudovalidate.lassosum.pipeline <- function(ls.pipeline, test.bfile=NULL,
     
   } else {
     toextract <- ls.pipeline$test.extract
-    if(is.null(ls.pipeline$pgs)) {
+    if(is.null(ls.pipeline$pgs) || recal) {
       if(trace) cat("Calculating PGS...\n")
       pgs <- lapply(ls.pipeline$beta, function(x) pgs(bfile=test.bfile, 
                                                       weights = x, 

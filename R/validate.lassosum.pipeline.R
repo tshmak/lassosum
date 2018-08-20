@@ -33,17 +33,11 @@ validate.lassosum.pipeline <- function(ls.pipeline, test.bfile=NULL,
   
   results <- list(lambda=ls.pipeline$lambda, s=ls.pipeline$s)
   
-  if(!is.null(keep) || !is.null(remove)) if(is.null(test.bfile))
-    stop("Please specify test.bfile if you specify keep or remove")
-  # We actually cannot implement it otherwise, cos the pgs is only calculated in 
-  # ls.pipeline for those in keep.test. So if we now change keep to some other subsets, 
-  # not everyone is available, and so need to be recalculated. 
-  
   redo <- T
   if(is.null(test.bfile)) {
     test.bfile <- ls.pipeline$test.bfile
-    if(is.null(keep) && is.null(remove)) 
-      keep <- ls.pipeline$keep.test
+    # if(is.null(keep) && is.null(remove)) 
+    #   keep <- ls.pipeline$keep.test
     redo <- F 
   }
 
