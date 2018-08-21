@@ -17,8 +17,20 @@ head(read.table2("lassosum.validate.results.txt", header=T))
 
 Tim.load(Rplink)
 fam <- read.fam(f("testsample"))
-fam2 <- fam[sample(nrow(fam), 50),]
+fam2 <- fam[sample(nrow(fam), 150),]
 write.table2(fam2[,1:2], file=keep <- tempfile())
 options$keep.test <- keep
 system(paste(exec, parse.options(options = options, dot2dash=F)))
 lp <- readRDS("lassosum.lassosum.pipeline.rds")
+
+fam3 <- fam[sample(nrow(fam), 170),]
+write.table2(fam3[,c(1:2,6)], col.names=TRUE, file=PHENO <- tempfile())
+options$lassosum.pipeline <- "lassosum.lassosum.pipeline.rds"
+options$pheno <- PHENO
+system(paste(exec, parse.options(options = options, dot2dash=F)))
+
+fam4 <- fam[sample(nrow(fam), 170),]
+covar <- cbind(fam4[,1:2], rnorm(nrow(fam4)), rnorm(nrow(fam4)))
+write.table2(covar, col.names=TRUE, file=COVAR <- tempfile())
+options$covar <- COVAR
+system(paste(exec, parse.options(options = options, dot2dash=F)))
