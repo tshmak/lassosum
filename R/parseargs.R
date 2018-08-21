@@ -2,7 +2,7 @@ parseargs <- function(..., silent=F, include.others=TRUE) {
   opts <- list(...)
   if(!interactive()) {
     text <- commandArgs(trailingOnly = FALSE)
-    # str(text)
+# print(text)
     start <- which(text == "--args")
     if(length(start) == 0) {
       opts[[".SYSTEM"]] <- text
@@ -19,7 +19,7 @@ parseargs <- function(..., silent=F, include.others=TRUE) {
     }
   }
   # text <- "abc.sh --abc 234 --def-3 --uio 23/asdf/asdf"
-  sp <- strsplit(text, split="[[:space:]]--")[[1]]
+  sp <- strsplit(paste0(" ", text), split="[[:space:]]--")[[1]]
   opts[[".OTHER."]] <- sp[1]
 # print(text)
 # print(sp)
