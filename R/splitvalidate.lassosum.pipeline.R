@@ -92,7 +92,7 @@ splitvalidate.lassosum.pipeline <- function(ls.pipeline, test.bfile=NULL,
   } else {
     results.table <- phcovar$table
     results.table$best.pgs <- best.pgs[results.table$order]
-    results.table$split <- split
+    results.table$split <- split[results.table$order]
   }
   
     
