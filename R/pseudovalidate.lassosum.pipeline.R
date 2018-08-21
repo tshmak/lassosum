@@ -84,6 +84,7 @@ pseudovalidate.lassosum.pipeline <- function(ls.pipeline, test.bfile=NULL,
       pgs <- lapply(ls.pipeline$beta, function(x) pgs(bfile=test.bfile, 
                                                       weights = x, 
                                                       keep=parsed.test$keep, 
+                                                      extract=ls.pipeline$test.extract, 
                                                       cluster=cluster, 
                                                       trace=trace-1))
       names(pgs) <- as.character(ls.pipeline$s)
