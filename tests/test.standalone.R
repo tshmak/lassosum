@@ -2,7 +2,7 @@ devel()
 exec <- system.file("inst/lassosum.R", package="lassosum")
 system(paste("chmod +x", exec))
 # system(exec)
-setwd(system.file("tests", package="lassosum"))
+setwd(tempdir())
 f <- function(file="") paste0(system.file("data", package="lassosum"), "/", file)
 ss <- read.table2(f("summarystats.txt"), header=TRUE)
 options <- list(data=f("summarystats.txt"), chr="Chr", pos="Position", 
