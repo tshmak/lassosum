@@ -1,6 +1,6 @@
 #!/usr/bin/env Rscript 
-Tim.load(lassosum)
-# library(lassosum)
+# Tim.load(lassosum)
+library(lassosum)
 args <- parseargs(required="data", include.others = FALSE)
 opts <- args
 

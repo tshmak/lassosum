@@ -13,8 +13,8 @@ validate.lassosum.pipeline <- function(ls.pipeline, test.bfile=NULL,
   #' @param test.bfile The (\href{https://www.cog-genomics.org/plink2/formats#bed}{PLINK bfile} for the test dataset 
   #' @param keep Participants to keep (see \code{\link{lassosum}} for more details)
   #' @param remove Participants to remove
-  #' @param pheno A vector of phenotype or a \code{data.frame} with 3 columns, the first 2 columns being headed "FID" and "IID"
-  #' @param covar A matrix of covariates or a \code{data.frame} with 3 or more columns, the first 2 columns being headed "FID" and "IID"
+  #' @param pheno A vector of phenotype OR a \code{data.frame} with 3 columns, the first 2 columns being headed "FID" and "IID", OR a filename for such a data.frame
+  #' @param covar A matrix of covariates OR a \code{data.frame} with 3 or more columns, the first 2 columns being headed "FID" and "IID", OR a filename for such a data.frame
   #' @param validate.function Function with which to perform validation
   #' @param trace Controls amount of output
   #' @param destandardize Should coefficients from \code{\link{lassosum}} be 
