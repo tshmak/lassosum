@@ -92,6 +92,7 @@ if(!is.null(args[['covar']])) {
 
 if(!is.null(pheno) || !is.null(args[['validate']])) {
   message("Running validate.lassosum.pipeline")
+  if(!is.null(args[['debug']]) && interactive()) debug(validate.lassosum.pipeline)
   v <- validate(lp, pheno=pheno, covar=covar, trace=trace)
   saveRDS(v, file=paste0(out, ".validate.rds"))
   write.table2(v$results.table, file=paste0(out, ".validate.results.txt"), 
@@ -100,6 +101,7 @@ if(!is.null(pheno) || !is.null(args[['validate']])) {
 
 if(!is.null(pheno) || !is.null(args[['splitvalidate']])) {
   message("Running splitvalidate.lassosum.pipeline")
+  if(!is.null(args[['debug']]) && interactive()) debug(splitvalidate.lassosum.pipeline)
   v <- splitvalidate(lp, pheno=pheno, covar=covar, trace=trace)
   saveRDS(v, file=paste0(out, ".splitvalidate.rds"))
   write.table2(v$results.table, file=paste0(out, ".splitvalidate.results.txt"), 
@@ -108,6 +110,7 @@ if(!is.null(pheno) || !is.null(args[['splitvalidate']])) {
 
 if(!is.null(args[['pseudovalidate']])) {
   message("Running pseudovalidate.lassosum.pipeline")
+  if(!is.null(args[['debug']]) && interactive()) debug(pseudovalidate.lassosum.pipeline)
   v <- pseudovalidate(lp, trace=trace)
   saveRDS(v, file=paste0(out, ".pseudovalidate.rds"))
 }
