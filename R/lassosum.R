@@ -90,7 +90,7 @@ lassosum <- function(cor, bfile,
       Blocks <- blocks
       # Make sure these are defined within the function and so copied to 
       # the child processes
-      results.list <- parLapplyLB(cluster, unique(chunks$chunks.blocks), function(i) {
+      results.list <- parallel::parLapplyLB(cluster, unique(chunks$chunks.blocks), function(i) {
         lassosum(cor=Cor[chunks$chunks==i], bfile=Bfile, lambda=Lambda, 
                  shrink=Shrink, thr=Thr, init=Init[chunks$chunks==i], 
                  trace=trace-0.5, maxiter=Maxiter, 

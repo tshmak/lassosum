@@ -17,6 +17,10 @@ parse.pheno.covar <- function(pheno, covar, parsed, trace=0) {
     }
   }
   #### pheno ####
+  if(!is.null(pheno) && is.character(pheno) && length(pheno) == 1) {
+    if(file.exists(pheno)) pheno <- read.table2(pheno, header=T) else 
+      stop(paste("Cannot find", pheno))
+  }
   if(is.data.frame(pheno)) {
     if(ncol(pheno) != 3) {
       stop(paste("A pheno data.frame must have 3 columns exactly",
@@ -47,6 +51,10 @@ parse.pheno.covar <- function(pheno, covar, parsed, trace=0) {
   
   #### covar ####
   user.covar <- FALSE
+  if(!is.null(covar) && is.character(covar) && length(covar) == 1) {
+    if(file.exists(covar)) covar <- read.table2(covar, header=T) else 
+      stop(paste("Cannot find", covar))
+  }
   if(is.data.frame(covar) & all(colnames(covar)[1:2] == c("FID", "IID"))) {
     user.covar <- TRUE
     colnames <- colnames(covar) 
