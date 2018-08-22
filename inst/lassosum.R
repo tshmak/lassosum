@@ -7,8 +7,17 @@ opts <- args
 #### Options specific to standalone version ####
 standalone.opts <- c("nthreads", "data", "n", "pval", "beta", "OR", "pheno", "covar", 
                      "out", "lassosum.pipeline", "pseudovalidate", "validate", 
-                     "splitvalidate", "debug")
+                     "splitvalidate", "validate.rds", "applyto", 
+                     "debug")
 for(i in standalone.opts) opts[[i]] <- NULL
+
+#### applyto ####
+if(!is.null(args[['applyto']])) {
+  if(is.null(args[['lassosum.pipeline']])) 
+    stop("--lassosum.pipeline must be specified with --applyto")
+  if(is.null(args[['validate.rds']])) 
+    stop("--validate.rds must be specified with --applyto")
+}
 
 #### out ####
 if(is.null(args[['out']])) {
@@ -88,7 +97,7 @@ if(!is.null(args[['debug']]) && interactive()) debug(lassosum.pipeline)
 
 #### Run lassosum.pipeline ####
 if(is.null(args$lassosum.pipeline)) {
-  message("Running lassosum.pipeline")
+  message("\nRunning lassosum.pipeline")
 # str(opts)
   lp <- do.call(lassosum.pipeline, opts)
   saveRDS(lp, file=paste0(out, ".lassosum.pipeline.rds"))
@@ -102,25 +111,38 @@ opts2$pheno <- args[['pheno']]
 opts2$covar <- args[['covar']]
 opts2 <- c(opts2, opts)
 
-opts2.tokeep <- list(validate=names(as.list(args(lassosum:::validate.lassosum.pipeline))),
+opts2.tokeep <- list(pseudovalidate=names(as.list(args(lassosum:::pseudovalidate.lassosum.pipeline))), 
                      splitvalidate=names(as.list(args(lassosum:::splitvalidate.lassosum.pipeline))),
-                     pseudovalidate=names(as.list(args(lassosum:::pseudovalidate.lassosum.pipeline))))
+                     validate=names(as.list(args(lassosum:::validate.lassosum.pipeline))))
 
-if(!is.null(args[['pheno']])) {
-  args[['validate']] <- args[['splitvalidate']] <- TRUE
-}
-for(i in 1:length(opts2.tokeep)) {
-  type <- names(opts2.tokeep)[i]
-  tokeep <- names(opts2) %in% opts2.tokeep[[i]]
-  
-  if(!is.null(args[[type]])) {
-    message("Running ", type, ".lassosum.pipeline")
-    if(!is.null(args[['debug']]) && interactive()) debug(paste0(type,".lassosum.pipeline"))
-    v <- do.call(type, opts2[tokeep])
-    if(type %in% c("validate", "splitvalidate")) 
-      saveRDS(v, file=paste(out, type, "rds", sep="."))
-    lassosum:::write.table2(v$results.table, file=paste(out, type, "results.txt", sep="."), 
-                 col.names=T)
+if(is.null(args[['validate.rds']])) {
+  if(!is.null(args[['pheno']])) {
+    args[['validate']] <- args[['splitvalidate']] <- TRUE
   }
+  for(i in 1:length(opts2.tokeep)) {
+    type <- names(opts2.tokeep)[i]
+    tokeep <- names(opts2) %in% opts2.tokeep[[i]]
+    
+    if(!is.null(args[[type]])) {
+      message("\nRunning ", type, ".lassosum.pipeline")
+      if(!is.null(args[['debug']]) && interactive()) debug(paste0(type,".lassosum.pipeline"))
+      v <- do.call(type, opts2[tokeep])
+      if(type %in% c("validate", "splitvalidate")) 
+        saveRDS(v, file=paste(out, type, "rds", sep="."))
+      lassosum:::write.table2(v$results.table, file=paste(out, type, "results.txt", sep="."), 
+                              col.names=T)
+    }
+  }
+} else {
+  v <- readRDS(args[['validate.rds']])
 }
 
+#### Apply to new data ####
+if(!is.null(args[['applyto']])) {
+  opts2[['test.bfile']] <- args[['applyto']]
+  tokeep <- names(opts2) %in% opts2.tokeep[['validate']]
+  lp <- subset(lp, s=v$best.s, lambda=v$best.lambda)
+  v2 <- do.call("validate", opts2[tokeep])
+  lassosum:::write.table2(v2$results.table, file=paste(out, "results.txt", sep="."), 
+                          col.names=T)
+}
