@@ -61,7 +61,7 @@ parseargs <- function(required=character(0), ..., silent=F, include.others=TRUE,
 
   if(length(required) > 0) {
     for(v in required) {
-      if(!(v %in% names(opts))) stop(paste0("--", v, " is required."))
+      if(length(opts) == 0 || !(v %in% names(opts))) stop(paste0("--", v, " is required."))
     }
   }
   

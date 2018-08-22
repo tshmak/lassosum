@@ -102,9 +102,9 @@ opts2$pheno <- args[['pheno']]
 opts2$covar <- args[['covar']]
 opts2 <- c(opts2, opts)
 
-opts2.tokeep <- list(validate=names(as.list(args(validate.lassosum.pipeline))),
-                     splitvalidate=names(as.list(args(splitvalidate.lassosum.pipeline))),
-                     pseudovalidate=names(as.list(args(pseudovalidate.lassosum.pipeline))))
+opts2.tokeep <- list(validate=names(as.list(args(lassosum:::validate.lassosum.pipeline))),
+                     splitvalidate=names(as.list(args(lassosum:::splitvalidate.lassosum.pipeline))),
+                     pseudovalidate=names(as.list(args(lassosum:::pseudovalidate.lassosum.pipeline))))
 
 if(!is.null(args[['pheno']])) {
   args[['validate']] <- args[['splitvalidate']] <- TRUE
