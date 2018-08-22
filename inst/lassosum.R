@@ -1,7 +1,7 @@
 #!/usr/bin/env Rscript 
 # Tim.load(lassosum)
 library(lassosum)
-args <- parseargs(required="data", include.others = FALSE)
+args <- lassosum:::parseargs(required="data", include.others = FALSE)
 opts <- args
 
 #### Options specific to standalone version ####

@@ -1,6 +1,9 @@
 parseargs <- function(required=character(0), ..., silent=F, include.others=TRUE, 
                       test=NULL) {
 
+  #' @title Function to parse arguments from command line
+  #' @keywords internal 
+  
   opts <- list(...)
   if(!interactive()) {
     text <- commandArgs(trailingOnly = FALSE)
