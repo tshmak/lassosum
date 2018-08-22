@@ -2,6 +2,7 @@ plot.validate.lassosum <- function(obj) {
   #' @title Plot function for \code{validate.lassosum} objects
   #' @export
   t <- obj$validation.table
+  if(!any(is.finite(t$value))) return(invisible(NULL)) # If nothing to plot
   plot(unlist(t$lambda), 
        unlist(t$value), 
        type="n", 
