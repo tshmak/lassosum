@@ -1,7 +1,7 @@
 #!/usr/bin/env Rscript 
 # Tim.load(lassosum)
 library(lassosum)
-args <- lassosum:::parseargs(required="data", include.others = FALSE)
+args <- lassosum:::parseargs(include.others = FALSE)
 opts <- args
 
 #### Options specific to standalone version ####
@@ -31,76 +31,79 @@ if(!is.null(args$nthreads)) {
   opts$cl <- parallel::makeForkCluster(args$nthreads)
 } 
 
-#### lambda ####
-if(!is.null(args[['lambda']]) && is.character(args[['lambda']])) {
-  opts[['lambda']] <- as.numeric(strsplit(args[['lambda']], split=",")[[1]])
-} 
+if(is.null(args[['lassosum.pipeline']])) {
 
-#### s ####
-if(!is.null(args[['s']]) && is.character(args[['s']])) {
-  opts[['s']] <- as.numeric(strsplit(args[['s']], split=",")[[1]])
-} 
-
-#### data ####
-data <- lassosum:::read.table2(args[['data']], header=TRUE)
-
-#### variables in data ####
-vars <- c("cor", "chr", "pos", "snp", "A1", "A2")
-for(v in vars) {
-  if(!is.null(args[[v]])) {
-    if(!is.null(data[[ args[[v]] ]])) opts[[v]] <- data[[ args[[v]] ]] else
-      stop(paste("Cannot find", args[[v]], "in data"))
+  #### lambda ####
+  if(!is.null(args[['lambda']]) && is.character(args[['lambda']])) {
+    opts[['lambda']] <- as.numeric(strsplit(args[['lambda']], split=",")[[1]])
   } 
-}
+  
+  #### s ####
+  if(!is.null(args[['s']]) && is.character(args[['s']])) {
+    opts[['s']] <- as.numeric(strsplit(args[['s']], split=",")[[1]])
+  } 
+  
+  #### data ####
+  if(is.null(args[['data']])) stop("--data is required.")
+  data <- lassosum:::read.table2(args[['data']], header=TRUE)  
 
-#### Others variables in data ####
-vars <- c("pval", "beta", "OR")
-for(v in vars) {
-  if(!is.null(args[[v]])) {
-    if(!is.null(data[[ args[[v]] ]])) assign(v, data[[ args[[v]] ]]) else 
-      stop(paste("Cannot find", args[[v]], "in data"))
-  } else assign(v, NULL)
-}
-
-#### n ####
-# n is special, cos it can take a number or be a variable in data
-if(!is.null(args[["n"]])) n <- if(is.character(args[['n']])) data[[ args[['n']] ]] else 
-  args[['n']] else n <- NULL
-
-#### LDblocks ####
-if(!is.null(args[["LDblocks"]])) opts[['LDblocks']] <- if(!is.null(data[[ args[['LDblocks']] ]])) 
-  data[[ args[['LDblocks']] ]] else opts[['LDblocks']] <- args[['LDblocks']]
-
-#### min.n ####
-if(!is.null(args[["min.n"]])) min.n <- args[["min.n"]] else min.n <- NULL
-
-#### p2cor ####
-if(is.null(beta) && !is.null(OR)) beta <- log(OR)
-if(is.null(opts[['cor']])) {
-  if(!is.null(pval)) {
-    if(!is.null(n) && !is.null(beta)) {
-      if(!is.null(min.n)) {
-        opts[['cor']] <- p2cor(pval, n=n, sign = beta, min.n = min.n) 
+  #### variables in data ####
+  vars <- c("cor", "chr", "pos", "snp", "A1", "A2")
+  for(v in vars) {
+    if(!is.null(args[[v]])) {
+      if(!is.null(data[[ args[[v]] ]])) opts[[v]] <- data[[ args[[v]] ]] else
+        stop(paste("Cannot find", args[[v]], "in data"))
+    } 
+  }
+  
+  #### Others variables in data ####
+  vars <- c("pval", "beta", "OR")
+  for(v in vars) {
+    if(!is.null(args[[v]])) {
+      if(!is.null(data[[ args[[v]] ]])) assign(v, data[[ args[[v]] ]]) else 
+        stop(paste("Cannot find", args[[v]], "in data"))
+    } else assign(v, NULL)
+  }
+  
+  #### n ####
+  # n is special, cos it can take a number or be a variable in data
+  if(!is.null(args[["n"]])) n <- if(is.character(args[['n']])) data[[ args[['n']] ]] else 
+    args[['n']] else n <- NULL
+  
+  #### LDblocks ####
+  if(!is.null(args[["LDblocks"]])) opts[['LDblocks']] <- if(!is.null(data[[ args[['LDblocks']] ]])) 
+    data[[ args[['LDblocks']] ]] else opts[['LDblocks']] <- args[['LDblocks']]
+  
+  #### min.n ####
+  if(!is.null(args[["min.n"]])) min.n <- args[["min.n"]] else min.n <- NULL
+  
+  #### p2cor ####
+  if(is.null(beta) && !is.null(OR)) beta <- log(OR)
+  if(is.null(opts[['cor']])) {
+    if(!is.null(pval)) {
+      if(!is.null(n) && !is.null(beta)) {
+        if(!is.null(min.n)) {
+          opts[['cor']] <- p2cor(pval, n=n, sign = beta, min.n = min.n) 
+        } else {
+          opts[['cor']] <- p2cor(pval, n=n, sign = beta) 
+        }
       } else {
-        opts[['cor']] <- p2cor(pval, n=n, sign = beta) 
+        stop("You need to specify n and beta/OR to convert pval to correlations.")
       }
     } else {
-      stop("You need to specify n and beta/OR to convert pval to correlations.")
+      stop("Either cor or pval must be provided.")
     }
-  } else {
-    stop("Either cor or pval must be provided.")
   }
-}
-
-#### debug ####
-if(!is.null(args[['debug']]) && interactive()) debug(lassosum.pipeline)
-
-#### Run lassosum.pipeline ####
-if(is.null(args$lassosum.pipeline)) {
+  
+  #### debug ####
+  if(!is.null(args[['debug']]) && interactive()) debug(lassosum.pipeline)
+  
+  #### Run lassosum.pipeline ####
   message("\nRunning lassosum.pipeline")
-# str(opts)
+  # str(opts)
   lp <- do.call(lassosum.pipeline, opts)
   saveRDS(lp, file=paste0(out, ".lassosum.pipeline.rds"))
+  
 } else {
   lp <- readRDS(args$lassosum.pipeline)
 }
@@ -127,8 +130,7 @@ if(is.null(args[['validate.rds']])) {
       message("\nRunning ", type, ".lassosum.pipeline")
       if(!is.null(args[['debug']]) && interactive()) debug(paste0(type,".lassosum.pipeline"))
       v <- do.call(type, opts2[tokeep])
-      if(type %in% c("validate", "splitvalidate")) 
-        saveRDS(v, file=paste(out, type, "rds", sep="."))
+      saveRDS(v, file=paste(out, type, "rds", sep="."))
       lassosum:::write.table2(v$results.table, file=paste(out, type, "results.txt", sep="."), 
                               col.names=T)
     }
@@ -139,9 +141,9 @@ if(is.null(args[['validate.rds']])) {
 
 #### Apply to new data ####
 if(!is.null(args[['applyto']])) {
-  opts2[['test.bfile']] <- args[['applyto']]
+  if(is.character(args[['applyto']])) opts2[['test.bfile']] <- args[['applyto']]
   tokeep <- names(opts2) %in% opts2.tokeep[['validate']]
-  lp <- subset(lp, s=v$best.s, lambda=v$best.lambda)
+  opts2$ls.pipeline <- subset(lp, s=v$best.s, lambda=v$best.lambda)
   v2 <- do.call("validate", opts2[tokeep])
   lassosum:::write.table2(v2$results.table, file=paste(out, "results.txt", sep="."), 
                           col.names=T)
