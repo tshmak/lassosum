@@ -4,7 +4,7 @@ lassosum [![Build Status](https://travis-ci.org/tshmak/lassosum.svg?branch=maste
 
 ### Description
 
-`lassosum` is a method for computing LASSO estimates of a linear regression problem given summary statistics from GWAS and Genome-wide meta-analyses, accounting for Linkage Disequilibrium (LD), via a reference panel.
+`lassosum` is a method for computing LASSO/Elastic Net estimates of a linear regression problem given summary statistics from GWAS and Genome-wide meta-analyses, accounting for Linkage Disequilibrium (LD), via a reference panel.
 The reference panel is assumed to be in PLINK 1 [format](https://www.cog-genomics.org/plink/1.9/input#bed).
 Summary statistics are expected to be loaded into memory as a data.frame/data.table. 
 
