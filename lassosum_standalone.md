@@ -2,7 +2,7 @@ lassosum (standalone version for Linux)
 =======================
 
 ### Description
-This page is for the standalone version of `lassosum`. For full details of `lassosum` as an R package, please refer to [this page](https://github.com/tshmak/lassosum). 
+This page is for the standalone version of `lassosum`. For full details of `lassosum` as an R package, please refer to [this page](https://github.com/tshmak/lassosum#lassosum-). 
 
 ### Installation
 Follow the instruction [here](https://github.com/tshmak/lassosum#installation) to install `lassosum` on R. Then add the `lassosum` path to the `$PATH` variable. The `lassosum` path can be obtained by typing the following in R:  
@@ -50,7 +50,7 @@ To actually try out the above example, copy the relevant files from the director
 ```
 
 ### Options
-Almost all of the options available to the [R version](https://github.com/tshmak/lassosum) can be passed to `lassosum` standalone by prepending the option with `--`. For example, type 
+Almost all of the options available to the [R version](https://github.com/tshmak/lassosum#lassosum-) can be passed to `lassosum` standalone by prepending the option with `--`. For example, type 
 ```{bash}
 $ lassosum ... --ref.bfile refsample --lambda 0.001, 0.002 --keep.test keep.txt ... 
 ```

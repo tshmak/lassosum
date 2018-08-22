@@ -1,6 +1,6 @@
 lassosum [![Build Status](https://travis-ci.org/tshmak/lassosum.svg?branch=master)](https://travis-ci.org/tshmak/lassosum)
 =======================
-*New!! A standalone version of `lassosum` is now available. Please see [here](https://github.com/tshmak/lassosum/blob/master/lassosum_standalone.md) for details.*
+*New!! A standalone version of `lassosum` is now available. Please see [here](https://github.com/tshmak/lassosum/blob/master/lassosum_standalone.md#lassosum-standalone-version-for-linux) for details.*
 
 ### Description
 
