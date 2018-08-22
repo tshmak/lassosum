@@ -31,16 +31,34 @@ if(!is.null(args$nthreads)) {
   opts$cl <- parallel::makeForkCluster(args$nthreads)
 } 
 
+parsefun <- function(input) {
+  if(is.character(input)) {
+    s <- strsplit(input, split=",")[[1]]
+    suppressWarnings(ss <- as.numeric(s))
+    if(!all(is.na(ss))) return(ss) else return(s)
+  } else return(input)
+}
+
+#### test.bfile ####
+if(!is.null(args[['test.bfile']])) {
+  opts[['test.bfile']] <- parsefun(args[['test.bfile']])
+} 
+
+#### ref.bfile ####
+if(!is.null(args[['ref.bfile']])) {
+  opts[['ref.bfile']] <- parsefun(args[['ref.bfile']])
+} 
+
 if(is.null(args[['lassosum.pipeline']])) {
 
   #### lambda ####
-  if(!is.null(args[['lambda']]) && is.character(args[['lambda']])) {
-    opts[['lambda']] <- as.numeric(strsplit(args[['lambda']], split=",")[[1]])
+  if(!is.null(args[['lambda']])) {
+    opts[['lambda']] <- parsefun(args[['lambda']])
   } 
   
   #### s ####
-  if(!is.null(args[['s']]) && is.character(args[['s']])) {
-    opts[['s']] <- as.numeric(strsplit(args[['s']], split=",")[[1]])
+  if(!is.null(args[['s']])) {
+    opts[['s']] <- parsefun(args[['s']])
   } 
   
   #### data ####
