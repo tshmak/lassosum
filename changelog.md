@@ -59,4 +59,13 @@
 * Bug fix for `matchpos()`
 * `pgs()` stops if keep or extract not in the same order as in .bim/.fam file
 
+## v0.4.2
+* Allows `covar` and `pheno` to take `data.frame`s or files as input. 
+* You no longer have to re-enter `test.bfile` if `keep` or `remove` is used in `validate.lassosum.pipeline()` or `pseudovalidate.lassosum.pipeline()` 
+* Adds `splitvalidate()` for split-validation. 
+* Adds `subset.lassosum.pipeline()` for applying validated PGS to new data. 
+* Allows `pheno` to be constant or NA if only one PGS is calculated in `validate.lassosum.pipeline()`. 
+* `plot.validate.lassosum()` will abandon if there are no finite values. 
+* **A standalone version of lassosum is available** 
+
 
