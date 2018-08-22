@@ -33,7 +33,7 @@ if(!is.null(args[['s']]) && is.character(args[['s']])) {
 } 
 
 #### data ####
-data <- read.table2(args[['data']], header=TRUE)
+data <- lassosum:::read.table2(args[['data']], header=TRUE)
 
 #### variables in data ####
 vars <- c("cor", "chr", "pos", "snp", "A1", "A2")
@@ -119,7 +119,7 @@ for(i in 1:length(opts2.tokeep)) {
     v <- do.call(type, opts2[tokeep])
     if(type %in% c("validate", "splitvalidate")) 
       saveRDS(v, file=paste(out, type, "rds", sep="."))
-    write.table2(v$results.table, file=paste(out, type, "results.txt", sep="."), 
+    lassosum:::write.table2(v$results.table, file=paste(out, type, "results.txt", sep="."), 
                  col.names=T)
   }
 }
