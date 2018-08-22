@@ -1,8 +1,3 @@
----
-output:
-  html_document:
-    highlight: pygments
---- 
 lassosum (standalone version for Linux)
 =======================
 
