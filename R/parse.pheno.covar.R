@@ -107,7 +107,7 @@ parse.pheno.covar <- function(pheno, covar, parsed, trace=0) {
     stop(paste("The dimension of the covar matrix does not match the number of samples used.", 
                "If your covariate is a data.frame with FID and IID, make sure they have headers."))
   }
-  if(sd(pheno, na.rm = TRUE) == 0) stop("There's no variation in phenotype")
+  # if(sd(pheno, na.rm = TRUE) == 0) stop("There's no variation in phenotype")
   parsed$fam <- fam
 
   return(list(pheno=pheno, covar=covar, parsed=parsed, table=pheno.df))

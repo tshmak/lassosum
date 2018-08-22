@@ -115,6 +115,10 @@ validate.lassosum.pipeline <- function(ls.pipeline, test.bfile=NULL,
   ss <- rep(ls.pipeline$s, rep(length(ls.pipeline$lambda), length(ls.pipeline$s)))
   PGS <- do.call("cbind", results$pgs)
 
+  ### pheno ###
+  if(sd(pheno, na.rm = TRUE) == 0 && ncol(PGS) > 1) 
+    stop("There's no variation in phenotype")
+
   ### covar ### 
   if(!is.null(covar)) {
     for(i in ncol(PGS)) {
