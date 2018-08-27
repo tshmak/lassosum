@@ -6,7 +6,8 @@ validate.lassosum.pipeline <- function(ls.pipeline, test.bfile=NULL,
                               trace=1, 
                               destandardize=F, plot=T, 
                               exclude.ambiguous=T, 
-                              cluster=NULL, ...) {
+                              cluster=NULL, 
+                              rematch=!is.null(test.bfile), ...) {
   
   #' @title Function to validate output from lassosum.pipeline with external phenotype
   #' @param ls.pipeline A lassosum.pipeline object
@@ -22,6 +23,7 @@ validate.lassosum.pipeline <- function(ls.pipeline, test.bfile=NULL,
   #' @param plot Should the validation plot be plotted? 
   #' @param exclude.ambiguous Should ambiguous SNPs (C/G, A/T) be excluded? 
   #' @param cluster A \code{cluster} object from the \code{parallel} package for parallel computing
+  #' @param rematch Forces a rematching of the ls.pipline beta's with the new .bim file
   #' @param ... parameters to pass to \code{\link{sd.bfile}}
   #' @details Chooses the best \code{lambda} and \code{s} by validating 
   #' polygenic score against an external phenotype in the testing dataset. 
@@ -33,7 +35,6 @@ validate.lassosum.pipeline <- function(ls.pipeline, test.bfile=NULL,
   
   results <- list(lambda=ls.pipeline$lambda, s=ls.pipeline$s)
   
-  redo <- T
   if(is.null(test.bfile)) {
     test.bfile <- ls.pipeline$test.bfile
     keep.through.pheno <- !is.null(pheno) && 
@@ -41,7 +42,6 @@ validate.lassosum.pipeline <- function(ls.pipeline, test.bfile=NULL,
                               (is.character(pheno) && length(pheno) == 1))
     if(is.null(keep) && is.null(remove) && !keep.through.pheno)
       keep <- ls.pipeline$keep.test
-    redo <- F 
   }
 
   ### Pheno & covar ### 
@@ -60,12 +60,13 @@ validate.lassosum.pipeline <- function(ls.pipeline, test.bfile=NULL,
     sd[sd <= 0] <- Inf # Do not want infinite beta's!
     ls.pipeline$beta <- lapply(ls.pipeline$beta, 
                                function(x) as.matrix(Matrix::Diagonal(x=1/sd) %*% x))
-    redo <- T
+    recal <- T
   }
 
-  if(redo) {
+  if(rematch) {
     if(trace) cat("Coordinating lassosum output with test data...\n")
     
+    if(length(test.bfile) > 1) stop("Multiple 'test.bfile's not supported here.")
     bim <- fread(paste0(test.bfile, ".bim"))
     bim$V1 <- as.character(sub("^chr", "", bim$V1, ignore.case = T))
     

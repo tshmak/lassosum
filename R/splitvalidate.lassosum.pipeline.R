@@ -2,6 +2,7 @@ splitvalidate.lassosum.pipeline <- function(ls.pipeline, test.bfile=NULL,
                                        keep=NULL, remove=NULL, 
                                        pheno=NULL, covar=NULL, 
                                        trace=1, split=NULL, 
+                                       rematch=!is.null(test.bfile), 
                                        ...) {
   
   #' @title Function to perform split-validation using output from lassosum.pipeline with external phenotype
@@ -12,6 +13,7 @@ splitvalidate.lassosum.pipeline <- function(ls.pipeline, test.bfile=NULL,
   #' @param pheno A vector of phenotype OR a \code{data.frame} with 3 columns, the first 2 columns being headed "FID" and "IID", OR a filename for such a data.frame
   #' @param covar A matrix of covariates OR a \code{data.frame} with 3 or more columns, the first 2 columns being headed "FID" and "IID", OR a filename for such a data.frame
   #' @param trace Controls amount of output
+  #' @param rematch Forces a rematching of the ls.pipline beta's with the new .bim file
   #' @param ... parameters to pass to \code{\link{validate.lassosum.pipeline}}
   #' @details Performs split-validation. Randomly split the test data into half for validation 
   #' and half for prediction. Standardize the best cross-predicted pgs and stack together. 
@@ -21,7 +23,6 @@ splitvalidate.lassosum.pipeline <- function(ls.pipeline, test.bfile=NULL,
   
   results <- list(lambda=ls.pipeline$lambda, s=ls.pipeline$s)
   
-  redo <- T
   if(is.null(test.bfile)) {
     test.bfile <- ls.pipeline$test.bfile
     keep.through.pheno <- !is.null(pheno) && 
@@ -29,7 +30,6 @@ splitvalidate.lassosum.pipeline <- function(ls.pipeline, test.bfile=NULL,
          (is.character(pheno) && length(pheno) == 1))
     if(is.null(keep) && is.null(remove) && !keep.through.pheno)
       keep <- ls.pipeline$keep.test
-    redo <- F
   }
   
   ### Pheno & covar ### 
@@ -71,7 +71,7 @@ splitvalidate.lassosum.pipeline <- function(ls.pipeline, test.bfile=NULL,
     }
     if(trace) cat(paste0("Split ", s, ":\n")) 
     v <- validate(ls.pipeline, keep=keep, pheno=pheno2, covar=covar2, 
-                  test.bfile=test.bfile, trace=trace, ...)
+                  test.bfile=test.bfile, trace=trace, rematch=rematch, ...)
     best.s <- c(best.s, v$best.s)
     best.lambda <- c(best.lambda, v$best.lambda)
     PGS[[s]] <- v$pgs

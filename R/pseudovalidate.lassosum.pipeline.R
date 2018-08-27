@@ -3,7 +3,9 @@ pseudovalidate.lassosum.pipeline <- function(ls.pipeline, test.bfile=NULL,
                                        trace=1, 
                                        destandardize=F, plot=T, 
                                        exclude.ambiguous=T, 
-                                       cluster=NULL, ...) {
+                                       cluster=NULL, 
+                                       rematch=!is.null(test.bfile), 
+                                       ...) {
   #' @title Function to perform pseudovalidation from a lassosum.pipeline object
   #' @param ls.pipeline A lassosum.pipeline object
   #' @param test.bfile The (\href{https://www.cog-genomics.org/plink2/formats#bed}{PLINK bfile} for the test dataset 
@@ -15,6 +17,7 @@ pseudovalidate.lassosum.pipeline <- function(ls.pipeline, test.bfile=NULL,
   #' @param plot Should the validation plot be plotted? 
   #' @param exclude.ambiguous Should ambiguous SNPs (C/G, A/T) be excluded? 
   #' @param cluster A \code{cluster} object from the \code{parallel} package for parallel computing
+  #' @param rematch Forces a rematching of the ls.pipline beta's with the new .bim file
   #' @param ... parameters to pass to \code{\link{pseudovalidation}}
   #' @details Pseudovalidation is explained in Mak et al (2016). It helps 
   #' choosing a value of \code{lambda} and \code{s} in the absence of a validation
@@ -32,12 +35,10 @@ pseudovalidate.lassosum.pipeline <- function(ls.pipeline, test.bfile=NULL,
   if(!is.null(keep) || !is.null(remove)) if(is.null(test.bfile))
     stop("Please specify test.bfile if you specify keep or remove")
   
-  redo <- T
   if(is.null(test.bfile)) {
     test.bfile <- ls.pipeline$test.bfile
     if(is.null(keep) && is.null(remove))
       keep <- ls.pipeline$keep.test
-    redo <- F
   }
   
   if(destandardize) {
@@ -47,16 +48,17 @@ pseudovalidate.lassosum.pipeline <- function(ls.pipeline, test.bfile=NULL,
     sd[sd <= 0] <- Inf # Do not want infinite beta's!
     ls.pipeline$beta <- lapply(ls.pipeline$beta, 
                    function(x) as.matrix(Matrix::Diagonal(x=1/sd) %*% x))
-    redo <- T
+    recal <- T
   }
   
   parsed.test <- parseselect(test.bfile, keep=keep, remove=remove)
   recal <- !identical(ls.pipeline$test.bfile, test.bfile) || 
     !identical(parsed.test$keep, ls.pipeline$keep.test)
   
-  if(redo) {
+  if(rematch) {
     if(trace) cat("Coordinating lassosum output with test data...\n")
     
+    if(length(test.bfile) > 1) stop("Multiple 'test.bfile's not supported here.")
     bim <- fread(paste0(test.bfile, ".bim"))
     bim$V1 <- as.character(sub("^chr", "", bim$V1, ignore.case = T))
     

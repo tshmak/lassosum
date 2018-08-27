@@ -10,7 +10,7 @@ splitvalidate(...)
 
 \method{splitvalidate}{lassosum.pipeline}(ls.pipeline, test.bfile = NULL,
   keep = NULL, remove = NULL, pheno = NULL, covar = NULL, trace = 1,
-  split = NULL, ...)
+  split = NULL, rematch = !is.null(test.bfile), ...)
 }
 \arguments{
 \item{...}{parameters to pass to \code{\link{validate.lassosum.pipeline}}}
@@ -28,6 +28,8 @@ splitvalidate(...)
 \item{covar}{A matrix of covariates OR a \code{data.frame} with 3 or more columns, the first 2 columns being headed "FID" and "IID", OR a filename for such a data.frame}
 
 \item{trace}{Controls amount of output}
+
+\item{rematch}{Forces a rematching of the ls.pipline beta's with the new .bim file}
 }
 \details{
 Performs split-validation. Randomly split the test data into half for validation 
