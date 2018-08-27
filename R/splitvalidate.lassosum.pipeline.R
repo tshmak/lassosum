@@ -24,8 +24,11 @@ splitvalidate.lassosum.pipeline <- function(ls.pipeline, test.bfile=NULL,
   redo <- T
   if(is.null(test.bfile)) {
     test.bfile <- ls.pipeline$test.bfile
-    # if(is.null(keep) && is.null(remove)) 
-    #   keep <- ls.pipeline$keep.test
+    keep.through.pheno <- !is.null(pheno) && 
+      ((is.data.frame(pheno)) || 
+         (is.character(pheno) && length(pheno) == 1))
+    if(is.null(keep) && is.null(remove) && !keep.through.pheno)
+      keep <- ls.pipeline$keep.test
     redo <- F
   }
   

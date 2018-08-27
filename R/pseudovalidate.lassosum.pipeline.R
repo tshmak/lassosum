@@ -35,8 +35,8 @@ pseudovalidate.lassosum.pipeline <- function(ls.pipeline, test.bfile=NULL,
   redo <- T
   if(is.null(test.bfile)) {
     test.bfile <- ls.pipeline$test.bfile
-    # if(is.null(keep) && is.null(remove)) 
-    #   keep <- ls.pipeline$keep.test
+    if(is.null(keep) && is.null(remove))
+      keep <- ls.pipeline$keep.test
     redo <- F
   }
   
