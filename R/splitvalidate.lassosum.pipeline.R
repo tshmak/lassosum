@@ -40,8 +40,8 @@ splitvalidate.lassosum.pipeline <- function(ls.pipeline, test.bfile=NULL,
   parsed.test <- phcovar$parsed
   pheno <- phcovar$pheno
   covar <- phcovar$covar
-  recal <- !identical(ls.pipeline$test.bfile, test.bfile) || 
-    !identical(parsed.test$keep, ls.pipeline$keep.test)
+  # recal <- !identical(ls.pipeline$test.bfile, test.bfile) || 
+  #   !identical(parsed.test$keep, ls.pipeline$keep.test)
   
   ### Split ###
   if(is.null(split)) {

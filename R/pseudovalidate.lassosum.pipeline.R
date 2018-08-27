@@ -84,6 +84,7 @@ pseudovalidate.lassosum.pipeline <- function(ls.pipeline, test.bfile=NULL,
     toextract <- ls.pipeline$test.extract
     if(is.null(ls.pipeline$pgs) || recal) {
       if(trace) cat("Calculating PGS...\n")
+      if(length(test.bfile) > 1) stop("Multiple 'test.bfile's not supported here.")
       pgs <- lapply(ls.pipeline$beta, function(x) pgs(bfile=test.bfile, 
                                                       weights = x, 
                                                       keep=parsed.test$keep, 
