@@ -23,6 +23,7 @@ splitvalidate.lassosum.pipeline <- function(ls.pipeline, test.bfile=NULL,
   
   results <- list(lambda=ls.pipeline$lambda, s=ls.pipeline$s)
   
+  rematch <- rematch # Forces an evaluation at this point
   if(is.null(test.bfile)) {
     test.bfile <- ls.pipeline$test.bfile
     keep.through.pheno <- !is.null(pheno) && 

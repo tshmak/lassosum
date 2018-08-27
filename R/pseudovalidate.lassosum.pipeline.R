@@ -35,6 +35,7 @@ pseudovalidate.lassosum.pipeline <- function(ls.pipeline, test.bfile=NULL,
   if(!is.null(keep) || !is.null(remove)) if(is.null(test.bfile))
     stop("Please specify test.bfile if you specify keep or remove")
   
+  rematch <- rematch # Forces an evaluation at this point
   if(is.null(test.bfile)) {
     test.bfile <- ls.pipeline$test.bfile
     if(is.null(keep) && is.null(remove))
