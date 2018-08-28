@@ -275,10 +275,10 @@ lassosum.pipeline <- function(cor, chr=NULL, pos=NULL, snp=NULL,
   ### Split data by ld region ###
   if(!is.null(LDblocks)) {
     if(is.vector(LDblocks)) {
-      split <- LDblocks[m.ref$order][m.common$order]
+      LDblocks <- as.integer(LDblocks[m.ref$order][m.common$order])
     } else {
       if(trace) cat("Splitting genome by LD blocks ...\n")
-      split <- splitgenome(CHR = ref.bim$V1[ref.extract], 
+      LDblocks <- splitgenome(CHR = ref.bim$V1[ref.extract], 
                            POS = ref.bim$V4[ref.extract],
                            ref.CHR = LDblocks[,1], 
                            ref.breaks = LDblocks[,3])
@@ -298,7 +298,7 @@ lassosum.pipeline <- function(cor, chr=NULL, pos=NULL, snp=NULL,
       if(trace) cat("s = ", s, "\n")
       lassosum(cor=cor2, bfile=ref.bfile, 
                    shrink=s, extract=ref.extract, lambda=lambda,
-                   blocks = split, trace=trace-1, 
+                   blocks = LDblocks, trace=trace-1, 
                    keep=parsed.ref$keep, cluster=cluster, ...)
     })
   }
@@ -380,7 +380,7 @@ lassosum.pipeline <- function(cor, chr=NULL, pos=NULL, snp=NULL,
                   keep.test=parsed.test$keep, 
                   ref.bfile=ref.bfile, 
                   keep.ref=parsed.ref$keep, 
-                  LDblocks=as.integer(split), 
+                  LDblocks=LDblocks, 
                   destandardized=destandardize, 
                   exclude.ambiguous=exclude.ambiguous)
   #' @return A \code{lassosum.pipeline} object with the following elements
