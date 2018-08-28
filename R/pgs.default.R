@@ -26,8 +26,9 @@ pgs.default <- function(bfile, weights, keep=NULL, extract=NULL, exclude=NULL, r
                    chr=NULL, cluster=NULL, trace=0, sparse=TRUE) {
 
   if(length(bfile) > 1) {
-    call <- match.call()
-    return(do.call("pgs.vec", as.list(call[-1])))
+    return(pgs.vec(bfile=bfile, weights=weights, keep=keep, remove=remove,
+                   extract=extract, exclude=exclude, chr=chr, 
+                   cluster=cluster, trace=trace, sparse=sparse))
   }
 
   stopifnot(is.numeric(weights))

@@ -55,13 +55,18 @@ merge.lassosum.pipeline <- function(...) {
     }
   }
   
-  split.vec <- sapply(l, function(x) nrow(x$beta[[1]]))
-  lpipe$beta.split <- rep(1:length(l), split.vec)
-  lpipe$split <- function(obj, vec) {
-    # obj should be either lassosum.pipeline or cp.lassosum
-    s <- obj$beta.split
-    return(lapply(1:max(s), function(i) vec[s==i]))
-  }
+  # split.vec <- sapply(l, function(x) nrow(x$beta[[1]]))
+  # lpipe$beta.split <- rep(1:length(l), split.vec)
+  # lpipe$split <- function(obj, vec) {
+  #   # obj should be either lassosum.pipeline or cp.lassosum
+  #   s <- obj$beta.split
+  #   return(lapply(1:max(s), function(i) vec[s==i]))
+  # }
+  
+  #### Adds attributes to bfile ####
+  attr(lpipe$bfile, "p") <- sapply(l, function(x) sum(x$test.extract))
+  attr(lpipe$bfile, "P") <- sapply(l, function(x) length(x$test.extract))
+  
   class(lpipe) <- "lassosum.pipeline"
   return(lpipe)
   #' @return A \code{lassosum.pipeline} object 
