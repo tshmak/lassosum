@@ -93,8 +93,8 @@ parse.pheno.covar <- function(pheno, covar, parsed, trace=0) {
   } 
 
   if(user.covar) {
-    if(!is.null(parsed$keep)) covar <- Covar[rownames(fam)[parsed$keep],] else 
-      covar <- Covar[rownames(fam),]
+    if(!is.null(parsed$keep)) covar <- Covar[rownames(fam)[parsed$keep],,drop=F] else 
+      covar <- Covar[rownames(fam),,drop=F]
     if(trace) message(nrow(covar), " out of ", nrow(Covar), " samples kept in covar.")
   } 
   
