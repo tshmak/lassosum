@@ -64,8 +64,10 @@ merge.lassosum.pipeline <- function(...) {
   # }
   
   #### Adds attributes to bfile ####
-  attr(lpipe$bfile, "p") <- sapply(l, function(x) sum(x$test.extract))
-  attr(lpipe$bfile, "P") <- sapply(l, function(x) length(x$test.extract))
+  if(length(lpipe$test.bfile) > 1) {
+    attr(lpipe$test.bfile, "p") <- sapply(l, function(x) sum(x$test.extract))
+    attr(lpipe$test.bfile, "P") <- sapply(l, function(x) length(x$test.extract))
+  }
   
   class(lpipe) <- "lassosum.pipeline"
   return(lpipe)
