@@ -158,7 +158,7 @@ lassosum.pipeline <- function(cor, chr=NULL, pos=NULL, snp=NULL,
         stopifnot(all(LDblocks[,3] >= LDblocks[,2]))
         LDblocks[,1] <- as.character(sub("^chr", "", LDblocks[,1], ignore.case = T))
       }
-  } else {
+  } else if(any(s < 1)) {
     stop(paste0("LDblocks must be specified. Specify one of ", 
                paste(possible.LDblocks, collapse=", "), 
                ". Alternatively, give an integer vector defining the blocks, ", 
@@ -284,10 +284,8 @@ lassosum.pipeline <- function(cor, chr=NULL, pos=NULL, snp=NULL,
                            ref.breaks = LDblocks[,3])
       # Assumes base 1 for the 3rd column of LDblocks (like normal bed files)
     }
-  } else {
-    stop("LDblocks must now be specified.")
-  }
-
+  } 
+  
   ### Number of different s values to try ###
   s.minus.1 <- s[s != 1]
   
