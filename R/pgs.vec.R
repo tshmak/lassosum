@@ -17,15 +17,15 @@ pgs.vec <- function(bfile, weights, extract=NULL, exclude=NULL,
   split2 <- rep(1:length(bfile), attr(bfile, "P"))
   
   if(is.vector(weights)) weights <- matrix(weights, ncol=1)
-  weights <- lapply(1:length(bfile)) function(i) weights[split1==i,]
+  weights <- lapply(1:length(bfile), function(i) weights[split1==i,])
 
   if(!is.null(extract)) {
     stopifnot(length(extract) == length(Pvec))
-    extract <- lapply(1:length(bfile)) function(i) extract[split2==i]
+    extract <- lapply(1:length(bfile), function(i) extract[split2==i])
   }
   if(!is.null(exclude)) {
     stopifnot(length(exclude) == length(Pvec))
-    exclude <- lapply(1:length(bfile)) function(i) exclude[split2==i]
+    exclude <- lapply(1:length(bfile), function(i) exclude[split2==i])
   }
 
   #### Start ####
