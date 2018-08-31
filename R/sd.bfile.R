@@ -17,8 +17,9 @@
 #' PLINK files (same as the \code{--fill-missing-a2} option in PLINK). 
 #' @keywords internal
 sd.bfile <- function(bfile, keep=NULL, remove=NULL, extract=NULL, exclude=NULL, 
-                        chr=NULL, ...) {
+                        chr=NULL, trace=0, ...) {
   
+  if(trace > 0) cat("Calculating SD...\n")
   if(length(bfile) > 1) {
     l <- splitvec.from.bfile(bfile)
     
@@ -34,7 +35,7 @@ sd.bfile <- function(bfile, keep=NULL, remove=NULL, extract=NULL, exclude=NULL,
     for(i in 1:length(bfile)) {
       sd[l$split_p == i] <- sd.bfile(bfile[i], keep=keep, remove=remove, 
                                      extract=extract[[i]], exclude=exclude[[i]], 
-                                     chr=chr, ...)
+                                     chr=chr,trace=trace-1, ...)
     }
     return(sd)
   }

@@ -57,7 +57,7 @@ validate.lassosum.pipeline <- function(ls.pipeline, test.bfile=NULL,
   if(destandardize) {
     if(ls.pipeline$destandardized) stop("beta in ls.pipeline already destandardized.")
     sd <- sd.bfile(test.bfile, extract=ls.pipeline$test.extract, 
-                   keep=parsed.test$keep, ...)
+                   keep=parsed.test$keep, trace=trace, ...)
     sd[sd <= 0] <- Inf # Do not want infinite beta's!
     ls.pipeline$beta <- lapply(ls.pipeline$beta, 
                                function(x) as.matrix(Matrix::Diagonal(x=1/sd) %*% x))
