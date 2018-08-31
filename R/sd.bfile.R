@@ -23,12 +23,12 @@ sd.bfile <- function(bfile, keep=NULL, remove=NULL, extract=NULL, exclude=NULL,
     l <- splitvec.from.bfile(bfile)
     
     if(!is.null(extract)) {
-      stopifnot(length(extract) == length(l$split2))
-      extract <- lapply(1:length(bfile), function(i) extract[l$split2==i])
+      stopifnot(length(extract) == length(l$split_P))
+      extract <- lapply(1:length(bfile), function(i) extract[l$split_P==i])
     }
     if(!is.null(exclude)) {
-      stopifnot(length(exclude) == length(l$split2))
-      exclude <- lapply(1:length(bfile), function(i) exclude[l$split2==i])
+      stopifnot(length(exclude) == length(l$split_P))
+      exclude <- lapply(1:length(bfile), function(i) exclude[l$split_P==i])
     }
     sd <- l$split_p * NA
     for(i in 1:length(bfile)) {
