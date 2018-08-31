@@ -126,7 +126,7 @@ validate.lassosum.pipeline <- function(ls.pipeline, test.bfile=NULL,
 
   ### covar ### 
   if(!is.null(covar)) {
-    for(i in ncol(PGS)) {
+    for(i in 1:ncol(PGS)) {
       PGS[,i] <- residuals(lm(PGS[,i] ~ ., data=covar))
     }
     stopifnot(nrow(covar) == parsed.test$n) 
