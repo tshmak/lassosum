@@ -4,5 +4,5 @@
 \alias{plot.validate.lassosum}
 \title{Plot function for \code{validate.lassosum} objects}
 \usage{
-\method{plot}{validate.lassosum}(obj)
+\method{plot}{validate.lassosum}(obj, legend.x = "bottomright", log = "x")
 }

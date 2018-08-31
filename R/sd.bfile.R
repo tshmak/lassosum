@@ -17,8 +17,27 @@
 #' PLINK files (same as the \code{--fill-missing-a2} option in PLINK). 
 #' @keywords internal
 sd.bfile <- function(bfile, keep=NULL, remove=NULL, extract=NULL, exclude=NULL, 
-                        chr=NULL,...) {
+                        chr=NULL, ...) {
   
+  if(length(bfile) > 1) {
+    l <- splitvec.from.bfile(bfile)
+    
+    if(!is.null(extract)) {
+      stopifnot(length(extract) == length(l$split2))
+      extract <- lapply(1:length(bfile), function(i) extract[l$split2==i])
+    }
+    if(!is.null(exclude)) {
+      stopifnot(length(exclude) == length(l$split2))
+      exclude <- lapply(1:length(bfile), function(i) exclude[l$split2==i])
+    }
+    sd <- l$split_p * NA
+    for(i in 1:length(bfile)) {
+      sd[l$split_p == i] <- sd.bfile(bfile[i], keep=keep, remove=remove, 
+                                     extract=extract[[i]], exclude=exclude[[i]], 
+                                     chr=chr, ...)
+    }
+    return(sd)
+  }
   parsed <- parseselect(bfile, extract=extract, exclude = exclude, 
                         keep=keep, remove=remove, 
                         chr=chr)

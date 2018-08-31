@@ -4,29 +4,20 @@
 pgs.vec <- function(bfile, weights, extract=NULL, exclude=NULL, 
                     trace=0, ...) {
 
-  pvec <- attr(bfile, "p")
-  Pvec <- attr(bfile, "P")
-  if(is.null(pvec) || is.null(Pvec)) {
-    stop("Since v0.4.3 bfile should have the attributes 'p' and 'P' if it is a vector")
-  } else {
-    stopifnot(length(pvec) == length(bfile))
-    stopifnot(length(Pvec) == length(bfile))
-  }
-  
-  split1 <- rep(1:length(bfile), attr(bfile, "p"))
-  split2 <- rep(1:length(bfile), attr(bfile, "P"))
+
+  l <- splitvec.from.bfile(bfile)
   
   if(is.vector(weights)) weights <- matrix(weights, ncol=1)
-  stopifnot(nrow(weights) == length(split1))
-  weights <- lapply(1:length(bfile), function(i) weights[split1==i,])
+  stopifnot(nrow(weights) == length(l$split_p))
+  weights <- lapply(1:length(bfile), function(i) weights[l$split_p==i,])
 
   if(!is.null(extract)) {
-    stopifnot(length(extract) == length(split2))
-    extract <- lapply(1:length(bfile), function(i) extract[split2==i])
+    stopifnot(length(extract) == length(l$split_P))
+    extract <- lapply(1:length(bfile), function(i) extract[l$split_P==i])
   }
   if(!is.null(exclude)) {
-    stopifnot(length(exclude) == length(split2))
-    exclude <- lapply(1:length(bfile), function(i) exclude[split2==i])
+    stopifnot(length(exclude) == length(l$split_P))
+    exclude <- lapply(1:length(bfile), function(i) exclude[l$split_P==i])
   }
 
   #### Start ####
