@@ -1,7 +1,7 @@
 #' @title Computes polygenic scores as a genotype matrix multiplied by a matrix of weights
 #'
-#' @param bfile A plink bfile stem
 #' @param weights The weights for the SNPs (\eqn{\beta})
+#' @param bfile A plink bfile stem
 #' @param extract SNPs to extract (see \code{\link{parseselect}})
 #' @param exclude SNPs to exclude (see \code{\link{parseselect}})
 #' @param keep samples to keep (see \code{\link{parseselect}})
@@ -22,7 +22,7 @@
 #' 
 #' @rdname pgs
 #' @export
-pgs.default <- function(bfile, weights, keep=NULL, extract=NULL, exclude=NULL, remove=NULL, 
+.pgs.default <- function(weights, bfile, keep=NULL, extract=NULL, exclude=NULL, remove=NULL, 
                    chr=NULL, cluster=NULL, trace=0, sparse=TRUE) {
 
   if(length(bfile) > 1) {

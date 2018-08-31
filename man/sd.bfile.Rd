@@ -5,7 +5,7 @@
 \title{Obtain the SNP-wise standard deviations from the PLINK bfile}
 \usage{
 sd.bfile(bfile, keep = NULL, remove = NULL, extract = NULL,
-  exclude = NULL, chr = NULL, ...)
+  exclude = NULL, chr = NULL, trace = 0, ...)
 }
 \arguments{
 \item{bfile}{plink file stem}

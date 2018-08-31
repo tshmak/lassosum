@@ -4,7 +4,6 @@
 \alias{pgs.vec}
 \title{pgs for a list of bfiles}
 \usage{
-\method{pgs}{vec}(bfile, weights, extract = NULL, exclude = NULL,
-  trace = 0, ...)
+pgs.vec(bfile, weights, extract = NULL, exclude = NULL, trace = 0, ...)
 }
 \keyword{internal}

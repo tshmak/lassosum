@@ -2,12 +2,15 @@
 % Please edit documentation in R/pgs.R, R/pgs.default.R
 \name{pgs}
 \alias{pgs}
-\alias{pgs.default}
-\title{Computes polygenic scores as a genotype matrix multiplied by a matrix of weights}
+\alias{.pgs}
+\alias{.pgs.default}
+\title{This is to enable S3 parsing by the second argument}
 \usage{
-pgs(...)
+pgs(bfile, weights, ...)
 
-\method{pgs}{default}(bfile, weights, keep = NULL, extract = NULL,
+.pgs(...)
+
+\method{.pgs}{default}(weights, bfile, keep = NULL, extract = NULL,
   exclude = NULL, remove = NULL, chr = NULL, cluster = NULL,
   trace = 0, sparse = TRUE)
 }
@@ -35,6 +38,9 @@ For parallel processing.}
 }
 \value{
 A matrix of Polygenic Scores
+}
+\description{
+This is to enable S3 parsing by the second argument
 }
 \details{
 A function to calculate \eqn{X\beta} where \eqn{X} is the genotype matrix
