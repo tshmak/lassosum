@@ -43,7 +43,7 @@ merge.lassosum.pipeline <- function(...) {
     }
     
     # sumstats
-    lpipe$sumstats <- do.call("rbind", lapply(l, function(x) l$sumstats))
+    lpipe$sumstats <- do.call("rbind", lapply(l, function(x) x$sumstats))
     
     # Checks if same file name. 
     if(all(lpipe$ref.bfile == lpipe$ref.bfile[1])) {
