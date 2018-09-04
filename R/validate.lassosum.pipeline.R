@@ -127,7 +127,7 @@ validate.lassosum.pipeline <- function(ls.pipeline, test.bfile=NULL,
   ### covar ### 
   if(!is.null(covar)) {
     for(i in 1:ncol(PGS)) {
-      PGS[,i] <- residuals(lm(PGS[,i] ~ ., data=covar))
+      PGS[,i] <- residuals(lm(PGS[,i] ~ ., data=covar, na.action = na.exclude))
     }
     stopifnot(nrow(covar) == parsed.test$n) 
     adj.pheno <- resid(lm(pheno ~ ., data=covar, na.action = na.exclude))
