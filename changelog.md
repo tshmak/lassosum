@@ -68,4 +68,9 @@
 * `plot.validate.lassosum()` will abandon if there are no finite values. 
 * **A standalone version of lassosum is available** 
 
+## v0.4.3
+* LDblocks does not need to be specified when s < 1
+* Better tracing in SD calculation
+* Bug fix in `validate.lassosum.pipeline()`
+* Allows multiple `test.bfile` in `validate.lassosum.pipeline()`
 
