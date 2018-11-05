@@ -78,7 +78,7 @@ cor <- p2cor(p = ss$P_val, n = 60000, sign=log(ss$OR_A1))
 Running lassosum using standard pipeline: 
 ```r
 out <- lassosum.pipeline(cor=cor, chr=ss$Chr, pos=ss$Position, 
-                         A1=ss$A1, A2=ss$A2,
+                         A1=ss$A1, A2=ss$A2, # A2 is not required but advised
                          ref.bfile=ref.bfile, test.bfile=test.bfile, 
                          LDblocks = ld)
 
@@ -106,7 +106,7 @@ Note that parallel processing is done by `LDblocks`.
 library(parallel)
 cl <- makeCluster(2, type="FORK")
 out <- lassosum.pipeline(cor=cor, chr=ss$Chr, pos=ss$Position, 
-                         A1=ss$A1, A2=ss$A2,
+                         A1=ss$A1, A2=ss$A2, # A2 is not required but advised
                          ref.bfile=ref.bfile, test.bfile=test.bfile, 
                          LDblocks = ld, cluster=cl)
 ```
