@@ -8,6 +8,9 @@ lassosum [![Build Status](https://travis-ci.org/tshmak/lassosum.svg?branch=maste
 The reference panel is assumed to be in PLINK 1 [format](https://www.cog-genomics.org/plink/1.9/input#bed).
 Summary statistics are expected to be loaded into memory as a data.frame/data.table. 
 
+### Reference
+[Mak _et al_ (2017) Polygenic scores via penalized regression on summary statistics. _Genetic Epidemiology_ 41(6) 469-480](https://onlinelibrary.wiley.com/doi/abs/10.1002/gepi.22050)
+
 ### Installation
 
 `lassosum` requires the following R packages: `RcppArmadillo`, `data.table`, `Matrix`. Install them by: 
