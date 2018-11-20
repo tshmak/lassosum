@@ -52,7 +52,8 @@ library(lassosum)
 setwd(system.file("data", package="lassosum")) # Directory where data and LD region files are stored
 ```
 
-First we read the summary statistics into R, and provide the `bfile` names of the reference panel and the test data. If only the reference panel is provided then only the beta coefficients (no polygenic scores) are calculated. You can then apply these subsequently to a test dataset using `validate` or `pseudovalidate`. If no reference panel is provided, then the test data is taken as the reference panel. If no ld region file is provided, then `lassosum` is performed by chromosomes. We recommend you use the appropriate LD regions as defined in [Berisa and Pickrell (2015)](https://academic.oup.com/bioinformatics/article/32/2/283/1743626/Approximately-independent-linkage-disequilibrium) which are also included in our package. 
+First we read the summary statistics into R, and provide the `bfile` names of the reference panel and the test data. If only the reference panel is provided then only the beta coefficients (no polygenic scores) are calculated. You can then apply these subsequently to a test dataset using `validate` or `pseudovalidate`. If no reference panel is provided, then the test data is taken as the reference panel. 
+
 
 ```r
 library(data.table)
@@ -67,9 +68,11 @@ ref.bfile <- "refpanel"
 ### Specify the PLINK file stub of the test data ###
 test.bfile <- "testsample"
 
-### Read ld region file ###
-ld <- fread("Berisa.EUR.hg19.bed") # Replace EUR with ASN or AFR for Asian or African. Replace hg19 with hg38 for hg38 coordinates. 
+### Read LD region file ###
+LDblocks <- "EUR.hg19" # This will use LD regions as defined in Berisa and Pickrell (2015) for the European population and the hg19 genome.
+# Other alternatives available. Type ?lassosum.pipeline for more details. 
 ```
+Reference: [Berisa and Pickrell (2015)](https://academic.oup.com/bioinformatics/article/32/2/283/1743626/Approximately-independent-linkage-disequilibrium)
 
 To run `lassosum`, we need to input SNP-wise correlations. This can be converted from p-values via the `p2cor` function. 
 ```r
@@ -83,7 +86,7 @@ Running lassosum using standard pipeline:
 out <- lassosum.pipeline(cor=cor, chr=ss$Chr, pos=ss$Position, 
                          A1=ss$A1, A2=ss$A2, # A2 is not required but advised
                          ref.bfile=ref.bfile, test.bfile=test.bfile, 
-                         LDblocks = ld)
+                         LDblocks = LDblocks)
 
 ### Validation with phenotype ### 
 v <- validate(out) # Use the 6th column in .fam file in test dataset for test phenotype
@@ -111,7 +114,7 @@ cl <- makeCluster(2, type="FORK")
 out <- lassosum.pipeline(cor=cor, chr=ss$Chr, pos=ss$Position, 
                          A1=ss$A1, A2=ss$A2, # A2 is not required but advised
                          ref.bfile=ref.bfile, test.bfile=test.bfile, 
-                         LDblocks = ld, cluster=cl)
+                         LDblocks = LDblocks, cluster=cl)
 ```
 #### Including covariates in validation
 It is possible to include covariates in validation or splitvalidation (though not in pseudovalidation). Simply pass the covariate matrix as an argument to `validate` or `splitvalidate`. 
@@ -127,6 +130,20 @@ To apply the best lassosum predictor (indexed by `s` and `lambda`) to a new data
 out2 <- subset(out, s=v$best.s, lambda=v$best.lambda)
 v2 <- validate(out2, covar=covar, test.bfile="Some_new_bfile")
 ```
+
+#### lassosum in subsamples  
+To use subsamples of either the test dataset or the reference panel, use the `keep.test` and `keep.ref` options respectively in `lassosum.pipeline`. Type `?lassosum.pipeline` to see what format these options can take. To use only a subset of SNPs for inference, remove the unnecessary SNPs from the summary statistics file. 
+
+#### Estimation by chromosome 
+In large datasets, it is typical for the PLINK data to be organized by chromosomes. For example, say we have `chr1.bed` and `chr2.bed`. It is much faster to carry out lassosum by chromosome, and then combine them together. An example: 
+```r 
+ref.test <- round(1:nrow.bfile("chr1") / nrow.bfile("chr1")) # Define the reference panel and the test dataset as mutually exclusive subsets of the same bed file
+out1 <- lassosum.pipeline(..., test.bfile="chr1", keep.ref=ref.test==0, keep.test=ref.test==1)
+out2 <- lassosum.pipeline(..., test.bfile="chr2", keep.ref=ref.test==0, keep.test=ref.test==1)
+out <- merge(out1, out2)
+v <- validate(out)
+```
+Note that if you specify the `pheno` or the `covar` option in `validate`, it would be advised to keep sample in these dataset the same as the test sample. If a different test sample is used (or if a different `test.bfile` specified), then the polygenic score is re-calculated from the betas, and because this is not parallelized across the chromosomes, this can be very time consuming. 
 
 ### Support
 If there are any questions or problems with running or installing `lassosum`, please do email me at <tshmak@hku.hk>. 

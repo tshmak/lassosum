@@ -246,6 +246,13 @@ lassosum.pipeline <- function(cor, chr=NULL, pos=NULL, snp=NULL,
                            rm.duplicates = T, 
                            exclude.ambiguous = exclude.ambiguous, 
                            silent=T)
+      if(any(funny <- m.common$ref.extract & !m.test$ref.extract)) {
+        # Occasionally this can happen! 
+        w <- which(funny[m.common$ref.extract])
+        m.common$ref.extract[funny] <- FALSE
+        m.common$order <- m.common$order[-w]
+        m.common$rev <- m.common$rev[-w]
+      }
     } else {
       m.common <- m.test <- m.ref
       m.common$order <- 1:length(m.test$order)
