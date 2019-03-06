@@ -76,4 +76,4 @@ However, there are a number of options which are specific to the standalone vers
 Berisa, T. & Pickrell, J. K. (2015) Approximately independent linkage disequilibrium blocks in human populations. *Bioinformatics* 32, 283–285
 
 ### Support
-If there are any questions or problems with running or installing `lassosum`, please do email me at <tshmak@hku.hk>. 
+If there are any questions or problems with running or installing `lassosum`, please do email me at <timmak@yahoo.com>. 
