@@ -146,4 +146,4 @@ v <- validate(out)
 Note that if you specify the `pheno` or the `covar` option in `validate`, it would be advised to keep sample in these dataset the same as the test sample. If a different test sample is used (or if a different `test.bfile` specified), then the polygenic score is re-calculated from the betas, and because this is not parallelized across the chromosomes, this can be very time consuming. 
 
 ### Support
-If there are any questions or problems with running or installing `lassosum`, please do email me at <tshmak@hku.hk>. 
+If there are any questions or problems with running or installing `lassosum`, please do email me at <timmak@yahoo.com>. 
