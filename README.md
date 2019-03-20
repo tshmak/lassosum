@@ -98,7 +98,7 @@ v <- validate(out, pheno=pheno) # Alternatively, specify the phenotype in the ar
 # install.packages("fdrtool")
 v <- pseudovalidate(out)
 ```
-Since v0.4.2, the `pheno` argument in `validate` can also take a `data.frame` with the first 2 columns headed by FID and IID, and the third column being the phenotype, or alternatively, a file name for such a data.frame. Moreover, a `v$results.table` object is also returned in `validate` and `pseudovalidate`, giving a table with the best PGS and the phenotype tabulated with the FID and IID (family and individual ID). 
+Since v0.4.2, the `pheno` argument in `validate` can also take a `data.frame` with the first 2 columns headed by FID and IID, and the third column being the phenotype, or alternatively, a file name for such a data.frame. Moreover, a `v$results.table` object is also returned in `validate` and `pseudovalidate`, giving a table with the best PGS and the phenotype tabulated with the FID and IID (family and individual ID). *Note that `lassosum` doesn't understand the Plink convention of `-9` being NA. Change -9 to NA before running `validate()`!* 
 
 A new feature since v0.4.2 is `split-validation`, where the test dataset (`test.bfile`) is split in half using one half for validation and the other half for calculating PGS. The PGS in the two halves are then standardised and stacked back together. This avoids overfitting due to the overlapping of the target and the validation dataset. See [this paper](https://www.biorxiv.org/content/early/2018/07/30/252270) for details. 
 ```r
