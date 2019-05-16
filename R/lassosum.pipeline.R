@@ -439,6 +439,6 @@ lassosum.pipeline <- function(cor, chr=NULL, pos=NULL, snp=NULL,
   #' }
   #' @note Berisa, T. & Pickrell, J. K. 
   #' Approximately independent linkage disequilibrium blocks in human populations. 
-  #' Bioinformatics 32, 283–285 (2015).
+  #' Bioinformatics 32, 283-285 (2015).
 
 }
