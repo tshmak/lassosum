@@ -87,8 +87,8 @@ splitvalidate.lassosum.pipeline <- function(ls.pipeline, test.bfile=NULL,
 
   #### Results table ####
   if(is.null(phcovar$table)) {
-    results.table <- (if(is.null(parsed.test$fam)) read.table2(parsed.test$famfile) else
-      parsed.test$fam)[,1:2]
+    results.table <- (if(is.null(parsed.test[['fam']])) read.table2(parsed.test$famfile) else
+      parsed.test[['fam']])[,1:2]
     if(!is.null(parsed.test$keep)) results.table <- results.table[parsed.test$keep,]
     colnames(results.table) <- c("FID", "IID")
     results.table$pheno <- pheno
