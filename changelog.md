@@ -74,3 +74,6 @@
 * Bug fix in `validate.lassosum.pipeline()`
 * Allows multiple `test.bfile` in `validate.lassosum.pipeline()`
 
+## v0.4.4
+* Bug fix
+* Better documentation for Mac users
