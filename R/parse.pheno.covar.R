@@ -1,6 +1,5 @@
 parse.pheno.covar <- function(pheno, covar, parsed, trace=0) {
   #' @keywords internal
-
   fam <- parsed[['fam']]
   keep <- parsed$keep
   # keep <- NULL
@@ -37,7 +36,7 @@ parse.pheno.covar <- function(pheno, covar, parsed, trace=0) {
     colnames(pheno.df)[3] <- "pheno"
     rownames(pheno) <- paste(pheno$FID, pheno$IID, sep="_")
     keep <- update.keep(keep, rownames(fam) %in% rownames(pheno))
-    Pheno <- pheno[,3]
+    Pheno <- as.data.frame(pheno)[,3]
     names(Pheno) <- rownames(pheno)
   } else {
     if(!is.null(pheno)) {
@@ -57,6 +56,7 @@ parse.pheno.covar <- function(pheno, covar, parsed, trace=0) {
   }
   if(is.data.frame(covar) & all(colnames(covar)[1:2] == c("FID", "IID"))) {
     user.covar <- TRUE
+    covar <- as.data.frame(covar)
     colnames <- colnames(covar) 
     if(is.null(fam)) fam <- read.table2(parsed$famfile)
     rownames(fam) <- paste(fam$V1, fam$V2, sep="_")
