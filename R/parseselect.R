@@ -139,7 +139,8 @@ parseselect <- function(bfile, extract=NULL, exclude=NULL,
         stopifnot(ncol(keep)==2)
         fam <- read.table2(famfile)
         famID <- paste(fam[,1], fam[,2], sep=".")
-        keepID <- paste(keep[,1], keep[,2], sep=".")
+        keep <- as.data.table(keep)
+        keepID <- keep[, ID:=do.call(paste, c(.SD, sep=":")),.SDcols=c(1:2)][,ID]
         keep <- famID %in% keepID
         if(order.important) {
           if(!all(famID[keep] == keepID)) {
@@ -167,7 +168,8 @@ parseselect <- function(bfile, extract=NULL, exclude=NULL,
         stopifnot(ncol(remove)==2)
         if(is.null(fam)) fam <- read.table2(famfile)
         famID <- paste(fam[,1], fam[,2], sep=".")
-        removeID <- paste(remove[,1], remove[,2], sep=".")
+        remove <- as.data.table(remove)
+        removeID <- remove[, ID:=do.call(paste, c(.SD, sep=":")),.SDcols=c(1:2)][,ID]
         remove <- famID %in% removeID
       } else {
         stop("I don't know what to do with this type of input for remove")
