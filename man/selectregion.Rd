@@ -9,4 +9,7 @@ selectregion(keep)
 \arguments{
 \item{keep}{A boolean vector of which position to keep}
 }
+\description{
+Internal function to parse extract
+}
 \keyword{internal}

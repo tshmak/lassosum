@@ -4,6 +4,10 @@
 \alias{read.table2}
 \title{Function to read a text file}
 \usage{
-read.table2(file, header = F, data.table = F, check.names = TRUE, ...)
+read.table2(file, header = F, data.table = F, check.names = TRUE,
+  ...)
+}
+\description{
+Function to read a text file
 }
 \keyword{internal}

@@ -9,8 +9,8 @@
 splitvalidate(...)
 
 \method{splitvalidate}{lassosum.pipeline}(ls.pipeline, test.bfile = NULL,
-  keep = NULL, remove = NULL, pheno = NULL, covar = NULL, trace = 1,
-  split = NULL, rematch = !is.null(test.bfile), ...)
+  keep = NULL, remove = NULL, pheno = NULL, covar = NULL,
+  trace = 1, split = NULL, rematch = !is.null(test.bfile), ...)
 }
 \arguments{
 \item{...}{parameters to pass to \code{\link{validate.lassosum.pipeline}}}
@@ -30,6 +30,9 @@ splitvalidate(...)
 \item{trace}{Controls amount of output}
 
 \item{rematch}{Forces a rematching of the ls.pipline beta's with the new .bim file}
+}
+\description{
+Function to perform split-validation using output from lassosum.pipeline with external phenotype
 }
 \details{
 Performs split-validation. Randomly split the test data into half for validation 

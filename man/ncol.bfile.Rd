@@ -13,3 +13,6 @@ ncol.bfile(bfile)
 an integer with the number of columns
 #@keywords internal
 }
+\description{
+Obtains the number of column (SNPs) in a PLINK bfile
+}

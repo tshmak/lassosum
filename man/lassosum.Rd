@@ -3,16 +3,15 @@
 \docType{package}
 \name{lassosum}
 \alias{lassosum}
-\alias{lassosum}
 \alias{lassosum-package}
 \title{Function to obtain LASSO estimates of a regression problem given summary statistics
 and a reference panel}
 \usage{
-lassosum(cor, bfile, lambda = exp(seq(log(0.001), log(0.1), length.out = 20)),
-  shrink = 0.9, thr = 1e-04, init = NULL, trace = 0, maxiter = 10000,
-  blocks = NULL, keep = NULL, remove = NULL, extract = NULL,
-  exclude = NULL, chr = NULL, mem.limit = 4 * 10^9, chunks = NULL,
-  cluster = NULL)
+lassosum(cor, bfile, lambda = exp(seq(log(0.001), log(0.1), length.out =
+  20)), shrink = 0.9, thr = 1e-04, init = NULL, trace = 0,
+  maxiter = 10000, blocks = NULL, keep = NULL, remove = NULL,
+  extract = NULL, exclude = NULL, chr = NULL, mem.limit = 4 * 10^9,
+  chunks = NULL, cluster = NULL)
 }
 \arguments{
 \item{cor}{A vector of correlations (\eqn{r})}
@@ -63,6 +62,9 @@ A list with the following
 \item{nparams}{Number of non-zero coefficients}
 }
 \description{
+Function to obtain LASSO estimates of a regression problem given summary statistics
+and a reference panel
+
 lassosum: A package for carrying out LASSO regression using GWAS summary statistics
 }
 \details{

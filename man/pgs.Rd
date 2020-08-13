@@ -4,7 +4,7 @@
 \alias{pgs}
 \alias{.pgs}
 \alias{.pgs.default}
-\title{This is to enable S3 parsing by the second argument}
+\title{Computes polygenic scores as a genotype matrix multiplied by a matrix of weights}
 \usage{
 pgs(bfile, weights, ...)
 
@@ -40,7 +40,8 @@ For parallel processing.}
 A matrix of Polygenic Scores
 }
 \description{
-This is to enable S3 parsing by the second argument
+Note that this is a low-level command. For applying estimated
+betas to new bfiles, refer to https://github.com/tshmak/lassosum#apply-validated-betas-to-new-data
 }
 \details{
 A function to calculate \eqn{X\beta} where \eqn{X} is the genotype matrix

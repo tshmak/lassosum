@@ -5,9 +5,9 @@
 \title{Function to obtain LASSO estimates of a regression problem given summary statistics
 and a reference panel (without PLINK bfile)}
 \usage{
-lassosumR(cor, refpanel, lambda = exp(seq(log(0.001), log(0.1), length.out =
-  20)), shrink = 0.9, ridge = F, thr = 1e-04, init = NULL, trace = 0,
-  maxiter = 10000, blocks = NULL)
+lassosumR(cor, refpanel, lambda = exp(seq(log(0.001), log(0.1),
+  length.out = 20)), shrink = 0.9, ridge = F, thr = 1e-04,
+  init = NULL, trace = 0, maxiter = 10000, blocks = NULL)
 }
 \arguments{
 \item{cor}{A vector of correlations (\eqn{r})}
@@ -42,6 +42,10 @@ A list with the following
 \item{shrink}{same as input}
 \item{nparams}{Number of non-zero coefficients}
 \item{ridge}{ridge regression estimates}
+}
+\description{
+Function to obtain LASSO estimates of a regression problem given summary statistics
+and a reference panel (without PLINK bfile)
 }
 \details{
 A function to find the minimum of \eqn{\beta} in  

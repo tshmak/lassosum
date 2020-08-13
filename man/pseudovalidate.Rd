@@ -8,10 +8,10 @@
 \usage{
 pseudovalidate(...)
 
-\method{pseudovalidate}{lassosum.pipeline}(ls.pipeline, test.bfile = NULL,
-  keep = NULL, remove = NULL, trace = 1, destandardize = F, plot = T,
-  exclude.ambiguous = T, cluster = NULL, rematch = !is.null(test.bfile),
-  ...)
+\method{pseudovalidate}{lassosum.pipeline}(ls.pipeline,
+  test.bfile = NULL, keep = NULL, remove = NULL, trace = 1,
+  destandardize = F, plot = T, exclude.ambiguous = T,
+  cluster = NULL, rematch = !is.null(test.bfile), ...)
 }
 \arguments{
 \item{...}{parameters to pass to \code{\link{pseudovalidation}}}
@@ -36,6 +36,9 @@ destandardized using test dataset standard deviations before being returned?}
 \item{cluster}{A \code{cluster} object from the \code{parallel} package for parallel computing}
 
 \item{rematch}{Forces a rematching of the ls.pipline beta's with the new .bim file}
+}
+\description{
+Function to perform pseudovalidation from a lassosum.pipeline object
 }
 \details{
 Pseudovalidation is explained in Mak et al (2016). It helps 

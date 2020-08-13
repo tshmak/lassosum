@@ -4,8 +4,8 @@
 \alias{genotypeMatrix}
 \title{imports genotypeMatrix}
 \usage{
-genotypeMatrix(fileName, N, P, col_skip_pos, col_skip, keepbytes, keepoffset,
-  fillmissing)
+genotypeMatrix(fileName, N, P, col_skip_pos, col_skip, keepbytes,
+  keepoffset, fillmissing)
 }
 \arguments{
 \item{fileName}{location of bam file}

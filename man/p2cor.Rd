@@ -18,3 +18,6 @@ p2cor(p, n, sign = rep(1, length(p)), min.n = max(n, 30)/10)
 \value{
 A vector of correlations
 }
+\description{
+Function to convert p-values to correlation via the t-statistic
+}

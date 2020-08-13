@@ -4,7 +4,10 @@
 \alias{parseargs}
 \title{Function to parse arguments from command line}
 \usage{
-parseargs(required = character(0), ..., silent = F, include.others = TRUE,
-  test = NULL)
+parseargs(required = character(0), ..., silent = F,
+  include.others = TRUE, test = NULL)
+}
+\description{
+Function to parse arguments from command line
 }
 \keyword{internal}

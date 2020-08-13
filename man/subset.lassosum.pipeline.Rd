@@ -17,6 +17,9 @@
 \value{
 A lassosum.pipeline object
 }
+\description{
+Subset a lassosum.pipeline object by lambda and s
+}
 \details{
 This function is usually used to reapply a validated pgs to a new data.set. 
 See example below.

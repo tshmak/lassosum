@@ -4,8 +4,9 @@
 \alias{pseudovalidation}
 \title{Performs `pseudovalidation' to select the best \eqn{\lambda} value in lassosum}
 \usage{
-pseudovalidation(bfile, beta, cor, sd = NULL, keep = NULL, extract = NULL,
-  exclude = NULL, remove = NULL, chr = NULL, cluster = NULL, ...)
+pseudovalidation(bfile, beta, cor, sd = NULL, keep = NULL,
+  extract = NULL, exclude = NULL, remove = NULL, chr = NULL,
+  cluster = NULL, ...)
 }
 \arguments{
 \item{bfile}{A plink bfile stem}
@@ -30,6 +31,9 @@ pseudovalidation(bfile, beta, cor, sd = NULL, keep = NULL, extract = NULL,
 }
 \value{
 the results of the pseudovalidation, i.e. \eqn{f(\lambda)}
+}
+\description{
+Performs `pseudovalidation' to select the best \eqn{\lambda} value in lassosum
 }
 \details{
 A function to calculate  

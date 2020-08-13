@@ -17,6 +17,10 @@ pseudovalidationR(genotype.mat, beta, cor)
 \value{
 the results of the pseudovalidation, i.e. \eqn{f(\lambda)}
 }
+\description{
+Performs `pseudovalidation' to select the best \eqn{\lambda} value in 
+lassosum (without PLINK bfile)
+}
 \details{
 A function to calculate  
 \deqn{f(\lambda)=\beta'r/\sqrt{\beta'X'X\beta}} 

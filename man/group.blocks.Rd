@@ -11,4 +11,8 @@ group.blocks(Blocks, parseselect, mem.limit = 2^32 * 8, chunks = NULL,
 \arguments{
 \item{parseselect}{An object returned by parseselect()}
 }
+\description{
+Group blocks into chunks so as not to exhaust memory or hit 
+matrix size ceiling
+}
 \keyword{internal}

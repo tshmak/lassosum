@@ -20,6 +20,9 @@ sd.bfile(bfile, keep = NULL, remove = NULL, extract = NULL,
 
 \item{chr}{a vector of chromosomes}
 }
+\description{
+Obtain the SNP-wise standard deviations from the PLINK bfile
+}
 \details{
 \code{keep}, \code{remove} could take one of three 
 formats: (1) A logical vector indicating which indivduals to keep/remove, 
