@@ -110,7 +110,7 @@ sv <- splitvalidate(out)
 Note that parallel processing is done by `LDblocks`. 
 ```r
 library(parallel)
-cl <- makeCluster(2, type="FORK")
+cl <- makeCluster(2, type="FORK") # Parallel over 2 nodes
 out <- lassosum.pipeline(cor=cor, chr=ss$Chr, pos=ss$Position, 
                          A1=ss$A1, A2=ss$A2, # A2 is not required but advised
                          ref.bfile=ref.bfile, test.bfile=test.bfile, 
