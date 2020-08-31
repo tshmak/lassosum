@@ -77,3 +77,8 @@
 ## v0.4.4
 * Bug fix
 * Better documentation for Mac users
+
+## v0.4.5
+* A number of bug fixes
+* Adds seed option in standalone version 
+

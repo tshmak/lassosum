@@ -18,19 +18,19 @@ Summary statistics are expected to be loaded into memory as a data.frame/data.ta
 ```r
 install.packages(c("RcppArmadillo", "data.table", "Matrix"), dependencies=TRUE)
 ```
-For Windows and Mac users, it would be easiest to download the following binaries ([Windows](https://github.com/tshmak/lassosum/releases/download/v0.4.4/lassosum_0.4.4.zip), [Mac](https://github.com/tshmak/lassosum/releases/download/v0.4.4/lassosum_0.4.4.tgz)) and install using: 
+For Windows and Mac users, it would be easiest to download the following binaries ([Windows](https://github.com/tshmak/lassosum/releases/download/v0.4.5/lassosum_0.4.5.zip), [Mac](https://github.com/tshmak/lassosum/releases/download/v0.4.5/lassosum_0.4.5.tgz)) and install using: 
 ```r
 install.packages("/path/to/downloaded_binary_file", repos=NULL)
 ```
 
-If you are on Linux or you would like to compile from source, you can download the source codes [lassosum_0.4.4.tar.gz](https://github.com/tshmak/lassosum/releases/download/v0.4.4/lassosum_0.4.4.tar.gz). Mac users should refer to [this page](https://cran.r-project.org/bin/macosx/tools/) for the various dependencies required. Install then via: 
+If you are on Linux or you would like to compile from source, you can download the source codes [lassosum_0.4.5.tar.gz](https://github.com/tshmak/lassosum/releases/download/v0.4.5/lassosum_0.4.5.tar.gz). Mac users should refer to [this page](https://cran.r-project.org/bin/macosx/tools/) for the various dependencies required. Install then via: 
 ```r
 install.packages("/path/to/downloaded_source.tar.gz", repos=NULL, type="source")
 ```
 
 If you have `devtools`, you can also type: 
 ```r
-install_github("tshmak/lassosum@v0.4.4")
+install_github("tshmak/lassosum@v0.4.5")
 ```
 or
 ```r

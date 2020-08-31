@@ -1,8 +1,8 @@
 Package: lassosum
 Type: Package
 Title: LASSO with summary statistics and a reference panel
-Version: 0.4.4
-Date: 2019-5-23
+Version: 0.4.5
+Date: 2020-08-31
 Authors@R: c(
 		person("Timothy", "Mak", email = "timmak@yahoo.com", role = c("aut", "cre")),
 		person("Robert", "Porsch", email = "robert.porsch@hku.hk", role = c("aut"))
