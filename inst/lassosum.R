@@ -27,8 +27,8 @@ if(is.null(args[['out']])) {
 }
 
 #### nthreads ####
-if(!is.null(args$nthreads)) {
-  opts$cl <- parallel::makeForkCluster(args$nthreads)
+if(!is.null(args[['nthreads']])) {
+  opts[['cluster']] <- parallel::makeForkCluster(args[['nthreads']])
 } 
 
 parsefun <- function(input) {
@@ -123,13 +123,13 @@ if(is.null(args[['lassosum.pipeline']])) {
   saveRDS(lp, file=paste0(out, ".lassosum.pipeline.rds"))
   
 } else {
-  lp <- readRDS(args$lassosum.pipeline)
+  lp <- readRDS(args[['lassosum.pipeline']])
 }
 
 #### Options for validation ####
 opts2 <- list(ls.pipeline = lp)
-opts2$pheno <- args[['pheno']]
-opts2$covar <- args[['covar']]
+opts2[['pheno']] <- args[['pheno']]
+opts2[['covar']] <- args[['covar']]
 opts2 <- c(opts2, opts)
 
 opts2.tokeep <- list(pseudovalidate=names(as.list(args(lassosum:::pseudovalidate.lassosum.pipeline))), 
@@ -149,7 +149,7 @@ if(is.null(args[['validate.rds']])) {
       if(!is.null(args[['debug']]) && interactive()) debug(paste0(type,".lassosum.pipeline"))
       v <- do.call(type, opts2[tokeep])
       saveRDS(v, file=paste(out, type, "rds", sep="."))
-      lassosum:::write.table2(v$results.table, file=paste(out, type, "results.txt", sep="."), 
+      lassosum:::write.table2(v[['results.table']], file=paste(out, type, "results.txt", sep="."), 
                               col.names=T)
     }
   }
@@ -161,8 +161,8 @@ if(is.null(args[['validate.rds']])) {
 if(!is.null(args[['applyto']])) {
   if(is.character(args[['applyto']])) opts2[['test.bfile']] <- args[['applyto']]
   tokeep <- names(opts2) %in% opts2.tokeep[['validate']]
-  opts2$ls.pipeline <- subset(lp, s=v$best.s, lambda=v$best.lambda)
+  opts2[['ls.pipeline']] <- subset(lp, s=v[['best.s']], lambda=v[['best.lambda']])
   v2 <- do.call("validate", opts2[tokeep])
-  lassosum:::write.table2(v2$results.table, file=paste(out, "results.txt", sep="."), 
+  lassosum:::write.table2(v2[['results.table']], file=paste(out, "results.txt", sep="."), 
                           col.names=T)
 }
