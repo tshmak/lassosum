@@ -137,13 +137,27 @@ To use subsamples of either the test dataset or the reference panel, use the `ke
 #### Estimation by chromosome 
 In large datasets, it is typical for the PLINK data to be organized by chromosomes. For example, say we have `chr1.bed` and `chr2.bed`. It is much faster to carry out lassosum by chromosome, and then combine them together. An example: 
 ```r 
-ref.test <- round(1:nrow.bfile("chr1") / nrow.bfile("chr1")) # Define the reference panel and the test dataset as mutually exclusive subsets of the same bed file
-out1 <- lassosum.pipeline(..., test.bfile="chr1", keep.ref=ref.test==0, keep.test=ref.test==1)
-out2 <- lassosum.pipeline(..., test.bfile="chr2", keep.ref=ref.test==0, keep.test=ref.test==1)
+out1 <- lassosum.pipeline(..., test.bfile="chr1")
+out2 <- lassosum.pipeline(..., test.bfile="chr2")
 out <- merge(out1, out2)
 v <- validate(out)
 ```
-Note that if you specify the `pheno` or the `covar` option in `validate`, it would be advised to keep sample in these dataset the same as the test sample. If a different test sample is used (or if a different `test.bfile` specified), then the polygenic score is re-calculated from the betas, and because this is not parallelized across the chromosomes, this can be very time consuming. 
+For data with many samples, `lassosum.pipeline` will complain if the size of the reference panel is too large. Currently "too large" is taken to mean greater than 20000. `lassosum.pipeline` will suggest that you take a sample of, say, 5000 as the reference panel using the `sample=` option. Note that if you run `lassosum.pipeline` across different chromosomes, you may want to keep the sample the same. (This is not strictly necessary, but seems a good idea anyway.) You can do by setting the same seed before running `lassosum.pipeline`, e.g. 
+```r 
+set.seed(42)
+out1 <- lassosum.pipeline(..., test.bfile="chr1", sample=5000)
+set.seed(42)
+out2 <- lassosum.pipeline(..., test.bfile="chr2", sample=5000)
+out <- merge(out1, out2)
+v <- validate(out)
+```
+Alternatively, specify the exact sample with the `keep.ref` command. 
+
+#### For datasets with large samples
+In general, it is a good idea to anticipate the test sample you will need in the `lassosum.pipeline` stage rather than specify them at the `validate` stage, using the `keep.test=` option. This is especially the case if you need to specify the `pheno` or the `covar` option in `validate`. The reason is that if a different test sample is used (or if a different `test.bfile` is specified) in `validate`, then the polygenic score is re-calculated from the betas, this can be very time consuming. In a future version, I may allow `lassosum.pipeline` to take `pheno` and `covar` as argument so as to identify the exact test sample to circumvent this issue. 
+
+#### Extracting the lassosum betas 
+The exact SNPs used in calculating the PGS are given in the `out$sumstats` data.frame, where `out` is the output from `lassosum.pipeline`. The order of the SNPs is the same as that of `v$best.beta` where `v` is the output from `validate`/`splitvalidate`/`psuedovalidate`. 
 
 ### Support
 Further documentation for various functions can be obtained by running `help` from `R`, e.g. 
