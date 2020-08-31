@@ -4,8 +4,8 @@
 \alias{runElnet}
 \title{Runs elnet with various parameters}
 \usage{
-runElnet(lambda, shrink, fileName, r, N, P, col_skip_pos, col_skip, keepbytes,
-  keepoffset, thr, x, trace, maxiter, startvec, endvec)
+runElnet(lambda, shrink, fileName, r, N, P, col_skip_pos, col_skip,
+  keepbytes, keepoffset, thr, x, trace, maxiter, startvec, endvec)
 }
 \arguments{
 \item{fileName}{the file name of the reference panel}

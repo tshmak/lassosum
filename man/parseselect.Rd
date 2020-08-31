@@ -5,7 +5,8 @@
 \title{Parse the keep/remove/extract/exclude/chr options}
 \usage{
 parseselect(bfile, extract = NULL, exclude = NULL, keep = NULL,
-  remove = NULL, chr = NULL, export = FALSE, order.important = FALSE)
+  remove = NULL, chr = NULL, export = FALSE,
+  order.important = FALSE)
 }
 \arguments{
 \item{bfile}{plink file stem}
@@ -28,6 +29,9 @@ a list with
 \item{P}{Number of columns in the PLINK bfile}
 \item{n}{Number of rows in the PLINK bfile after keep}
 \item{p}{Number of columns in the PLINK bfile after extract}
+}
+\description{
+Parse the keep/remove/extract/exclude/chr options
 }
 \details{
 \code{keep}, \code{remove} could take one of three 

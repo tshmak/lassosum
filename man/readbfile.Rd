@@ -25,4 +25,7 @@ readbfile(bfile, keep = NULL, extract = NULL, exclude = NULL,
 \value{
 A genotype matrix of 0,1, and 2 (possibly with NaNs)
 }
+\description{
+read a PLINK bfile file into a matrix
+}
 \keyword{internal}

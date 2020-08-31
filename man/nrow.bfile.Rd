@@ -13,3 +13,6 @@ nrow.bfile(bfile)
 an integer with the number of rows
 #@keywords internal
 }
+\description{
+Obtains the number of individuals in a PLINK bfile
+}

@@ -7,9 +7,16 @@ opts <- args
 #### Options specific to standalone version ####
 standalone.opts <- c("nthreads", "data", "n", "pval", "beta", "OR", "pheno", "covar", 
                      "out", "lassosum.pipeline", "pseudovalidate", "validate", 
-                     "splitvalidate", "validate.rds", "applyto", 
+                     "splitvalidate", "validate.rds", "applyto", "seed", 
                      "debug")
 for(i in standalone.opts) opts[[i]] <- NULL
+
+#### seed ####
+if(!is.null(args[['seed']])) {
+  set.seed(args[['seed']])
+} else {
+  set.seed(1234)
+}
 
 #### applyto ####
 if(!is.null(args[['applyto']])) {

@@ -4,13 +4,13 @@
 \alias{lassosum.pipeline}
 \title{Run lassosum with standard pipeline}
 \usage{
-lassosum.pipeline(cor, chr = NULL, pos = NULL, snp = NULL, A1 = NULL,
-  A2 = NULL, ref.bfile = NULL, test.bfile = NULL, LDblocks = NULL,
-  lambda = exp(seq(log(0.001), log(0.1), length.out = 20)), s = c(0.2, 0.5,
-  0.9, 1), destandardize = F, trace = 1, exclude.ambiguous = TRUE,
-  keep.ref = NULL, remove.ref = NULL, keep.test = NULL,
-  remove.test = NULL, sample = NULL, cluster = NULL,
-  max.ref.bfile.n = 20000, nomatch = FALSE, ...)
+lassosum.pipeline(cor, chr = NULL, pos = NULL, snp = NULL,
+  A1 = NULL, A2 = NULL, ref.bfile = NULL, test.bfile = NULL,
+  LDblocks = NULL, lambda = exp(seq(log(0.001), log(0.1), length.out =
+  20)), s = c(0.2, 0.5, 0.9, 1), destandardize = F, trace = 1,
+  exclude.ambiguous = TRUE, keep.ref = NULL, remove.ref = NULL,
+  keep.test = NULL, remove.test = NULL, sample = NULL,
+  cluster = NULL, max.ref.bfile.n = 20000, nomatch = FALSE, ...)
 }
 \arguments{
 \item{cor}{A vector of SNP-wise correlations with phenotype
@@ -115,7 +115,7 @@ for details.
 \note{
 Berisa, T. & Pickrell, J. K. 
 Approximately independent linkage disequilibrium blocks in human populations. 
-Bioinformatics 32, 283–285 (2015).
+Bioinformatics 32, 283-285 (2015).
 }
 \examples{
 \dontrun{

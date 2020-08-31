@@ -4,7 +4,8 @@
 \alias{indeplasso}
 \title{Independent LASSO using summary statistics (a.k.a. soft-thresholding)}
 \usage{
-indeplasso(coef, lambda = exp(seq(log(0.001), log(0.1), length.out = 20)))
+indeplasso(coef, lambda = exp(seq(log(0.001), log(0.1), length.out =
+  20)))
 }
 \arguments{
 \item{coef}{vector of regression coefficients (\eqn{r})}
@@ -15,6 +16,9 @@ indeplasso(coef, lambda = exp(seq(log(0.001), log(0.1), length.out = 20)))
 A list with the following
 \item{lambda}{Same as \code{lambda} in input}
 \item{beta}{A matrix of estimates of \eqn{\beta}}
+}
+\description{
+Independent LASSO using summary statistics (a.k.a. soft-thresholding)
 }
 \details{
 A function to find the minimum of \eqn{\beta} in  

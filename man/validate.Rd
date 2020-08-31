@@ -9,9 +9,9 @@ validate(...)
 
 \method{validate}{lassosum.pipeline}(ls.pipeline, test.bfile = NULL,
   keep = NULL, remove = NULL, pheno = NULL, covar = NULL,
-  validate.function = function(x, y) cor(x, y, use = "complete"), trace = 1,
-  destandardize = F, plot = T, exclude.ambiguous = T, cluster = NULL,
-  rematch = !is.null(test.bfile), ...)
+  validate.function = function(x, y) cor(x, y, use = "complete"),
+  trace = 1, destandardize = F, plot = T, exclude.ambiguous = T,
+  cluster = NULL, rematch = !is.null(test.bfile), ...)
 }
 \arguments{
 \item{...}{parameters to pass to \code{\link{sd.bfile}}}
@@ -42,6 +42,9 @@ destandardized using test dataset standard deviations before being returned?}
 \item{cluster}{A \code{cluster} object from the \code{parallel} package for parallel computing}
 
 \item{rematch}{Forces a rematching of the ls.pipline beta's with the new .bim file}
+}
+\description{
+Function to validate output from lassosum.pipeline with external phenotype
 }
 \details{
 Chooses the best \code{lambda} and \code{s} by validating 
