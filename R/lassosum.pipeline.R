@@ -194,7 +194,7 @@ lassosum.pipeline <- function(cor, chr=NULL, pos=NULL, snp=NULL,
                paste0("(", parsed.ref$n, ")"), 
                "for the reference panel as it can be slow.", 
                "Alter max.ref.bfile.n to proceed anyway (it will be more accurate).",
-               "Alternatively use the sample(5000) option",
+               "Alternatively use the sample=5000 option",
                "to take a random sample of 5000."))
   }
   parsed.test <- parseselect(test.bfile, keep=keep.test, remove=remove.test)
