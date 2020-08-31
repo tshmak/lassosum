@@ -79,6 +79,8 @@
 * Better documentation for Mac users
 
 ## v0.4.5
-* A number of bug fixes
+* [Bug fix] standalone version used to ignore --nthreads option when running `validate.lassosum.pipeline`
+* [Bug fix] The `pheno` and `covar` option didn't use to like `data.table` and required `data.frame`
+* [Bug fix] Pull request #20
 * Adds seed option in standalone version 
 
