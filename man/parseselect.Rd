@@ -4,9 +4,16 @@
 \alias{parseselect}
 \title{Parse the keep/remove/extract/exclude/chr options}
 \usage{
-parseselect(bfile, extract = NULL, exclude = NULL, keep = NULL,
-  remove = NULL, chr = NULL, export = FALSE,
-  order.important = FALSE)
+parseselect(
+  bfile,
+  extract = NULL,
+  exclude = NULL,
+  keep = NULL,
+  remove = NULL,
+  chr = NULL,
+  export = FALSE,
+  order.important = FALSE
+)
 }
 \arguments{
 \item{bfile}{plink file stem}
@@ -20,26 +27,38 @@ parseselect(bfile, extract = NULL, exclude = NULL, keep = NULL,
 \item{remove}{samples to remove}
 
 \item{chr}{a vector of chromosomes}
+
+\item{export}{Logical. Whether to include the \code{bim} and/or \code{fam} data in the returned object.}
+
+\item{order.important}{Logical. Whether to strictly enforce that the order of \code{extract} and/or \code{keep} must match with \code{bim} or \code{fam}, respectively.}
 }
 \value{
-a list with
+A list containing:
 \item{keep}{Either NULL or a logical vector of which individuals to keep}
 \item{extract}{Either NULL or a logical vector of which SNPs to extract}
 \item{N}{Number of rows in the PLINK bfile}
 \item{P}{Number of columns in the PLINK bfile}
 \item{n}{Number of rows in the PLINK bfile after keep}
 \item{p}{Number of columns in the PLINK bfile after extract}
+\item{bfile}{File path to bfile stub}
+\item{bimfile}{File path to bim file}
+\item{famfile}{File path to fam file}
+\item{bim}{Either \code{NULL} or a data frame of bim data}
+\item{fam}{Either \code{NULL} or a data frame of fam data}
 }
 \description{
 Parse the keep/remove/extract/exclude/chr options
 }
 \details{
-\code{keep}, \code{remove} could take one of three 
-formats: (1) A logical vector indicating which indivduals to keep/remove, 
-(2) A \code{data.frame} with two columns giving the FID and IID of the indivdiuals
-to keep/remove (matching those in the .fam file), or (3) a character scalar giving 
-the text file with the FID/IID. Note that these files should have no headers. 
-Likewise \code{extract}, \code{exclude} can also take one of the three formats,
-except with the role of the FID/IID data.frame replaced with a character vector of 
-SNP ids (matching those in the .bim file).
+\code{keep} and \code{remove} can take one of three
+formats:
+\enumerate{
+\item A logical vector indicating which indivduals to keep/remove,
+\item A \code{data.frame} with two columns giving the FID and IID of the indivdiuals to keep/remove (matching those in the .fam file), or
+\item A character scalar giving the text file with the FID/IID.
+}
+
+Note that these files should not contain headers.
+
+\code{extract} and \code{exclude} can be of format type \strong{(1)} or \strong{(3)} describe above, or a character vector of SNP ids (matching those in the .bim file).
 }
